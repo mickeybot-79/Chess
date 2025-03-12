@@ -11,3 +11,45 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+#board {
+  display: grid;
+  place-self: left;
+  margin-top: 40px;
+  border: 1px solid;
+  width: fit-content;
+}
+
+.cell-even {
+  background-color: grey;
+  width: 100px;
+  height: 100px;
+  border: 1px solid black;
+}
+
+.row {
+  display: flex;
+}
+
+.cell-uneven {
+  background-color: white;
+  width: 100px;
+  height: 100px;
+  border: 1px solid black;
+}
+
+img {
+  width: 80px;
+  height: 80px;
+  margin: 10px;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.suitable {
+  background-color: rgba(255, 196, 0, 0.5);
+  width: 100px;
+  height: 100px;
+  border: 1px solid black;
+  cursor: pointer;
+}
