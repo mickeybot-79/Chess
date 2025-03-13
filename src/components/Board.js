@@ -329,8 +329,8 @@ const Board = () => {
                 // set new suitable cells
                 const currentPiecePosition = allPiecePositions[selectedPiece]
                 let width = 8
-                let column = (currentPiecePosition % 8) + 1
-                let row = ((currentPiecePosition - (currentPiecePosition % 8)) / 8) + 1
+                let column = (currentPiecePosition % width) + 1
+                let row = ((currentPiecePosition - (currentPiecePosition % width)) / width) + 1
                 // black pawn
                 if (selectedPiece.indexOf('pawn-black') !== -1 && nextTurn === 'black') {
                     // simple move forward
@@ -845,7 +845,7 @@ const Board = () => {
                         let row2 = (((currentPiecePosition - width * i - i) - ((currentPiecePosition - width * i - i) % 8)) / 8) + 1
                         let loopSize2
                         if (column2 >= row2) loopSize2 = width - column2 - (width - column)
-                        if (column2 < row2) loopSize2 = width - row2 - (width - column)
+                        if (column2 < row2) loopSize2 = width - row2 - (width - row)
                         for (let j = 1; j < loopSize2; j++) {
                             if (Object.values(allPiecePositions).includes((currentPiecePosition - width * i - i) + (width * j + j)) && (currentPiecePosition - width * i - i) + (width * j + j) !== currentPiecePosition) {
                                 clear = false
@@ -958,7 +958,7 @@ const Board = () => {
                         let row2 = (((currentPiecePosition - width * i - i) - ((currentPiecePosition - width * i - i) % 8)) / 8) + 1
                         let loopSize2
                         if (column2 >= row2) loopSize2 = width - column2 - (width - column)
-                        if (column2 < row2) loopSize2 = width - row2
+                        if (column2 < row2) loopSize2 = width - row2 - (width - row)
                         for (let j = 1; j < loopSize2; j++) {
                             if (Object.values(allPiecePositions).includes((currentPiecePosition - width * i - i) + (width * j + j)) && (currentPiecePosition - width * i - i) + (width * j + j) !== currentPiecePosition) {
                                 clear = false
@@ -979,11 +979,177 @@ const Board = () => {
                 }
                 // black king
                 if (selectedPiece.indexOf('king-black') !== -1 && nextTurn === 'black') {
-
+                    if (column > 1 && row > 1) {
+                        if (!Object.values(allPiecePositions).includes(currentPiecePosition - width - 1)) {
+                            setNewSuitable(currentPiecePosition, currentPiecePosition - width - 1)
+                        } else {
+                            const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition - width - 1))[0][0]
+                            if (targetPiece.indexOf('white') === -1) {
+                                setNewSuitableThreat(currentPiecePosition, currentPiecePosition - width - 1, targetPiece)
+                            }
+                        }
+                    }
+                    if (row > 1) {
+                        if (!Object.values(allPiecePositions).includes(currentPiecePosition - width)) {
+                            setNewSuitable(currentPiecePosition, currentPiecePosition - width)
+                        } else {
+                            const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition - width))[0][0]
+                            if (targetPiece.indexOf('white') === -1) {
+                                setNewSuitableThreat(currentPiecePosition, currentPiecePosition - width, targetPiece)
+                            }
+                        }
+                    }
+                    if (column < 8 && row > 1) {
+                        if (!Object.values(allPiecePositions).includes(currentPiecePosition - width + 1)) {
+                            setNewSuitable(currentPiecePosition, currentPiecePosition - width + 1)
+                        } else {
+                            const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition - width + 1))[0][0]
+                            if (targetPiece.indexOf('white') === -1) {
+                                setNewSuitableThreat(currentPiecePosition, currentPiecePosition - width + 1, targetPiece)
+                            }
+                        }
+                    }
+                    if (column > 1) {
+                        if (!Object.values(allPiecePositions).includes(currentPiecePosition - 1)) {
+                            setNewSuitable(currentPiecePosition, currentPiecePosition - 1)
+                        } else {
+                            const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition - 1))[0][0]
+                            if (targetPiece.indexOf('white') === -1) {
+                                setNewSuitableThreat(currentPiecePosition, currentPiecePosition - 1, targetPiece)
+                            }
+                        }
+                    }
+                    if (column < 8) {
+                        if (!Object.values(allPiecePositions).includes(currentPiecePosition + 1)) {
+                            setNewSuitable(currentPiecePosition, currentPiecePosition + 1)
+                        } else {
+                            const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition + 1))[0][0]
+                            if (targetPiece.indexOf('white') === -1) {
+                                setNewSuitableThreat(currentPiecePosition, currentPiecePosition + 1, targetPiece)
+                            }
+                        }
+                    }
+                    if (row < 8 && column > 1) {
+                        if (!Object.values(allPiecePositions).includes(currentPiecePosition + width - 1)) {
+                            setNewSuitable(currentPiecePosition, currentPiecePosition + width - 1)
+                        } else {
+                            const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition + width - 1))[0][0]
+                            if (targetPiece.indexOf('white') === -1) {
+                                setNewSuitableThreat(currentPiecePosition, currentPiecePosition + width - 1, targetPiece)
+                            }
+                        }
+                    }
+                    if (row < 8) {
+                        if (!Object.values(allPiecePositions).includes(currentPiecePosition + width)) {
+                            setNewSuitable(currentPiecePosition, currentPiecePosition + width)
+                        } else {
+                            const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition + width))[0][0]
+                            if (targetPiece.indexOf('white') === -1) {
+                                setNewSuitableThreat(currentPiecePosition, currentPiecePosition + width, targetPiece)
+                            }
+                        }
+                    }
+                    if (row < 8 && column < 8) {
+                        if (!Object.values(allPiecePositions).includes(currentPiecePosition + width + 1)) {
+                            setNewSuitable(currentPiecePosition, currentPiecePosition + width + 1)
+                        } else {
+                            const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition + width + 1))[0][0]
+                            if (targetPiece.indexOf('white') === -1) {
+                                setNewSuitableThreat(currentPiecePosition, currentPiecePosition + width + 1, targetPiece)
+                            }
+                        }
+                    }
+                    // Castling
+                    if (currentPiecePosition === 4 && !Object.values(allPiecePositions).includes(5) && !Object.values(allPiecePositions).includes(6) && Object.values(allPiecePositions).includes(7) && Object.entries(allPiecePositions).filter(piece => piece.includes(7))[0][0].indexOf('rook-black') !== -1) {
+                        setNewSuitable(currentPiecePosition, 6)
+                    }
                 }
                 // white king
                 if (selectedPiece.indexOf('king-white') !== -1 && nextTurn === 'white') {
-
+                    if (column > 1 && row > 1) {
+                        if (!Object.values(allPiecePositions).includes(currentPiecePosition - width - 1)) {
+                            setNewSuitable(currentPiecePosition, currentPiecePosition - width - 1)
+                        } else {
+                            const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition - width - 1))[0][0]
+                            if (targetPiece.indexOf('black') === -1) {
+                                setNewSuitableThreat(currentPiecePosition, currentPiecePosition - width - 1, targetPiece)
+                            }
+                        }
+                    }
+                    if (row > 1) {
+                        if (!Object.values(allPiecePositions).includes(currentPiecePosition - width)) {
+                            setNewSuitable(currentPiecePosition, currentPiecePosition - width)
+                        } else {
+                            const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition - width))[0][0]
+                            if (targetPiece.indexOf('black') === -1) {
+                                setNewSuitableThreat(currentPiecePosition, currentPiecePosition - width, targetPiece)
+                            }
+                        }
+                    }
+                    if (column < 8 && row > 1) {
+                        if (!Object.values(allPiecePositions).includes(currentPiecePosition - width + 1)) {
+                            setNewSuitable(currentPiecePosition, currentPiecePosition - width + 1)
+                        } else {
+                            const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition - width + 1))[0][0]
+                            if (targetPiece.indexOf('black') === -1) {
+                                setNewSuitableThreat(currentPiecePosition, currentPiecePosition - width + 1, targetPiece)
+                            }
+                        }
+                    }
+                    if (column > 1) {
+                        if (!Object.values(allPiecePositions).includes(currentPiecePosition - 1)) {
+                            setNewSuitable(currentPiecePosition, currentPiecePosition - 1)
+                        } else {
+                            const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition - 1))[0][0]
+                            if (targetPiece.indexOf('black') === -1) {
+                                setNewSuitableThreat(currentPiecePosition, currentPiecePosition - 1, targetPiece)
+                            }
+                        }
+                    }
+                    if (column < 8) {
+                        if (!Object.values(allPiecePositions).includes(currentPiecePosition + 1)) {
+                            setNewSuitable(currentPiecePosition, currentPiecePosition + 1)
+                        } else {
+                            const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition + 1))[0][0]
+                            if (targetPiece.indexOf('black') === -1) {
+                                setNewSuitableThreat(currentPiecePosition, currentPiecePosition + 1, targetPiece)
+                            }
+                        }
+                    }
+                    if (row < 8 && column > 1) {
+                        if (!Object.values(allPiecePositions).includes(currentPiecePosition + width - 1)) {
+                            setNewSuitable(currentPiecePosition, currentPiecePosition + width - 1)
+                        } else {
+                            const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition + width - 1))[0][0]
+                            if (targetPiece.indexOf('black') === -1) {
+                                setNewSuitableThreat(currentPiecePosition, currentPiecePosition + width - 1, targetPiece)
+                            }
+                        }
+                    }
+                    if (row < 8) {
+                        if (!Object.values(allPiecePositions).includes(currentPiecePosition + width)) {
+                            setNewSuitable(currentPiecePosition, currentPiecePosition + width)
+                        } else {
+                            const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition + width))[0][0]
+                            if (targetPiece.indexOf('black') === -1) {
+                                setNewSuitableThreat(currentPiecePosition, currentPiecePosition + width, targetPiece)
+                            }
+                        }
+                    }
+                    if (row < 8 && column < 8) {
+                        if (!Object.values(allPiecePositions).includes(currentPiecePosition + width + 1)) {
+                            setNewSuitable(currentPiecePosition, currentPiecePosition + width + 1)
+                        } else {
+                            const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition + width + 1))[0][0]
+                            if (targetPiece.indexOf('black') === -1) {
+                                setNewSuitableThreat(currentPiecePosition, currentPiecePosition + width + 1, targetPiece)
+                            }
+                        }
+                    }
+                    // Castling
+                    if (currentPiecePosition === 60 && !Object.values(allPiecePositions).includes(61) && !Object.values(allPiecePositions).includes(62) && Object.values(allPiecePositions).includes(63) && Object.entries(allPiecePositions).filter(piece => piece.includes(63))[0][0].indexOf('rook-white') !== -1) {
+                        setNewSuitable(currentPiecePosition, 62)
+                    }
                 }
             }
         }
