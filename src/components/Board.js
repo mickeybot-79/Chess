@@ -984,7 +984,7 @@ const Board = () => {
                             setNewSuitable(currentPiecePosition, currentPiecePosition - width - 1)
                         } else {
                             const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition - width - 1))[0][0]
-                            if (targetPiece.indexOf('white') === -1) {
+                            if (targetPiece.indexOf('black') === -1) {
                                 setNewSuitableThreat(currentPiecePosition, currentPiecePosition - width - 1, targetPiece)
                             }
                         }
@@ -994,7 +994,7 @@ const Board = () => {
                             setNewSuitable(currentPiecePosition, currentPiecePosition - width)
                         } else {
                             const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition - width))[0][0]
-                            if (targetPiece.indexOf('white') === -1) {
+                            if (targetPiece.indexOf('black') === -1) {
                                 setNewSuitableThreat(currentPiecePosition, currentPiecePosition - width, targetPiece)
                             }
                         }
@@ -1004,7 +1004,7 @@ const Board = () => {
                             setNewSuitable(currentPiecePosition, currentPiecePosition - width + 1)
                         } else {
                             const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition - width + 1))[0][0]
-                            if (targetPiece.indexOf('white') === -1) {
+                            if (targetPiece.indexOf('black') === -1) {
                                 setNewSuitableThreat(currentPiecePosition, currentPiecePosition - width + 1, targetPiece)
                             }
                         }
@@ -1014,7 +1014,7 @@ const Board = () => {
                             setNewSuitable(currentPiecePosition, currentPiecePosition - 1)
                         } else {
                             const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition - 1))[0][0]
-                            if (targetPiece.indexOf('white') === -1) {
+                            if (targetPiece.indexOf('black') === -1) {
                                 setNewSuitableThreat(currentPiecePosition, currentPiecePosition - 1, targetPiece)
                             }
                         }
@@ -1024,7 +1024,7 @@ const Board = () => {
                             setNewSuitable(currentPiecePosition, currentPiecePosition + 1)
                         } else {
                             const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition + 1))[0][0]
-                            if (targetPiece.indexOf('white') === -1) {
+                            if (targetPiece.indexOf('black') === -1) {
                                 setNewSuitableThreat(currentPiecePosition, currentPiecePosition + 1, targetPiece)
                             }
                         }
@@ -1034,7 +1034,7 @@ const Board = () => {
                             setNewSuitable(currentPiecePosition, currentPiecePosition + width - 1)
                         } else {
                             const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition + width - 1))[0][0]
-                            if (targetPiece.indexOf('white') === -1) {
+                            if (targetPiece.indexOf('black') === -1) {
                                 setNewSuitableThreat(currentPiecePosition, currentPiecePosition + width - 1, targetPiece)
                             }
                         }
@@ -1044,7 +1044,7 @@ const Board = () => {
                             setNewSuitable(currentPiecePosition, currentPiecePosition + width)
                         } else {
                             const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition + width))[0][0]
-                            if (targetPiece.indexOf('white') === -1) {
+                            if (targetPiece.indexOf('black') === -1) {
                                 setNewSuitableThreat(currentPiecePosition, currentPiecePosition + width, targetPiece)
                             }
                         }
@@ -1054,7 +1054,7 @@ const Board = () => {
                             setNewSuitable(currentPiecePosition, currentPiecePosition + width + 1)
                         } else {
                             const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition + width + 1))[0][0]
-                            if (targetPiece.indexOf('white') === -1) {
+                            if (targetPiece.indexOf('black') === -1) {
                                 setNewSuitableThreat(currentPiecePosition, currentPiecePosition + width + 1, targetPiece)
                             }
                         }
@@ -1068,10 +1068,11 @@ const Board = () => {
                 if (selectedPiece.indexOf('king-white') !== -1 && nextTurn === 'white') {
                     if (column > 1 && row > 1) {
                         if (!Object.values(allPiecePositions).includes(currentPiecePosition - width - 1)) {
+                            console.log(currentPiecePosition - width - 1)
                             setNewSuitable(currentPiecePosition, currentPiecePosition - width - 1)
                         } else {
                             const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition - width - 1))[0][0]
-                            if (targetPiece.indexOf('black') === -1) {
+                            if (targetPiece.indexOf('white') === -1) {
                                 setNewSuitableThreat(currentPiecePosition, currentPiecePosition - width - 1, targetPiece)
                             }
                         }
@@ -1081,7 +1082,7 @@ const Board = () => {
                             setNewSuitable(currentPiecePosition, currentPiecePosition - width)
                         } else {
                             const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition - width))[0][0]
-                            if (targetPiece.indexOf('black') === -1) {
+                            if (targetPiece.indexOf('white') === -1) {
                                 setNewSuitableThreat(currentPiecePosition, currentPiecePosition - width, targetPiece)
                             }
                         }
@@ -1091,7 +1092,7 @@ const Board = () => {
                             setNewSuitable(currentPiecePosition, currentPiecePosition - width + 1)
                         } else {
                             const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition - width + 1))[0][0]
-                            if (targetPiece.indexOf('black') === -1) {
+                            if (targetPiece.indexOf('white') === -1) {
                                 setNewSuitableThreat(currentPiecePosition, currentPiecePosition - width + 1, targetPiece)
                             }
                         }
@@ -1101,7 +1102,7 @@ const Board = () => {
                             setNewSuitable(currentPiecePosition, currentPiecePosition - 1)
                         } else {
                             const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition - 1))[0][0]
-                            if (targetPiece.indexOf('black') === -1) {
+                            if (targetPiece.indexOf('white') === -1) {
                                 setNewSuitableThreat(currentPiecePosition, currentPiecePosition - 1, targetPiece)
                             }
                         }
@@ -1111,7 +1112,7 @@ const Board = () => {
                             setNewSuitable(currentPiecePosition, currentPiecePosition + 1)
                         } else {
                             const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition + 1))[0][0]
-                            if (targetPiece.indexOf('black') === -1) {
+                            if (targetPiece.indexOf('white') === -1) {
                                 setNewSuitableThreat(currentPiecePosition, currentPiecePosition + 1, targetPiece)
                             }
                         }
@@ -1121,7 +1122,7 @@ const Board = () => {
                             setNewSuitable(currentPiecePosition, currentPiecePosition + width - 1)
                         } else {
                             const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition + width - 1))[0][0]
-                            if (targetPiece.indexOf('black') === -1) {
+                            if (targetPiece.indexOf('white') === -1) {
                                 setNewSuitableThreat(currentPiecePosition, currentPiecePosition + width - 1, targetPiece)
                             }
                         }
@@ -1131,7 +1132,7 @@ const Board = () => {
                             setNewSuitable(currentPiecePosition, currentPiecePosition + width)
                         } else {
                             const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition + width))[0][0]
-                            if (targetPiece.indexOf('black') === -1) {
+                            if (targetPiece.indexOf('white') === -1) {
                                 setNewSuitableThreat(currentPiecePosition, currentPiecePosition + width, targetPiece)
                             }
                         }
@@ -1141,7 +1142,7 @@ const Board = () => {
                             setNewSuitable(currentPiecePosition, currentPiecePosition + width + 1)
                         } else {
                             const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition + width + 1))[0][0]
-                            if (targetPiece.indexOf('black') === -1) {
+                            if (targetPiece.indexOf('white') === -1) {
                                 setNewSuitableThreat(currentPiecePosition, currentPiecePosition + width + 1, targetPiece)
                             }
                         }
@@ -1154,6 +1155,7 @@ const Board = () => {
             }
         }
         touchPiece()
+        // eslint-disable-next-line
     }, [selectedPiece])
 
     return (
