@@ -47,7 +47,8 @@ img {
 }
 
 .suitable {
-  background-color: rgba(255, 196, 0, 0.5);
+  /* background-color: rgba(255, 196, 0, 0.5); */
+  background: radial-gradient(rgb(75, 216, 75), rgb(170, 223, 170));
   width: 100px;
   height: 100px;
   border: 1px solid black;

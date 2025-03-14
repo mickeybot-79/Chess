@@ -203,9 +203,9 @@ const Board = () => {
             } else {
                 vacatedCellClass = currentPiecePosition % 2 === 0 ? 'cell-even' : 'cell-uneven'
             }
-            const cellId = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition))[0][0]
+            const PieceId = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition))[0][0]
             const occupiedCell = (
-                <div id={selectedPosition} key={selectedPosition} className={occupiedCellClass}><img src={`../Images/${cellId.split('-')[0]}-${cellId.split('-')[1]}.png`} alt={`${cellId.split('-')[0]}-${cellId.split('-')[1]}`} id={cellId} onClick={() => setSelectedPiece(cellId)}/></div>
+                <div id={selectedPosition} key={selectedPosition} className={occupiedCellClass}><img src={`../Images/${PieceId.split('-')[0]}-${PieceId.split('-')[1]}.png`} alt={`${PieceId.split('-')[0]}-${PieceId.split('-')[1]}`} id={PieceId} onClick={() => setSelectedPiece(PieceId)}/></div>
             )
             const vacatedCell = (
                 <div id={currentPiecePosition} key={currentPiecePosition} className={vacatedCellClass}></div>
