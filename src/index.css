@@ -54,3 +54,7 @@ img {
   border: 1px solid black;
   cursor: pointer;
 }
+
+#check-display {
+  width: 150px;
+}

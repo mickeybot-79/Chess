@@ -47,6 +47,8 @@ const Board = () => {
 
     const [suitableCells, setSuitableCells] = useState([])
 
+    const [check, setCheck] = useState(false)
+
     //create cells
     useEffect(() => {
         setAllCells(() => {
@@ -55,69 +57,69 @@ const Board = () => {
             for (let i = 0; i < 64; i++) {
                 let imageElement = <></>
                 let cellClass = ''
-                if (i === 0) {
+                if (i === allPiecePositions['rook-black-1']) {
                     imageElement = <img src="../Images/rook-black.png" alt="rook-black" id="rook-black-1" onClick={() => setSelectedPiece('rook-black-1')} />
-                } else if (i === 7) {
+                } else if (i === allPiecePositions['rook-black-2']) {
                     imageElement = <img src="../Images/rook-black.png" alt="rook-black" id="rook-black-2" onClick={() => setSelectedPiece('rook-black-2')} />
-                } else if (i === 1) {
+                } else if (i === allPiecePositions['knight-black-1']) {
                     imageElement = <img src="../Images/knight-black.png" alt="knight-black" id="knight-black-1" onClick={() => setSelectedPiece('knight-black-1')} />
-                } else if (i === 6) {
+                } else if (i === allPiecePositions['knight-black-2']) {
                     imageElement = <img src="../Images/knight-black.png" alt="knight-black" id="knight-black-2" onClick={() => setSelectedPiece('knight-black-2')} />
-                } else if (i === 2) {
+                } else if (i === allPiecePositions['bishop-black-1']) {
                     imageElement = <img src="../Images/bishop-black.png" alt="bishop-black" id="bishop-black-1" onClick={() => setSelectedPiece('bishop-black-1')} />
-                } else if (i === 5) {
+                } else if (i === allPiecePositions['bishop-black-2']) {
                     imageElement = <img src="../Images/bishop-black.png" alt="bishop-black" id="bishop-black-2" onClick={() => setSelectedPiece('bishop-black-2')} />
-                } else if (i === 3) {
+                } else if (i === allPiecePositions['queen-black']) {
                     imageElement = <img src="../Images/queen-black.png" alt="queen-black" id="queen-black" onClick={() => setSelectedPiece('queen-black')} />
-                } else if (i === 4) {
+                } else if (i === allPiecePositions['king-black']) {
                     imageElement = <img src="../Images/king-black.png" alt="king-black" id="king-black" onClick={() => setSelectedPiece('king-black')} />
-                } else if (i === 8) {
+                } else if (i === allPiecePositions['pawn-black-1']) {
                     imageElement = <img src="../Images/pawn-black.png" alt="pawn-black" id="pawn-black-1" onClick={() => setSelectedPiece('pawn-black-1')} />
-                } else if (i === 9) {
+                } else if (i === allPiecePositions['pawn-black-2']) {
                     imageElement = <img src="../Images/pawn-black.png" alt="pawn-black" id="pawn-black-2" onClick={() => setSelectedPiece('pawn-black-2')} />
-                } else if (i === 10) {
+                } else if (i === allPiecePositions['pawn-black-3']) {
                     imageElement = <img src="../Images/pawn-black.png" alt="pawn-black" id="pawn-black-3" onClick={() => setSelectedPiece('pawn-black-3')} />
-                } else if (i === 11) {
+                } else if (i === allPiecePositions['pawn-black-4']) {
                     imageElement = <img src="../Images/pawn-black.png" alt="pawn-black" id="pawn-black-4" onClick={() => setSelectedPiece('pawn-black-4')} />
-                } else if (i === 12) {
+                } else if (i === allPiecePositions['pawn-black-5']) {
                     imageElement = <img src="../Images/pawn-black.png" alt="pawn-black" id="pawn-black-5" onClick={() => setSelectedPiece('pawn-black-5')} />
-                } else if (i === 13) {
+                } else if (i === allPiecePositions['pawn-black-6']) {
                     imageElement = <img src="../Images/pawn-black.png" alt="pawn-black" id="pawn-black-6" onClick={() => setSelectedPiece('pawn-black-6')} />
-                } else if (i === 14) {
+                } else if (i === allPiecePositions['pawn-black-7']) {
                     imageElement = <img src="../Images/pawn-black.png" alt="pawn-black" id="pawn-black-7" onClick={() => setSelectedPiece('pawn-black-7')} />
-                } else if (i === 15) {
+                } else if (i === allPiecePositions['pawn-black-8']) {
                     imageElement = <img src="../Images/pawn-black.png" alt="pawn-black" id="pawn-black-8" onClick={() => setSelectedPiece('pawn-black-8')} />
-                } else if (i === 48) {
+                } else if (i === allPiecePositions['pawn-white-1']) {
                     imageElement = <img src="../Images/pawn-white.png" alt="pawn-white" id="pawn-white-1" onClick={() => setSelectedPiece('pawn-white-1')} />
-                } else if (i === 49) {
+                } else if (i === allPiecePositions['pawn-white-2']) {
                     imageElement = <img src="../Images/pawn-white.png" alt="pawn-white" id="pawn-white-2" onClick={() => setSelectedPiece('pawn-white-2')} />
-                } else if (i === 50) {
+                } else if (i === allPiecePositions['pawn-white-3']) {
                     imageElement = <img src="../Images/pawn-white.png" alt="pawn-white" id="pawn-white-3" onClick={() => setSelectedPiece('pawn-white-3')} />
-                } else if (i === 51) {
+                } else if (i === allPiecePositions['pawn-white-4']) {
                     imageElement = <img src="../Images/pawn-white.png" alt="pawn-white" id="pawn-white-4" onClick={() => setSelectedPiece('pawn-white-4')} />
-                } else if (i === 52) {
+                } else if (i === allPiecePositions['pawn-white-5']) {
                     imageElement = <img src="../Images/pawn-white.png" alt="pawn-white" id="pawn-white-5" onClick={() => setSelectedPiece('pawn-white-5')} />
-                } else if (i === 53) {
+                } else if (i === allPiecePositions['pawn-white-6']) {
                     imageElement = <img src="../Images/pawn-white.png" alt="pawn-white" id="pawn-white-6" onClick={() => setSelectedPiece('pawn-white-6')} />
-                } else if (i === 54) {
+                } else if (i === allPiecePositions['pawn-white-7']) {
                     imageElement = <img src="../Images/pawn-white.png" alt="pawn-white" id="pawn-white-7" onClick={() => setSelectedPiece('pawn-white-7')} />
-                } else if (i === 55) {
+                } else if (i === allPiecePositions['pawn-white-8']) {
                     imageElement = <img src="../Images/pawn-white.png" alt="pawn-white" id="pawn-white-8" onClick={() => setSelectedPiece('pawn-white-8')} />
-                } else if (i === 56) {
+                } else if (i === allPiecePositions['rook-white-1']) {
                     imageElement = <img src="../Images/rook-white.png" alt="rook-white" id="rook-white-1" onClick={() => setSelectedPiece('rook-white-1')} />
-                } else if (i === 63) {
+                } else if (i === allPiecePositions['rook-white-2']) {
                     imageElement = <img src="../Images/rook-white.png" alt="rook-white" id="rook-white-2" onClick={() => setSelectedPiece('rook-white-2')} />
-                } else if (i === 57) {
+                } else if (i === allPiecePositions['knight-white-1']) {
                     imageElement = <img src="../Images/knight-white.png" alt="knight-white" id="knight-white-1" onClick={() => setSelectedPiece('knight-white-1')} />
-                } else if (i === 62) {
+                } else if (i === allPiecePositions['knight-white-2']) {
                     imageElement = <img src="../Images/knight-white.png" alt="knight-white" id="knight-white-2" onClick={() => setSelectedPiece('knight-white-2')} />
-                } else if (i === 58) {
+                } else if (i === allPiecePositions['bishop-white-1']) {
                     imageElement = <img src="../Images/bishop-white.png" alt="bishop-white" id="bishop-white-1" onClick={() => setSelectedPiece('bishop-white-1')} />
-                } else if (i === 61) {
+                } else if (i === allPiecePositions['bishop-white-2']) {
                     imageElement = <img src="../Images/bishop-white.png" alt="bishop-white" id="bishop-white-2" onClick={() => setSelectedPiece('bishop-white-2')} />
-                } else if (i === 59) {
+                } else if (i === allPiecePositions['queen-white']) {
                     imageElement = <img src="../Images/queen-white.png" alt="queen-white" id="queen-white" onClick={() => setSelectedPiece('queen-white')} />
-                } else if (i === 60) {
+                } else if (i === allPiecePositions['king-white']) {
                     imageElement = <img src="../Images/king-white.png" alt="king-white" id="king-white" onClick={() => setSelectedPiece('king-white')} />
                 }
 
@@ -577,16 +579,6 @@ const Board = () => {
                             }
                         }
                     }
-                    if (column < 8 && row > 2) {
-                        if (!Object.values(allPiecePositions).includes(currentPiecePosition + 15)) {
-                            setNewSuitable(currentPiecePosition, currentPiecePosition + 15)
-                        } else {
-                            const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition + 15))[0][0]
-                            if (targetPiece.indexOf('black') === -1) {
-                                setNewSuitableThreat(currentPiecePosition, currentPiecePosition + 15, targetPiece)
-                            }
-                        }
-                    }
                     if (column > 1 && row < 7) {
                         if (!Object.values(allPiecePositions).includes(currentPiecePosition + 15)) {
                             setNewSuitable(currentPiecePosition, currentPiecePosition + 15)
@@ -624,16 +616,6 @@ const Board = () => {
                             const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition + 6))[0][0]
                             if (targetPiece.indexOf('black') === -1) {
                                 setNewSuitableThreat(currentPiecePosition, currentPiecePosition + 6, targetPiece)
-                            }
-                        }
-                    }
-                    if (column < 8 && row < 7) {
-                        if (!Object.values(allPiecePositions).includes(currentPiecePosition + 17)) {
-                            setNewSuitable(currentPiecePosition, currentPiecePosition + 17)
-                        } else {
-                            const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition + 17))[0][0]
-                            if (targetPiece.indexOf('black') === -1) {
-                                setNewSuitableThreat(currentPiecePosition, currentPiecePosition + 17, targetPiece)
                             }
                         }
                     }
@@ -680,16 +662,6 @@ const Board = () => {
                             }
                         }
                     }
-                    if (column < 8 && row > 2) {
-                        if (!Object.values(allPiecePositions).includes(currentPiecePosition + 15)) {
-                            setNewSuitable(currentPiecePosition, currentPiecePosition + 15)
-                        } else {
-                            const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition + 15))[0][0]
-                            if (targetPiece.indexOf('white') === -1) {
-                                setNewSuitableThreat(currentPiecePosition, currentPiecePosition + 15, targetPiece)
-                            }
-                        }
-                    }
                     if (column > 1 && row < 7) {
                         if (!Object.values(allPiecePositions).includes(currentPiecePosition + 15)) {
                             setNewSuitable(currentPiecePosition, currentPiecePosition + 15)
@@ -727,16 +699,6 @@ const Board = () => {
                             const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition + 6))[0][0]
                             if (targetPiece.indexOf('white') === -1) {
                                 setNewSuitableThreat(currentPiecePosition, currentPiecePosition + 6, targetPiece)
-                            }
-                        }
-                    }
-                    if (column < 8 && row < 7) {
-                        if (!Object.values(allPiecePositions).includes(currentPiecePosition + 17)) {
-                            setNewSuitable(currentPiecePosition, currentPiecePosition + 17)
-                        } else {
-                            const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition + 17))[0][0]
-                            if (targetPiece.indexOf('white') === -1) {
-                                setNewSuitableThreat(currentPiecePosition, currentPiecePosition + 17, targetPiece)
                             }
                         }
                     }
@@ -1159,9 +1121,12 @@ const Board = () => {
     }, [selectedPiece])
 
     return (
-        <div id="board">
-            {allRows}
-        </div>
+        <>
+            <div id="board">
+                {allRows}
+            </div>
+            <p id="check-display">{check ? 'check' : ''}</p>
+        </>
     )
 }
 
