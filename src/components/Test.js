@@ -530,36 +530,36 @@ const Board = () => {
                 white: []
             }
         })
-        for (let i = 0; i < Object.entries(allPiecePositions).length; i++) {
-            let blackPawnMoves
-            let whitepawnMoves
-            let row = ((Object.entries(allPiecePositions)[i][1] - (Object.entries(allPiecePositions)[i][1] % width)) / width) + 1
-            if (Object.entries(allPiecePositions)[i][0].indexOf('black') !== -1) {
-                blackPawnMoves = pawnMovement('black', Object.entries(allPiecePositions)[i][1], row)
-            } else {
-                whitepawnMoves = pawnMovement('white', Object.entries(allPiecePositions)[i][1], row)
-            }
-            for (let j = 0; j < blackPawnMoves.threatenedPieces.length; j++) {
-                setAllThreatenedCells((prev) => {
-                    const newThreatened = prev
-                    newThreatened.black.push(blackPawnMoves.threatenedPieces[j])
-                    return {
-                        ...prev,
-                        black: newThreatened.black
-                    }
-                })
-            }
-            for (let j = 0; j < whitepawnMoves.threatenedPieces.length; j++) {
-                setAllThreatenedCells((prev) => {
-                    const newThreatened = prev
-                    newThreatened.white.push(whitepawnMoves.threatenedPieces[j])
-                    return {
-                        ...prev,
-                        white: newThreatened.white
-                    }
-                })
-            }
-        }
+        // for (let i = 0; i < Object.entries(allPiecePositions).length; i++) {
+        //     let blackPawnMoves
+        //     let whitepawnMoves
+        //     let row = ((Object.entries(allPiecePositions)[i][1] - (Object.entries(allPiecePositions)[i][1] % width)) / width) + 1
+        //     if (Object.entries(allPiecePositions)[i][0].indexOf('black') !== -1) {
+        //         blackPawnMoves = pawnMovement('black', Object.entries(allPiecePositions)[i][1], row)
+        //     } else {
+        //         whitepawnMoves = pawnMovement('white', Object.entries(allPiecePositions)[i][1], row)
+        //     }
+        //     for (let j = 0; j < blackPawnMoves.threatenedPieces.length; j++) {
+        //         setAllThreatenedCells((prev) => {
+        //             const newThreatened = prev
+        //             newThreatened.black.push(blackPawnMoves.threatenedPieces[j])
+        //             return {
+        //                 ...prev,
+        //                 black: newThreatened.black
+        //             }
+        //         })
+        //     }
+        //     for (let j = 0; j < whitepawnMoves.threatenedPieces.length; j++) {
+        //         setAllThreatenedCells((prev) => {
+        //             const newThreatened = prev
+        //             newThreatened.white.push(whitepawnMoves.threatenedPieces[j])
+        //             return {
+        //                 ...prev,
+        //                 white: newThreatened.white
+        //             }
+        //         })
+        //     }
+        // }
 
 
         const movePiece = (selectedPosition, currentPiecePosition) => {
