@@ -55,6 +55,15 @@ img {
   cursor: pointer;
 }
 
+.selected {
+  /* background-color: rgba(255, 196, 0, 0.5); */
+  background: radial-gradient(rgb(75, 136, 216), rgb(170, 197, 223));
+  width: 100px;
+  height: 100px;
+  border: 1px solid black;
+  cursor: pointer;
+}
+
 #check-display {
   width: 150px;
 }
