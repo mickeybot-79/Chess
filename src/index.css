@@ -20,7 +20,7 @@ code {
   width: fit-content;
 }
 
-.cell-even {
+.cell-uneven {
   background-color: grey;
   width: 100px;
   height: 100px;
@@ -31,7 +31,7 @@ code {
   display: flex;
 }
 
-.cell-uneven {
+.cell-even {
   background-color: white;
   width: 100px;
   height: 100px;
