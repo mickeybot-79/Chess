@@ -999,9 +999,10 @@ const Board = () => {
                     // take out checking piece
                     const colorToCheck = checkingPiece.split('-')[1] === 'black' ? 'white' : 'black'
                     for (let i = 0; i < Object.entries(allPiecePositions).length; i++) {
+                        let column = (Object.entries(allPiecePositions)[i][1] % width) + 1
+                        let row = ((Object.entries(allPiecePositions)[i][1] - (Object.entries(allPiecePositions)[i][1] % width)) / width) + 1
                         if (Object.entries(allPiecePositions)[i][0].indexOf('pawn') !== -1) {
                             let pawnMoves
-                            let row = ((Object.entries(allPiecePositions)[i][1] - (Object.entries(allPiecePositions)[i][1] % width)) / width) + 1
                             if (Object.entries(allPiecePositions)[i][0].indexOf(colorToCheck) !== -1) {
                                 pawnMoves = pawnMovement(colorToCheck, Object.entries(allPiecePositions)[i][1], row)
                             }
@@ -1013,8 +1014,6 @@ const Board = () => {
                         }
                         if (Object.entries(allPiecePositions)[i][0].indexOf('rook') !== -1) {
                             let rookMoves
-                            let column = (Object.entries(allPiecePositions)[i][1] % width) + 1
-                            let row = ((Object.entries(allPiecePositions)[i][1] - (Object.entries(allPiecePositions)[i][1] % width)) / width) + 1
                             if (Object.entries(allPiecePositions)[i][0].indexOf(colorToCheck) !== -1) {
                                 rookMoves = rookMovement(colorToCheck, Object.entries(allPiecePositions)[i][1], width, row, column)
                             }
@@ -1026,8 +1025,6 @@ const Board = () => {
                         }
                         if (Object.entries(allPiecePositions)[i][0].indexOf('knight') !== -1) {
                             let knightMoves
-                            let column = (Object.entries(allPiecePositions)[i][1] % width) + 1
-                            let row = ((Object.entries(allPiecePositions)[i][1] - (Object.entries(allPiecePositions)[i][1] % width)) / width) + 1
                             if (Object.entries(allPiecePositions)[i][0].indexOf(colorToCheck) !== -1) {
                                 knightMoves = knightMovement(colorToCheck, Object.entries(allPiecePositions)[i][1], row, column)
                             }
@@ -1039,8 +1036,6 @@ const Board = () => {
                         }
                         if (Object.entries(allPiecePositions)[i][0].indexOf('bishop') !== -1) {
                             let bishopMoves
-                            let column = (Object.entries(allPiecePositions)[i][1] % width) + 1
-                            let row = ((Object.entries(allPiecePositions)[i][1] - (Object.entries(allPiecePositions)[i][1] % width)) / width) + 1
                             if (Object.entries(allPiecePositions)[i][0].indexOf(colorToCheck) !== -1) {
                                 bishopMoves = bishopMovement(colorToCheck, Object.entries(allPiecePositions)[i][1], width, row, column)
                             }
@@ -1053,8 +1048,6 @@ const Board = () => {
                         if (Object.entries(allPiecePositions)[i][0].indexOf('queen') !== -1) {
                             let rookMoves
                             let bishopMoves
-                            let column = (Object.entries(allPiecePositions)[i][1] % width) + 1
-                            let row = ((Object.entries(allPiecePositions)[i][1] - (Object.entries(allPiecePositions)[i][1] % width)) / width) + 1
                             if (Object.entries(allPiecePositions)[i][0].indexOf(colorToCheck) !== -1) {
                                 rookMoves = rookMovement(colorToCheck, Object.entries(allPiecePositions)[i][1], width, row, column)
                                 bishopMoves = bishopMovement(colorToCheck, Object.entries(allPiecePositions)[i][1], width, row, column)
@@ -1072,8 +1065,6 @@ const Board = () => {
                         }
                         if (Object.entries(allPiecePositions)[i][0].indexOf('king') !== -1) {
                             let kingMoves
-                            let column = (Object.entries(allPiecePositions)[i][1] % width) + 1
-                            let row = ((Object.entries(allPiecePositions)[i][1] - (Object.entries(allPiecePositions)[i][1] % width)) / width) + 1
                             if (Object.entries(allPiecePositions)[i][0].indexOf(colorToCheck) !== -1) {
                                 kingMoves = kingMovement(colorToCheck, Object.entries(allPiecePositions)[i][1], width, row, column)
                             }
@@ -1084,7 +1075,7 @@ const Board = () => {
                             }
                         }
                     }
-                    // black king
+                    // move black king
                     if (selectedPiece.indexOf('king-black') !== -1 && nextTurn === 'black') {
                         const kingMoves = kingMovement('black', currentPiecePosition, width, row, column)
                         const allThreatenedByWhite = []
@@ -1098,7 +1089,7 @@ const Board = () => {
                             if (!allThreatenedByWhite.flat().includes(kingMoves.suitableCells[i])) setNewSuitable(currentPiecePosition, kingMoves.suitableCells[i])
                         }
                     }
-                    // white king
+                    // move white king
                     if (selectedPiece.indexOf('king-white') !== -1 && nextTurn === 'white') {
                         const kingMoves = kingMovement('white', currentPiecePosition, width, row, column)
                         const allThreatenedByBlack = []
