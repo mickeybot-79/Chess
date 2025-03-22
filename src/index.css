@@ -12,18 +12,26 @@ code {
     monospace;
 }
 
+#page {
+  display:flex;
+  gap: 0px;
+  place-content: center;
+  position: sticky;
+}
+
 #board {
-  display: grid;
-  place-self: left;
+  display: inline-block;
   margin-top: 40px;
   border: 1px solid;
-  width: fit-content;
+  height: fit-content;
+  position: sticky;
+  left: 0;
 }
 
 .cell-uneven {
   background-color: grey;
-  width: 100px;
-  height: 100px;
+  width: 70px;
+  height: 70px;
   border: 1px solid black;
 }
 
@@ -33,37 +41,80 @@ code {
 
 .cell-even {
   background-color: white;
-  width: 100px;
-  height: 100px;
+  width: 70px;
+  height: 70px;
   border: 1px solid black;
 }
 
 img {
-  width: 80px;
-  height: 80px;
-  margin: 10px;
+  width: 62px;
+  height: 62px;
+  margin: 4px;
   cursor: pointer;
   z-index: 1;
 }
 
 .suitable {
-  /* background-color: rgba(255, 196, 0, 0.5); */
   background: radial-gradient(rgb(75, 216, 75), rgb(170, 223, 170));
-  width: 100px;
-  height: 100px;
+  width: 70px;
+  height: 70px;
   border: 1px solid black;
   cursor: pointer;
 }
 
 .selected {
-  /* background-color: rgba(255, 196, 0, 0.5); */
   background: radial-gradient(rgb(75, 136, 216), rgb(170, 197, 223));
-  width: 100px;
-  height: 100px;
+  width: 70px;
+  height: 70px;
   border: 1px solid black;
   cursor: pointer;
 }
 
+#board-check {
+  position: sticky;
+  left: 0;
+  display:inline-block;
+}
+
 #check-display {
   width: 150px;
+  font-size: 50px;
+  font-weight: 700;
+  height: 70px;
+  margin-bottom: -30px;
+  margin-top: 0px;
+  place-self: center;
+}
+
+#taken-out-pieces {
+  margin-top: 80px;
+  margin-left: 20px;
+  height: 580px;
+  justify-content: center;
+  display: grid;
+}
+
+#taken-out-white-pieces {
+  width: 450px;
+  height: 150px;
+  place-items: bottom;
+  margin-bottom: 100px;
+  margin-top: 20px;
+}
+
+#taken-out-white-pieces img {
+  margin:  0px -5px;
+  cursor: auto;
+}
+
+#taken-out-black-pieces {
+  width: 450px;
+  height: 150px;
+  margin-bottom: -180px;
+  place-content: bottom;
+}
+
+#taken-out-black-pieces img {
+  margin: 0px -5px;
+  cursor: auto;
 }
