@@ -623,7 +623,8 @@ const Board = () => {
                 let row2 = (((currentPiecePosition + width * i + i) - ((currentPiecePosition + width * i + i) % 8)) / 8) + 1
                 let loopSize2
                 if (column2 >= row2) loopSize2 = row2 - 1 - (row - 1)
-                if (column2 < row2) loopSize2 = column2 - 1
+                //if (column2 < row2) loopSize2 = column2 - 1
+                if (column2 < row2) loopSize2 = width - row2
                 for (let j = 1; j < loopSize2; j++) {
                     if (Object.values(allPiecePositions).includes((currentPiecePosition + width * i + i) - (width * j + j)) && (currentPiecePosition + width * i + i) - (width * j + j) !== currentPiecePosition) {
                         checkShieldingPiece(Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition))[0][0], color, currentPiecePosition + width * i + i, (currentPiecePosition + width * i + i) - (width * j + j))
@@ -965,34 +966,64 @@ const Board = () => {
             // Ascension
             if (selectedPiece.indexOf('pawn-white') !== -1 && selectedPosition < 8 && selectedPosition >= 0) {
                 occupiedCell = (
-                    <div id={selectedPosition} key={selectedPosition} className={occupiedCellClass}><img src="../Images/queen-white.png" alt="queen-white" id="queen-white-2" onClick={() => setSelectedPiece('queen-white')}/></div>
+                    <div id={selectedPosition} key={selectedPosition} className={occupiedCellClass}><img src="../Images/queen-white.png" alt="queen-white" id="queen-white-2" onClick={() => setSelectedPiece('queen-white-2')}/></div>
                 )
+                setAllPiecePositions(prev => {
+                    let newState = {
+                        ...prev,
+                        'queen-white-2': selectedPosition,
+                        [selectedPiece]: -2,
+                    }
+                    if (Object.values(prev).includes(selectedPosition)) {
+                        const takenOutPiece = Object.entries(prev).filter(piece => piece.includes(selectedPosition))[0][0]
+                        newState = {
+                            ...newState,
+                            [takenOutPiece]: -1
+                        }
+                    }
+                    return newState
+                })
             } else if (selectedPiece.indexOf('pawn-black') !== -1 && selectedPosition <= 63 && selectedPosition > 55) {
                 occupiedCell = (
                     <div id={selectedPosition} key={selectedPosition} className={occupiedCellClass}><img src="../Images/queen-black.png" alt="queen-black" id="queen-black-2" onClick={() => setSelectedPiece('queen-black')}/></div>
                 )
+                setAllPiecePositions(prev => {
+                    let newState = {
+                        ...prev,
+                        'queen-black-2': selectedPosition,
+                        [selectedPiece]: -2,
+                    }
+                    if (Object.values(prev).includes(selectedPosition)) {
+                        const takenOutPiece = Object.entries(prev).filter(piece => piece.includes(selectedPosition))[0][0]
+                        newState = {
+                            ...newState,
+                            [takenOutPiece]: -1
+                        }
+                    }
+                    return newState
+                })
             } else {
                 occupiedCell = (
                     <div id={selectedPosition} key={selectedPosition} className={occupiedCellClass}><img src={`../Images/${selectedPiece.split('-')[0]}-${selectedPiece.split('-')[1]}.png`} alt={`${selectedPiece.split('-')[0]}-${selectedPiece.split('-')[1]}`} id={selectedPiece} onClick={() => setSelectedPiece(selectedPiece)}/></div>
                 )
+                setAllPiecePositions(prev => {
+                    let newState = {
+                        ...prev,
+                        [selectedPiece]: selectedPosition,
+                    }
+                    if (Object.values(prev).includes(selectedPosition)) {
+                        const takenOutPiece = Object.entries(prev).filter(piece => piece.includes(selectedPosition))[0][0]
+                        newState = {
+                            ...newState,
+                            [takenOutPiece]: -1
+                        }
+                    }
+                    return newState
+                })
             }
             const vacatedCell = (
                 <div id={currentPiecePosition} key={currentPiecePosition} className={vacatedCellClass}></div>
             )
-            setAllPiecePositions(prev => {
-                let newState = {
-                    ...prev,
-                    [selectedPiece]: selectedPosition,
-                }
-                if (Object.values(prev).includes(selectedPosition)) {
-                    const takenOutPiece = Object.entries(prev).filter(piece => piece.includes(selectedPosition))[0][0]
-                    newState = {
-                        ...newState,
-                        [takenOutPiece]: -1
-                    }
-                }
-                return newState
-            })
             setAllCells(prevCells => {
                 const updatedCells = prevCells
                 updatedCells.splice(selectedPosition, 1, occupiedCell)
@@ -1567,7 +1598,7 @@ const Board = () => {
 
         // check verification, set all threatened cells
         let isCheck = false
-        for (let i = 0; i < 32; i++) {
+        for (let i = 0; i < Object.values(allPiecePositions).length; i++) {
             if (Object.entries(allPiecePositions)[i][1] !== -1) {
                 let column = (Object.entries(allPiecePositions)[i][1] % width) + 1
                 let row = ((Object.entries(allPiecePositions)[i][1] - (Object.entries(allPiecePositions)[i][1] % width)) / width) + 1
@@ -1855,7 +1886,7 @@ const Board = () => {
     return (
         <div id="page">
             <div id="board-check">
-                <p id="check-display">{checkMate ? 'Checkmate' : check ? 'Check!' : ''}</p>
+                <p id="check-display">{checkMate ? nextTurn === 'black' ? 'Checkmate, white wins' : 'Checkmate, black wins' : check ? 'Check!' : ''}</p>
                 <div id="board">
                     {allRows}
                 </div>
