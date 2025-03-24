@@ -2,8 +2,6 @@ import { useEffect, useState } from "react"
 
 const Board = () => {
 
-    //console.log('running test')
-
     let width = 8
 
     const [allCells, setAllCells] = useState([])
@@ -245,9 +243,9 @@ const Board = () => {
     //piece movement
     useEffect(() => {
         const checkShieldingPiece = (mainPiece, color, currentCellPosition, previousCellPosition, nextCellPosition) => {
-            if (Object.values(allPiecePositions).includes(currentCellPosition) && !Object.values(allPiecePositions).includes(nextCellPosition)) {
+            if (Object.values(allPiecePositions).includes(currentCellPosition)) {
                 const currentPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentCellPosition))[0][0]
-                if (color !== currentPiece.split('-')[1] && currentPiece.indexOf('king') !== -1) {
+                if (color !== currentPiece.split('-')[1] && currentPiece.indexOf('king') !== -1 && (!Object.values(allPiecePositions).includes(nextCellPosition) || nextCellPosition === allPiecePositions[mainPiece])) {
                     const shieldingPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(previousCellPosition))[0][0]
                     if (currentPiece.split('-')[1] === shieldingPiece.split('-')[1]) {
                         setPiecesShieldingKing((prev) => {
@@ -289,11 +287,9 @@ const Board = () => {
             }
             const targetSimple = color === 'black' ? currentPiecePosition + 8 : currentPiecePosition - 8
             const targetDouble = color === 'black' ? currentPiecePosition + 16 : currentPiecePosition - 16
-            const targetDiagonal = color === 'black' ? currentPiecePosition + 7 : currentPiecePosition - 7
-            const targetDiagonal2 = color === 'black' ? currentPiecePosition + 9 : currentPiecePosition - 9
+            const targetDiagonal = color === 'black' ? currentPiecePosition + 7 : currentPiecePosition - 9
+            const targetDiagonal2 = color === 'black' ? currentPiecePosition + 9 : currentPiecePosition - 7
             const rowCheck = color === 'black' ? 2 : 7
-            // const threatCheck = color === 'black' ? ((((targetDiagonal) - ((targetDiagonal) % 8)) / 8) + 1) - row : row - ((((targetDiagonal) - ((targetDiagonal) % 8)) / 8) + 1)
-            // const threatCheck2 = color === 'black' ? ((((targetDiagonal2) - ((targetDiagonal2) % 8)) / 8) + 1) - row : row - ((((targetDiagonal2) - ((targetDiagonal2) % 8)) / 8) + 1)
             // simple move forward
             if (!Object.values(allPiecePositions).includes(targetSimple)) result.suitableCells.push(targetSimple)
             // double move forward
@@ -334,18 +330,38 @@ const Board = () => {
                 suitableCells: [],
                 protectedPieces: []
             }
-            // right
-            for (let i = 1; i <= width - column; i++) {
+
+            const rookBaseMove = (i, color, currentPiecePosition, moveForward, direction, column, row) => {
                 let clear = true
-                for (let j = 1; j < (((currentPiecePosition + i) % 8) + 1) - column; j++) {
-                    if (Object.values(allPiecePositions).includes(currentPiecePosition + i - j) && currentPiecePosition + i - j !== currentPiecePosition) {
-                        checkShieldingPiece(Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition))[0][0], color, currentPiecePosition + i, currentPiecePosition + i - j, currentPiecePosition + i - j - 1)
+                let loopValue
+                switch (direction) {
+                    case 'right': loopValue = (((moveForward) % 8) + 1) - column;
+                    break;
+                    case 'left': loopValue = 7 - ((moveForward) % 8) - (width - column);
+                    break;
+                    case 'up': loopValue = (7 - (((moveForward) - ((moveForward) % 8)) / 8)) - (width - row);
+                    break;
+                    default: loopValue = (((moveForward) - ((moveForward) % 8)) / 8 + 1) - row;
+                }
+                for (let j = 1; j < loopValue; j++) {
+                    let moveBackward
+                    switch (direction) {
+                        case 'right': moveBackward = moveForward - j;
+                        break;
+                        case 'left': moveBackward = moveForward + j;
+                        break;
+                        case 'up': moveBackward = moveForward + (j * 8);
+                        break;
+                        default: moveBackward = moveForward - (j * 8);
+                    }
+                    if (Object.values(allPiecePositions).includes(moveBackward) && moveBackward !== currentPiecePosition) {
+                        checkShieldingPiece(Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition))[0][0], color, moveForward, moveBackward, moveBackward - 1)
                         clear = false
                         break
                     }
                 }
-                if (Object.values(allPiecePositions).includes(currentPiecePosition + i)) {
-                    const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition + i))[0][0]
+                if (Object.values(allPiecePositions).includes(moveForward)) {
+                    const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(moveForward))[0][0]
                     if (clear && targetPiece.indexOf(color) === -1) {
                         result.threatenedPieces.push(targetPiece)
                         if (targetPiece.indexOf('king') !== -1) {
@@ -355,11 +371,31 @@ const Board = () => {
                             setCellsInterceptingCheck((prev) => {
                                 const newState = prev
                                 for (let j = 1; j < i; j++) {
-                                    if (!newState.includes(currentPiecePosition + j)) newState.push(currentPiecePosition + j)
+                                    let interceptingCell
+                                    switch (direction) {
+                                        case 'right': interceptingCell = currentPiecePosition + j;
+                                        break;
+                                        case 'left': interceptingCell = currentPiecePosition - j;
+                                        break;
+                                        case 'up': interceptingCell = currentPiecePosition - (j * width);
+                                        break;
+                                        default: interceptingCell = currentPiecePosition + (j * width);
+                                    }
+                                    if (!newState.includes(interceptingCell)) newState.push(interceptingCell)
                                 }
                                 return newState
                             })
-                            if (!Object.values(allPiecePositions).includes(currentPiecePosition + i + 1)) {
+                            let threateningCellValue
+                            switch (direction) {
+                                case 'right': threateningCellValue = moveForward + 1;
+                                break;
+                                case 'left': threateningCellValue = moveForward - 1;
+                                break;
+                                case 'up': threateningCellValue = moveForward - width;
+                                break;
+                                default: threateningCellValue = moveForward + width;
+                            }
+                            if (!Object.values(allPiecePositions).includes(threateningCellValue)) {
                                 setAllThreatenedCells((prev) => {
                                     const newThreatenedCells = Object.entries(prev).filter(piece => piece.includes(currentPiece))[0][1]
                                     if (!Object.values(allPiecePositions).includes(allPiecePositions[targetPiece] + 1) && !newThreatenedCells.includes(allPiecePositions[targetPiece] + 1)) {
@@ -375,140 +411,25 @@ const Board = () => {
                     }
                     if (clear && targetPiece.indexOf(color) !== -1) result.protectedPieces.push(targetPiece)
                 } else {
-                    if (clear || i === 1) result.suitableCells.push(currentPiecePosition + i)
+                    if (clear || i === 1) result.suitableCells.push(moveForward)
                 }
+            }
+
+            // right
+            for (let i = 1; i <= width - column; i++) {
+                rookBaseMove(i, color, currentPiecePosition, currentPiecePosition + i, 'right', column, row)
             }
             // left
             for (let i = 1; i < column; i++) {
-                let clear = true
-                for (let j = 1; j < 7 - ((currentPiecePosition - i) % 8) - (width - column); j++) {
-                    if (Object.values(allPiecePositions).includes(currentPiecePosition - i + j) && currentPiecePosition - i + j !== currentPiecePosition) {
-                        checkShieldingPiece(Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition))[0][0], color, currentPiecePosition - i, currentPiecePosition - i + j, currentPiecePosition - i + j + 1)
-                        clear = false
-                        break
-                    }
-                }
-                if (Object.values(allPiecePositions).includes(currentPiecePosition - i)) {
-                    const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition - i))[0][0]
-                    if (clear && targetPiece.indexOf(color) === -1) {
-                        result.threatenedPieces.push(targetPiece)
-                        if (targetPiece.indexOf('king') !== -1) {
-                            const currentPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition))[0][0]
-                            setCheck(true)
-                            setCheckingPiece(currentPiece)
-                            setCellsInterceptingCheck((prev) => {
-                                const newState = prev
-                                for (let j = 1; j < i; j++) {
-                                    if (!newState.includes(currentPiecePosition - j)) newState.push(currentPiecePosition - j)
-                                }
-                                return newState
-                            })
-                            if (!Object.values(allPiecePositions).includes(currentPiecePosition - i - 1)) {
-                                setAllThreatenedCells((prev) => {
-                                    const newThreatenedCells = Object.entries(prev).filter(piece => piece.includes(currentPiece))[0][1]
-                                    if (!Object.values(allPiecePositions).includes(allPiecePositions[targetPiece] - 1) && !newThreatenedCells.includes(allPiecePositions[targetPiece] - 1)) {
-                                        newThreatenedCells.push(allPiecePositions[targetPiece] - 1)
-                                    }
-                                    return {
-                                        ...prev,
-                                        [currentPiece]: newThreatenedCells
-                                    }
-                                })
-                            }
-                        }
-                    }
-                    if (clear && targetPiece.indexOf(color) !== -1) result.protectedPieces.push(targetPiece)
-                } else {
-                    if (clear || i === 1) result.suitableCells.push(currentPiecePosition - i)
-                }
+                rookBaseMove(i, color, currentPiecePosition, currentPiecePosition - i, 'left', column, row)
             }
             // down
             for (let i = 1; i <= width - row; i++) {
-                let clear = true
-                for (let j = 1; j < (((currentPiecePosition + (i * width)) - ((currentPiecePosition + (i * width)) % 8)) / 8 + 1) - row; j++) {
-                    if (Object.values(allPiecePositions).includes(currentPiecePosition + (i * width) - (j * 8)) && currentPiecePosition + (i * width) - (j * 8) !== currentPiecePosition) {
-                        checkShieldingPiece(Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition))[0][0], color, currentPiecePosition + (i * width), currentPiecePosition + (i * width) - (j * 8), currentPiecePosition + (i * width) - (j * 8) - width)
-                        clear = false
-                        break
-                    }
-                }
-                if (Object.values(allPiecePositions).includes(currentPiecePosition + (i * width))) {
-                    const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition + (i * width)))[0][0]
-                    if (clear && targetPiece.indexOf(color) === -1) {
-                        result.threatenedPieces.push(targetPiece)
-                        if (targetPiece.indexOf('king') !== -1) {
-                            const currentPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition))[0][0]
-                            setCheck(true)
-                            setCheckingPiece(currentPiece)
-                            setCellsInterceptingCheck((prev) => {
-                                const newState = prev
-                                for (let j = 1; j < i; j++) {
-                                    if (!newState.includes(currentPiecePosition + (j * width))) newState.push(currentPiecePosition + (j * width))
-                                }
-                                return newState
-                            })
-                            if (!Object.values(allPiecePositions).includes(currentPiecePosition + (i * width) + width)) {
-                                setAllThreatenedCells((prev) => {
-                                    const newThreatenedCells = Object.entries(prev).filter(piece => piece.includes(currentPiece))[0][1]
-                                    if (!Object.values(allPiecePositions).includes(allPiecePositions[targetPiece] + width) && !newThreatenedCells.includes(allPiecePositions[targetPiece] + width)) {
-                                        newThreatenedCells.push(allPiecePositions[targetPiece] + width)
-                                    }
-                                    return {
-                                        ...prev,
-                                        [currentPiece]: newThreatenedCells
-                                    }
-                                })
-                            }
-                        }
-                    }
-                    if (clear && targetPiece.indexOf(color) !== -1) result.protectedPieces.push(targetPiece)
-                } else {
-                    if (clear || i === 1) result.suitableCells.push(currentPiecePosition + (i * width))
-                }
+                rookBaseMove(i, color, currentPiecePosition, currentPiecePosition + (i * width), 'down', column, row)
             }
             // up
             for (let i = 1; i < row; i++) {
-                let clear = true
-                for (let j = 1; j < (7 - (((currentPiecePosition - (i * width)) - ((currentPiecePosition - (i * width)) % 8)) / 8)) - (width - row); j++) {
-                    if (clear && Object.values(allPiecePositions).includes(currentPiecePosition - (i * width) + (j * 8)) && currentPiecePosition - (i * width) + (j * 8) !== currentPiecePosition) {
-                        checkShieldingPiece(Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition))[0][0], color, currentPiecePosition - (i * width), currentPiecePosition - (i * width) + (j * 8), currentPiecePosition - (i * width) + (j * 8) + width)
-                        clear = false
-                        break
-                    }
-                }
-                if (Object.values(allPiecePositions).includes(currentPiecePosition - (i * width))) {
-                    const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition - (i * width)))[0][0]
-                    if (clear && targetPiece.indexOf(color) === -1) {
-                        result.threatenedPieces.push(targetPiece)
-                        if (targetPiece.indexOf('king') !== -1) {
-                            const currentPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition))[0][0]
-                            setCheck(true)
-                            setCheckingPiece(currentPiece)
-                            setCellsInterceptingCheck((prev) => {
-                                const newState = prev
-                                for (let j = 1; j < i; j++) {
-                                    if (!newState.includes(currentPiecePosition - (j * width))) newState.push(currentPiecePosition - (j * width))
-                                }
-                                return newState
-                            })
-                            if (!Object.values(allPiecePositions).includes(currentPiecePosition - (i * width) - width)) {
-                                setAllThreatenedCells((prev) => {
-                                    const newThreatenedCells = Object.entries(prev).filter(piece => piece.includes(currentPiece))[0][1]
-                                    if (!Object.values(allPiecePositions).includes(allPiecePositions[targetPiece] - width) && !newThreatenedCells.includes(allPiecePositions[targetPiece] - width)) {
-                                        newThreatenedCells.push(allPiecePositions[targetPiece] - width)
-                                    }
-                                    return {
-                                        ...prev,
-                                        [currentPiece]: newThreatenedCells
-                                    }
-                                })
-                            }
-                        }
-                    }
-                    if (clear && targetPiece.indexOf(color) !== -1) result.protectedPieces.push(targetPiece)
-                } else {
-                    if (clear || i === 1) result.suitableCells.push(currentPiecePosition - (i * width))
-                }
+                rookBaseMove(i, color, currentPiecePosition, currentPiecePosition - (i * width), 'up', column, row)
             }
             return result
         }
@@ -519,11 +440,12 @@ const Board = () => {
                 suitableCells: [],
                 protectedPieces: []
             }
-            if (column < 7 && row < 8) {
-                if (!Object.values(allPiecePositions).includes(currentPiecePosition + 10)) {
-                    result.suitableCells.push(currentPiecePosition + 10)
+
+            const knightBaseMove = (color, currentPiecePosition, currentMove) => {
+                if (!Object.values(allPiecePositions).includes(currentMove)) {
+                    result.suitableCells.push(currentMove)
                 } else {
-                    const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition + 10))[0][0]
+                    const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentMove))[0][0]
                     if (targetPiece.indexOf(color) === -1) {
                         result.threatenedPieces.push(targetPiece)
                         if (targetPiece.indexOf('king') !== -1) {
@@ -533,111 +455,31 @@ const Board = () => {
                     }
                     if (targetPiece.indexOf(color) !== -1) result.protectedPieces.push(targetPiece)
                 }
+            }
+
+            if (column < 7 && row < 8) {
+                knightBaseMove(color, currentPiecePosition, currentPiecePosition + 10)
             }
             if (column < 8 && row < 7) {
-                if (!Object.values(allPiecePositions).includes(currentPiecePosition + 17)) {
-                    result.suitableCells.push(currentPiecePosition + 17)
-                } else {
-                    const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition + 17))[0][0]
-                    if (targetPiece.indexOf(color) === -1) {
-                        result.threatenedPieces.push(targetPiece)
-                        if (targetPiece.indexOf('king') !== -1) {
-                            setCheck(true)
-                            setCheckingPiece(Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition))[0][0])
-                        }
-                    }
-                    if (targetPiece.indexOf(color) !== -1) result.protectedPieces.push(targetPiece)
-                }
+                knightBaseMove(color, currentPiecePosition, currentPiecePosition + 17)
             }
             if (column < 7 && row > 1) {
-                if (!Object.values(allPiecePositions).includes(currentPiecePosition - 6)) {
-                    result.suitableCells.push(currentPiecePosition - 6)
-                } else {
-                    const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition - 6))[0][0]
-                    if (targetPiece.indexOf(color) === -1) {
-                        result.threatenedPieces.push(targetPiece)
-                        if (targetPiece.indexOf('king') !== -1) {
-                            setCheck(true)
-                            setCheckingPiece(Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition))[0][0])
-                        }
-                    }
-                    if (targetPiece.indexOf(color) !== -1) result.protectedPieces.push(targetPiece)
-                }
+                knightBaseMove(color, currentPiecePosition, currentPiecePosition - 6)
             }
             if (column > 1 && row < 7) {
-                if (!Object.values(allPiecePositions).includes(currentPiecePosition + 15)) {
-                    result.suitableCells.push(currentPiecePosition + 15)
-                } else {
-                    const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition + 15))[0][0]
-                    if (targetPiece.indexOf(color) === -1) {
-                        result.threatenedPieces.push(targetPiece)
-                        if (targetPiece.indexOf('king') !== -1) {
-                            setCheck(true)
-                            setCheckingPiece(Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition))[0][0])
-                        }
-                    }
-                    if (targetPiece.indexOf(color) !== -1) result.protectedPieces.push(targetPiece)
-                }
+                knightBaseMove(color, currentPiecePosition, currentPiecePosition + 15)
             }
             if (column > 1 && row > 2) {
-                if (!Object.values(allPiecePositions).includes(currentPiecePosition - 17)) {
-                    result.suitableCells.push(currentPiecePosition - 17)
-                } else {
-                    const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition - 17))[0][0]
-                    if (targetPiece.indexOf(color) === -1) {
-                        result.threatenedPieces.push(targetPiece)
-                        if (targetPiece.indexOf('king') !== -1) {
-                            setCheck(true)
-                            setCheckingPiece(Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition))[0][0])
-                        }
-                    }
-                    if (targetPiece.indexOf(color) !== -1) result.protectedPieces.push(targetPiece)
-                }
+                knightBaseMove(color, currentPiecePosition, currentPiecePosition - 17)
             }
             if (column > 2 && row > 1) {
-                if (!Object.values(allPiecePositions).includes(currentPiecePosition - 10)) {
-                    result.suitableCells.push(currentPiecePosition - 10)
-                } else {
-                    const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition - 10))[0][0]
-                    if (targetPiece.indexOf(color) === -1) {
-                        result.threatenedPieces.push(targetPiece)
-                        if (targetPiece.indexOf('king') !== -1) {
-                            setCheck(true)
-                            setCheckingPiece(Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition))[0][0])
-                        }
-                    }
-                    if (targetPiece.indexOf(color) !== -1) result.protectedPieces.push(targetPiece)
-                }
+                knightBaseMove(color, currentPiecePosition, currentPiecePosition - 10)
             }
             if (column > 2 && row < 8) {
-                if (!Object.values(allPiecePositions).includes(currentPiecePosition + 6)) {
-                    result.suitableCells.push(currentPiecePosition + 6)
-                } else {
-                    const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition + 6))[0][0]
-                    if (targetPiece.indexOf(color) === -1) {
-                        result.threatenedPieces.push(targetPiece)
-                        if (targetPiece.indexOf('king') !== -1) {
-                            setCheck(true)
-                            setCheckingPiece(Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition))[0][0])
-                        }
-                    }
-                    if (targetPiece.indexOf(color) !== -1) result.protectedPieces.push(targetPiece)
-                }
+                knightBaseMove(color, currentPiecePosition, currentPiecePosition + 6)
             }
             if (column < 8 && row > 2) {
-                if (!Object.values(allPiecePositions).includes(currentPiecePosition - 15)) {
-                    result.suitableCells.push(currentPiecePosition - 15)
-                } else {
-                    const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition - 15))[0][0]
-                    if (targetPiece.indexOf(color) === -1) {
-                        result.threatenedPieces.push(targetPiece)
-                        if (targetPiece.indexOf('king') !== -1) {
-                            setCheck(true)
-                            setCheckingPiece(Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition))[0][0])
-                        }
-                    }
-                    if (targetPiece.indexOf(color) !== -1) result.protectedPieces.push(targetPiece)
-                }
+                knightBaseMove(color, currentPiecePosition, currentPiecePosition - 15)
             }
             return result
         }
@@ -648,26 +490,44 @@ const Board = () => {
                 suitableCells: [],
                 protectedPieces: []
             }
-            let loopSize
-            // down right
-            if (column >= row) loopSize = width - column
-            if (column < row) loopSize = width - row
-            for (let i = 1; i <= loopSize; i++) {
+
+            const bishopBaseMove = (i, color, currentPiecePosition, moveForward, direction, column, row) => {
                 let clear = true
-                let column2 = ((currentPiecePosition + width * i + i) % 8) + 1
-                let row2 = (((currentPiecePosition + width * i + i) - ((currentPiecePosition + width * i + i) % 8)) / 8) + 1
+                let column2 = ((moveForward) % 8) + 1
+                let row2 = (((moveForward) - ((moveForward) % 8)) / 8) + 1
                 let loopSize2
-                if (column2 >= row2) loopSize2 = row2 - 1 - (row - 1)
-                if (column2 < row2) loopSize2 = row2 - row
+                if (direction === 'down right') {
+                    if (column2 >= row2) loopSize2 = row2 - 1 - (row - 1)
+                    if (column2 < row2) loopSize2 = row2 - row
+                } else if (direction === 'down left') {
+                    if (row2 <= width - column2) loopSize2 = row2 - 1 - (row - 1)
+                    if (row2 > width - column2) loopSize2 = width - column2 - (width - column)
+                } else if (direction === 'up right') {
+                    if (column2 <= width - row2) loopSize2 = column2 - 1 - (column - 1)
+                    if (column2 > width - row2) loopSize2 = width - row2 - (width - row)
+                } else {
+                    if (column2 >= row2) loopSize2 = width - column2 - (width - column)
+                    if (column2 < row2) loopSize2 = width - row2 - (width - row)
+                }
                 for (let j = 1; j < loopSize2; j++) {
-                    if (Object.values(allPiecePositions).includes((currentPiecePosition + width * i + i) - (width * j + j)) && (currentPiecePosition + width * i + i) - (width * j + j) !== currentPiecePosition) {
-                        checkShieldingPiece(Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition))[0][0], color, currentPiecePosition + width * i + i, (currentPiecePosition + width * i + i) - (width * j + j), (currentPiecePosition + width * i + i) - (width * j + j) - width - 1)
+                    let moveBackward
+                    switch (direction) {
+                        case 'down right': moveBackward = moveForward - (width * j + j);
+                        break;
+                        case 'down left': moveBackward = moveForward - (width * j - j);
+                        break;
+                        case 'up right': moveBackward = moveForward + (width * j - j);
+                        break;
+                        default: moveBackward = moveForward + (width * j + j);
+                    }
+                    if (Object.values(allPiecePositions).includes(moveBackward) && moveBackward !== currentPiecePosition) {
+                        checkShieldingPiece(Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition))[0][0], color, moveForward, moveBackward, moveBackward - width - 1)
                         clear = false
                         break
                     }
                 }
-                if (Object.values(allPiecePositions).includes(currentPiecePosition + width * i + i)) {
-                    const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition + width * i + i))[0][0]
+                if (Object.values(allPiecePositions).includes(moveForward)) {
+                    const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(moveForward))[0][0]
                     if (clear && targetPiece.indexOf(color) === -1) {
                         result.threatenedPieces.push(targetPiece)
                         if (targetPiece.indexOf('king') !== -1) {
@@ -677,11 +537,31 @@ const Board = () => {
                             setCellsInterceptingCheck((prev) => {
                                 const newState = prev
                                 for (let j = 1; j < i; j++) {
-                                    if (!newState.includes(currentPiecePosition + width * j + j)) newState.push(currentPiecePosition + width * j + j)
+                                    let interceptingCell
+                                    switch (direction) {
+                                        case 'down right': interceptingCell = currentPiecePosition + width * j + j;
+                                        break;
+                                        case 'down left': interceptingCell = currentPiecePosition + width * j - j;
+                                        break;
+                                        case 'up right': interceptingCell = currentPiecePosition - width * j + j;
+                                        break;
+                                        default: interceptingCell = currentPiecePosition - width * j - j;
+                                    }
+                                    if (!newState.includes(interceptingCell)) newState.push(interceptingCell)
                                 }
                                 return newState
                             })
-                            if (!Object.values(allPiecePositions).includes(currentPiecePosition + width * i + i + width + 1)) {
+                            let threateningCellValue
+                            switch (direction) {
+                                case 'down right': threateningCellValue = moveForward + width + 1;
+                                break;
+                                case 'down left': threateningCellValue = moveForward + width - 1;
+                                break;
+                                case 'up right': threateningCellValue = moveForward - width + 1;
+                                break;
+                                default: threateningCellValue = moveForward - width - 1;
+                            }
+                            if (!Object.values(allPiecePositions).includes(threateningCellValue)) {
                                 setAllThreatenedCells((prev) => {
                                     const newThreatenedCells = Object.entries(prev).filter(piece => piece.includes(currentPiece))[0][1]
                                     if (!Object.values(allPiecePositions).includes(allPiecePositions[targetPiece] + width + 1) && !newThreatenedCells.includes(allPiecePositions[targetPiece] + width + 1)) {
@@ -697,161 +577,34 @@ const Board = () => {
                     }
                     if (clear && targetPiece.indexOf(color) !== -1) result.protectedPieces.push(targetPiece)
                 } else {
-                    if (clear || i === 1) result.suitableCells.push(currentPiecePosition + width * i + i)
+                    if (clear || i === 1) result.suitableCells.push(moveForward)
                 }
+            }
+
+            let loopSize
+            // down right
+            if (column >= row) loopSize = width - column
+            if (column < row) loopSize = width - row
+            for (let i = 1; i <= loopSize; i++) {
+                bishopBaseMove(i, color, currentPiecePosition, currentPiecePosition + width * i + i, 'down right', column, row)
             }
             // down left
             if (column <= width - row) loopSize = column - 1
             if (column > width - row) loopSize = width - row
             for (let i = 1; i <= loopSize; i++) {
-                let clear = true
-                let column2 = ((currentPiecePosition + width * i - i) % 8) + 1
-                let row2 = (((currentPiecePosition + width * i - i) - ((currentPiecePosition + width * i - i) % 8)) / 8) + 1
-                let loopSize2
-                if (row2 <= width - column2) loopSize2 = row2 - 1 - (row - 1)
-                if (row2 > width - column2) loopSize2 = width - column2 - (width - column)
-                for (let j = 1; j < loopSize2; j++) {
-                    if (Object.values(allPiecePositions).includes((currentPiecePosition + width * i - i) - (width * j - j)) && (currentPiecePosition + width * i - i) - (width * j - j) !== currentPiecePosition) {
-                        checkShieldingPiece(Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition))[0][0], color, currentPiecePosition + width * i - i, (currentPiecePosition + width * i - i) - (width * j - j), (currentPiecePosition + width * i - i) - (width * j - j) - width + 1)
-                        clear = false
-                        break
-                    }
-                }
-                if (Object.values(allPiecePositions).includes(currentPiecePosition + width * i - i)) {
-                    const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition + width * i - i))[0][0]
-                    if (clear && targetPiece.indexOf(color) === -1) {
-                        result.threatenedPieces.push(targetPiece)
-                        if (targetPiece.indexOf('king') !== -1) {
-                            const currentPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition))[0][0]
-                            setCheck(true)
-                            setCheckingPiece(currentPiece)
-                            setCellsInterceptingCheck((prev) => {
-                                const newState = prev
-                                for (let j = 1; j < i; j++) {
-                                    if (!newState.includes(currentPiecePosition + width * j - j)) newState.push(currentPiecePosition + width * j - j)
-                                }
-                                return newState
-                            })
-                            if (!Object.values(allPiecePositions).includes(currentPiecePosition + width * i - i + width - 1)) {
-                                setAllThreatenedCells((prev) => {
-                                    const newThreatenedCells = Object.entries(prev).filter(piece => piece.includes(currentPiece))[0][1]
-                                    if (!Object.values(allPiecePositions).includes(allPiecePositions[targetPiece] + width - 1) && !newThreatenedCells.includes(allPiecePositions[targetPiece] + width - 1)) {
-                                        newThreatenedCells.push(allPiecePositions[targetPiece] + width - 1)
-                                    }
-                                    return {
-                                        ...prev,
-                                        [currentPiece]: newThreatenedCells
-                                    }
-                                })
-                            }
-                        }
-                    }
-                    if (clear && targetPiece.indexOf(color) !== -1) result.protectedPieces.push(targetPiece)
-                } else {
-                    if (clear || i === 1) result.suitableCells.push(currentPiecePosition + width * i - i)
-                }
+                bishopBaseMove(i, color, currentPiecePosition, currentPiecePosition + width * i - i, 'down left', column, row)
             }
             // up right
             if (row <= width - column) loopSize = row - 1
             if (row > width - column) loopSize = width - column
             for (let i = 1; i <= loopSize; i++) {
-                let clear = true
-                let column2 = ((currentPiecePosition - width * i + i) % 8) + 1
-                let row2 = (((currentPiecePosition - width * i + i) - ((currentPiecePosition - width * i + i) % 8)) / 8) + 1
-                let loopSize2
-                if (column2 <= width - row2) loopSize2 = column2 - 1 - (column - 1)
-                if (column2 > width - row2) loopSize2 = width - row2 - (width - row)
-                for (let j = 1; j < loopSize2; j++) {
-                    if (Object.values(allPiecePositions).includes((currentPiecePosition - width * i + i) + (width * j - j)) && (currentPiecePosition - width * i + i) + (width * j - j) !== currentPiecePosition) {
-                        checkShieldingPiece(Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition))[0][0], color, currentPiecePosition - width * i + i, (currentPiecePosition - width * i + i) + (width * j - j), (currentPiecePosition - width * i + i) + (width * j - j) + width - 1)
-                        clear = false
-                        break
-                    }
-                }
-                if (Object.values(allPiecePositions).includes(currentPiecePosition - width * i + i)) {
-                    const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition - width * i + i))[0][0]
-                    if (clear && targetPiece.indexOf(color) === -1) {
-                        result.threatenedPieces.push(targetPiece)
-                        if (targetPiece.indexOf('king') !== -1) {
-                            const currentPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition))[0][0]
-                            setCheck(true)
-                            setCheckingPiece(currentPiece)
-                            setCellsInterceptingCheck((prev) => {
-                                const newState = prev
-                                for (let j = 1; j < i; j++) {
-                                    if (!newState.includes(currentPiecePosition - width * j + j)) newState.push(currentPiecePosition - width * j + j)
-                                }
-                                return newState
-                            })
-                            if (!Object.values(allPiecePositions).includes(currentPiecePosition - width * i + i - width + 1)) {
-                                setAllThreatenedCells((prev) => {
-                                    const newThreatenedCells = Object.entries(prev).filter(piece => piece.includes(currentPiece))[0][1]
-                                    if (!Object.values(allPiecePositions).includes(allPiecePositions[targetPiece] - width + 1) && !newThreatenedCells.includes(allPiecePositions[targetPiece] - width + 1)) {
-                                        newThreatenedCells.push(allPiecePositions[targetPiece] - width + 1)
-                                    }
-                                    return {
-                                        ...prev,
-                                        [currentPiece]: newThreatenedCells
-                                    }
-                                })
-                            }
-                        }
-                    }
-                    if (clear && targetPiece.indexOf(color) !== -1) result.protectedPieces.push(targetPiece)
-                } else {
-                    if (clear || i === 1) result.suitableCells.push(currentPiecePosition - width * i + i)
-                }
+                bishopBaseMove(i, color, currentPiecePosition, currentPiecePosition - width * i + i, 'up right', column, row)
             }
             // up left
             if (column >= row) loopSize = row - 1
             if (column < row) loopSize = column - 1
             for (let i = 1; i <= loopSize; i++) {
-                let clear = true
-                let column2 = ((currentPiecePosition - width * i - i) % 8) + 1
-                let row2 = (((currentPiecePosition - width * i - i) - ((currentPiecePosition - width * i - i) % 8)) / 8) + 1
-                let loopSize2
-                if (column2 >= row2) loopSize2 = width - column2 - (width - column)
-                if (column2 < row2) loopSize2 = width - row2 - (width - row)
-                for (let j = 1; j < loopSize2; j++) {
-                    if (Object.values(allPiecePositions).includes((currentPiecePosition - width * i - i) + (width * j + j)) && (currentPiecePosition - width * i - i) + (width * j + j) !== currentPiecePosition) {
-                        checkShieldingPiece(Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition))[0][0], color, currentPiecePosition - width * i - i, (currentPiecePosition - width * i - i) + (width * j + j), (currentPiecePosition - width * i - i) + (width * j + j) + width + 1)
-                        clear = false
-                        break
-                    }
-                }
-                if (Object.values(allPiecePositions).includes(currentPiecePosition - width * i - i)) {
-                    const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition - width * i - i))[0][0]
-                    if (clear && targetPiece.indexOf(color) === -1) {
-                        result.threatenedPieces.push(targetPiece)
-                        if (targetPiece.indexOf('king') !== -1) {
-                            const currentPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentPiecePosition))[0][0]
-                            setCheck(true)
-                            setCheckingPiece(currentPiece)
-                            setCellsInterceptingCheck((prev) => {
-                                const newState = prev
-                                for (let j = 1; j < i; j++) {
-                                    if (!newState.includes(currentPiecePosition - width * j - j)) newState.push(currentPiecePosition - width * j - j)
-                                }
-                                return newState
-                            })
-                            if (!Object.values(allPiecePositions).includes(currentPiecePosition - width * i - i - width - 1)) {
-                                setAllThreatenedCells((prev) => {
-                                    const newThreatenedCells = Object.entries(prev).filter(piece => piece.includes(currentPiece))[0][1]
-                                    if (!Object.values(allPiecePositions).includes(allPiecePositions[targetPiece] - width - 1) && !newThreatenedCells.includes(allPiecePositions[targetPiece] - width - 1)) {
-                                        newThreatenedCells.push(allPiecePositions[targetPiece] - width - 1)
-                                    }
-                                    return {
-                                        ...prev,
-                                        [currentPiece]: newThreatenedCells
-                                    }
-                                })
-                            }
-                        }
-                    }
-                    if (clear && targetPiece.indexOf(color) !== -1) result.protectedPieces.push(targetPiece)
-                } else {
-                    if (clear || i === 1) result.suitableCells.push(currentPiecePosition - width * i - i)
-                }
+                bishopBaseMove(i, color, currentPiecePosition, currentPiecePosition - width * i - i, 'up left', column, row)
             }
             return result
         }
@@ -947,6 +700,7 @@ const Board = () => {
         }
 
         const movePiece = (selectedPosition, currentPiecePosition) => {
+            // remove previous suitable cells
             for (let i = 0; i < suitableCells.length ; i++) {
                 let newClass
                 const rowNumber = (suitableCells[i] - (suitableCells[i] % 8)) / 8
@@ -1619,13 +1373,13 @@ const Board = () => {
             }
         }
 
-        for (const piece in allThreatenedCells) {
-            setAllThreatenedCells(prev => {
-                const newState = prev
+        setAllThreatenedCells(prev => {
+            const newState = prev
+            for (const piece in prev) {
                 newState[piece] = []
-                return newState
-            })
-        }
+            }
+            return newState
+        })
 
         // check verification, set all threatened cells
         let isCheck = false
