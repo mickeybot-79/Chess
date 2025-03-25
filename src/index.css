@@ -14,7 +14,6 @@ code {
 
 #page {
   display:flex;
-  gap: 0px;
   place-content: center;
   position: sticky;
 }
@@ -78,44 +77,40 @@ img {
 
 #check-display {
   width: 500px;
-  font-size: 40px;
+  font-size: 50px;
   font-weight: 700;
-  height: 70px;
-  margin-bottom: -50px;
-  margin-top: 0px;
-  text-align: center;
+  text-align: left;
   place-self: center;
-}
-
-#taken-out-pieces {
-  margin-top: 80px;
-  margin-left: 20px;
-  height: 580px;
-  justify-content: center;
-  display: grid;
+  margin-left: -200px;
 }
 
 #taken-out-white-pieces {
-  width: 450px;
-  height: 150px;
+  width: 780px;
+  height: 10px;
   place-items: bottom;
-  margin-bottom: 100px;
-  margin-top: 20px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  margin-left: 20px;
 }
 
 #taken-out-white-pieces img {
+  width: 45px;
+  height: 45px;
   margin:  0px -5px;
   cursor: auto;
 }
 
 #taken-out-black-pieces {
-  width: 450px;
-  height: 150px;
-  margin-bottom: -180px;
+  width: 780px;
+  height: 10px;
+  margin-top: 20px;
   place-content: bottom;
+  margin-left: 20px;
 }
 
 #taken-out-black-pieces img {
+  width: 45px;
+  height: 45px;
   margin: 0px -5px;
   cursor: auto;
 }
