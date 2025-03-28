@@ -943,6 +943,8 @@ const Board = () => {
                     } else {
                         newSelectedClass = previousSelected % 2 === 1 ? 'cell-even' : 'cell-uneven'
                     }
+                    console.log('allPiecePositions', allPiecePositions)
+                    console.log('previousSelected', previousSelected)
                     const previousSelectedPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(previousSelected))[0][0]
                     const previousSelectedCell = (
                         <div id={previousSelected} key={previousSelected} className={newSelectedClass}><img src={`../Images/${previousSelectedPiece.split('-')[0]}-${previousSelectedPiece.split('-')[1]}.png`} alt={`${previousSelectedPiece.split('-')[0]}-${previousSelectedPiece.split('-')[1]}`} id={previousSelectedPiece} onClick={() => setSelectedPiece(previousSelectedPiece)}/></div>
@@ -991,7 +993,6 @@ const Board = () => {
                 const pieceMoveLogic = (pieceMoves) => {
                     let notShielding = true
                     let indexOfThreateningPiece = -1
-                    //console.log(pieceMoves.threatenedPieces)
                     if (selectedPiece.split('-')[1] === 'black') {
                         for (let i = 0; i < piecesShieldingKing.black.length; i++) {
                             if (piecesShieldingKing.black[i]?.piece === selectedPiece) {
@@ -1189,39 +1190,39 @@ const Board = () => {
 
         // check verification, set all threatened cells
         let isCheck = false
-        const checkThreatVerify = (i, currentPiece, pieceMoves) => {
+        const checkThreatVerify = (currentPiece, pieceMoves) => {
             for (let j = 0; j < pieceMoves.threatenedPieces.length; j++) {
                 setAllThreatenedCells((prev) => {
-                    const newThreatenedCells = prev[Object.entries(allPiecePositions)[i][0]]
+                    const newThreatenedCells = prev[currentPiece]
                     if (!newThreatenedCells.includes(allPiecePositions[pieceMoves.threatenedPieces[j]])) newThreatenedCells.push(allPiecePositions[pieceMoves.threatenedPieces[j]])
                     return {
                         ...prev,
-                        [Object.entries(allPiecePositions)[i][0]]: newThreatenedCells
+                        [currentPiece]: newThreatenedCells
                     }
                 })
                 if (pieceMoves.threatenedPieces[j].indexOf('king') !== -1) {
-                    setCheckingPiece(Object.entries(allPiecePositions)[i][0])
+                    setCheckingPiece(currentPiece)
                     isCheck = true
                 }
             }
             for (let j = 0; j < pieceMoves.protectedPieces.length; j++) {
                 setAllThreatenedCells((prev) => {
-                    const newThreatenedCells = prev[Object.entries(allPiecePositions)[i][0]]
+                    const newThreatenedCells = prev[currentPiece]
                     if (!newThreatenedCells.includes(allPiecePositions[pieceMoves.protectedPieces[j]])) newThreatenedCells.push(allPiecePositions[pieceMoves.protectedPieces[j]])
                     return {
                         ...prev,
-                        [Object.entries(allPiecePositions)[i][0]]: newThreatenedCells
+                        [currentPiece]: newThreatenedCells
                     }
                 })
             }
             if (currentPiece.indexOf('pawn') !== -1) {
                 for (let j = 0; j < pieceMoves.threatenedCells.length; j++) {
                     setAllThreatenedCells((prev) => {
-                        const newThreatenedCells = prev[Object.entries(allPiecePositions)[i][0]]
+                        const newThreatenedCells = prev[currentPiece]
                         if (pieceMoves.threatenedCells[j] && !newThreatenedCells.includes(pieceMoves.threatenedCells[j])) newThreatenedCells.push(pieceMoves.threatenedCells[j])
                         return {
                             ...prev,
-                            [Object.entries(allPiecePositions)[i][0]]: newThreatenedCells
+                            [currentPiece]: newThreatenedCells
                         }
                     })
                 }
@@ -1229,11 +1230,11 @@ const Board = () => {
             if (currentPiece.indexOf('pawn') === -1) {
                 for (let j = 0; j < pieceMoves.suitableCells.length; j++) {
                     setAllThreatenedCells((prev) => {
-                        const newThreatenedCells = prev[Object.entries(allPiecePositions)[i][0]]
+                        const newThreatenedCells = prev[currentPiece]
                         if (!newThreatenedCells.includes(pieceMoves.suitableCells[j])) newThreatenedCells.push(pieceMoves.suitableCells[j])
                         return {
                             ...prev,
-                            [Object.entries(allPiecePositions)[i][0]]: newThreatenedCells
+                            [currentPiece]: newThreatenedCells
                         }
                     })
                 }
@@ -1247,23 +1248,23 @@ const Board = () => {
                 let row = ((currentPosition - (currentPosition % width)) / width) + 1
                 if (currentPiece.indexOf('pawn') !== -1) {
                     let pawnMoves = pawnMovement(currentPiece.split('-')[1], currentPosition, row, column)
-                    checkThreatVerify(i, currentPiece, pawnMoves)
+                    checkThreatVerify(currentPiece, pawnMoves)
                 }
                 if (currentPiece.indexOf('rook') !== -1 || currentPiece.indexOf('queen') !== -1) {
                     let rookMoves = rookMovement(currentPiece.split('-')[1], currentPosition, width, row, column)
-                    checkThreatVerify(i, currentPiece, rookMoves)
+                    checkThreatVerify(currentPiece, rookMoves)
                 }
                 if (currentPiece.indexOf('knight') !== -1) {
                     let knightMoves = knightMovement(currentPiece.split('-')[1], currentPosition, row, column)
-                    checkThreatVerify(i, currentPiece, knightMoves)
+                    checkThreatVerify(currentPiece, knightMoves)
                 }
                 if (currentPiece.indexOf('bishop') !== -1 || currentPiece.indexOf('queen') !== -1) {
                     let bishopMoves = bishopMovement(currentPiece.split('-')[1], currentPosition, width, row, column)
-                    checkThreatVerify(i, currentPiece, bishopMoves)
+                    checkThreatVerify(currentPiece, bishopMoves)
                 }
                 if (currentPiece.indexOf('king') !== -1) {
                     let kingMoves = kingMovement(currentPiece.split('-')[1], currentPosition, width, row, column)
-                    checkThreatVerify(i, currentPiece, kingMoves)
+                    checkThreatVerify(currentPiece, kingMoves)
                 }
             }
         }
@@ -1322,7 +1323,6 @@ const Board = () => {
                 setCheckMate(true)
             }
         }
-
         touchPiece()
         // eslint-disable-next-line
     }, [selectedPiece, checkingPiece])
