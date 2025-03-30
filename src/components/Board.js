@@ -179,11 +179,7 @@ const Board = () => {
 
                 const rowNumber = (i - (i % 8)) / 8
 
-                if (rowNumber % 2 === 0) {
-                    cellClass = i % 2 === 0 ? 'cell-even' : 'cell-uneven'
-                } else {
-                    cellClass = i % 2 === 1 ? 'cell-even' : 'cell-uneven'
-                }
+                rowNumber % 2 === 0 ? cellClass = i % 2 === 0 ? 'cell-even' : 'cell-uneven' : cellClass = i % 2 === 1 ? 'cell-even' : 'cell-uneven'
 
                 allCellElements.push(<div id={i} key={i} className={cellClass}>{imageElement}</div>)
             }
@@ -230,7 +226,7 @@ const Board = () => {
                 }
                 if (Object.values(allPiecePositions).includes(nextValue)) {
                     const currentPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(nextValue))[0][0]
-                    if (currentPiece.indexOf('king') === -1) interceptingPieces.push(Object.entries(allPiecePositions).filter(piece => piece.includes(nextValue))[0][0])
+                    if (currentPiece.indexOf('king') === -1 && currentPiece.split('-')[1] !== mainPiece.split('-')[1]) interceptingPieces.push(Object.entries(allPiecePositions).filter(piece => piece.includes(nextValue))[0][0])
                 }
             }
 
@@ -1359,7 +1355,7 @@ const Board = () => {
     return (
         <div id="page">
             <div id="board-check">
-            <p id="check-display" style={{color: check && nextTurn === 'white' ? 'black' : 'white', textShadow: check && nextTurn === 'white' ? '4px 4px white' : '4px 4px black'}}>{checkMate ? nextTurn === 'black' ? 'Checkmate, white wins' : 'Checkmate, black wins' : check ? 'Check!' : ''}</p>
+            <p id="check-display" style={{color: check && nextTurn === 'white' ? 'black' : 'white', textShadow: check && nextTurn === 'white' ? '4px 4px gray' : '4px 4px gray'}}>{checkMate ? nextTurn === 'black' ? 'Checkmate, white wins' : 'Checkmate, black wins' : check ? 'Check!' : ''}</p>
                 <div id="taken-out-white-pieces">{whiteTakenOut}</div>
                 <div id="board">
                     {allRows}
