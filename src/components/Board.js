@@ -209,7 +209,7 @@ const Board = () => {
     useEffect(() => {
         const checkShieldingPiece = (loopValue, direction, mainPiece, currentCellPosition) => {
             const interceptingPieces = []
-            for (let i = 1; i < loopValue; i++) {
+            for (let i = 1; i <= loopValue; i++) {
                 let nextValue
                 switch (direction) {
                     case 'right': nextValue = currentCellPosition - i;
@@ -943,8 +943,6 @@ const Board = () => {
                     } else {
                         newSelectedClass = previousSelected % 2 === 1 ? 'cell-even' : 'cell-uneven'
                     }
-                    console.log('allPiecePositions', allPiecePositions)
-                    console.log('previousSelected', previousSelected)
                     const previousSelectedPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(previousSelected))[0][0]
                     const previousSelectedCell = (
                         <div id={previousSelected} key={previousSelected} className={newSelectedClass}><img src={`../Images/${previousSelectedPiece.split('-')[0]}-${previousSelectedPiece.split('-')[1]}.png`} alt={`${previousSelectedPiece.split('-')[0]}-${previousSelectedPiece.split('-')[1]}`} id={previousSelectedPiece} onClick={() => setSelectedPiece(previousSelectedPiece)}/></div>
@@ -1361,13 +1359,13 @@ const Board = () => {
     return (
         <div id="page">
             <div id="board-check">
+            <p id="check-display" style={{color: check && nextTurn === 'white' ? 'black' : 'white', textShadow: check && nextTurn === 'white' ? '4px 4px white' : '4px 4px black'}}>{checkMate ? nextTurn === 'black' ? 'Checkmate, white wins' : 'Checkmate, black wins' : check ? 'Check!' : ''}</p>
                 <div id="taken-out-white-pieces">{whiteTakenOut}</div>
                 <div id="board">
                     {allRows}
                 </div>
                 <div id="taken-out-black-pieces">{blackTakenOut}</div>
             </div>
-            <p id="check-display">{checkMate ? nextTurn === 'black' ? 'Checkmate, white wins' : 'Checkmate, black wins' : check ? 'Check!' : ''}</p>
         </div>
     )
 }
