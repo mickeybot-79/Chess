@@ -1,0 +1,21 @@
+To move a piece, check if:
+- the target cell contains an enemy piece,
+- the target cell is being threatened by an enemy piece,
+- the target cell is being defended by a friendly piece,
+- a friendly piece can be defended from the target cell,
+- the friendly piece to be defended is already being defended by another friendly piece,
+- the friendly piece to be defended is being threatened by one or more enemy pieces,
+- the piece to be moved can threaten an enemy piece from the target cell,
+- the enemy piece that would be threatened from the target cell is also being threatened by another friendly piece,
+- the enemy piece that would be threatened from the target cell is being defended by one or more enemy pieces
+
+Also consider: 
+- the value of the current piece,
+- the value of the enemy piece being taken out,
+- the value of the enemy piece being threatened
+- the value of the enemy piece being defended
+- the value of the friendly piece being defended
+- the value of the friendly piece being left defenseless,
+
+Remember: 
+- Add second queen to allPiecePositions, allThreatenedCells and allPossibleMoves in the nextMove file.

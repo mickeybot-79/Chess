@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import nextMove from "../components/nextMove"
 
 const Board = () => {
 
@@ -10,7 +11,11 @@ const Board = () => {
 
     const [selectedPiece, setSelectedPiece] = useState('')
 
-    const [allPiecePositions, setAllPiecePositions] = useState({
+    const [selectedPosition, setSelectedPosition] = useState(-1)
+
+    //const [currentPiecePosition, setCurrentPiecePosition] = useState(-1)
+
+    /*
         'rook-black-1': 0,
         'rook-black-2': 7,
         'knight-black-1': 1,
@@ -43,6 +48,41 @@ const Board = () => {
         'bishop-white-2': 61,
         'queen-white': 59,
         'king-white': 60,
+    */
+
+    const [allPiecePositions, setAllPiecePositions] = useState({
+        'rook-black-1': 2,
+        'rook-black-2': 5,
+        'knight-black-1': 8,
+        'knight-black-2': -1,
+        'bishop-black-1': 12,
+        'bishop-black-2': -1,
+        'queen-black': 24,
+        'king-black': 6,
+        'pawn-black-1': 16,
+        'pawn-black-2': 25,
+        'pawn-black-3': -1,
+        'pawn-black-4': -1,
+        'pawn-black-5': 28,
+        'pawn-black-6': 13,
+        'pawn-black-7': 14,
+        'pawn-black-8': 15,
+        'pawn-white-1': 40,
+        'pawn-white-2': 49,
+        'pawn-white-3': -1,
+        'pawn-white-4': -1,
+        'pawn-white-5': 44,
+        'pawn-white-6': 53,
+        'pawn-white-7': 45,
+        'pawn-white-8': 55,
+        'rook-white-1': 58,
+        'rook-white-2': 61,
+        'knight-white-1': -1,
+        'knight-white-2': -1,
+        'bishop-white-1': 27,
+        'bishop-white-2': 46,
+        'queen-white': 36,
+        'king-white': 62,
     })
 
     const [nextTurn, setNextTurn] = useState('white')
@@ -89,7 +129,7 @@ const Board = () => {
         'bishop-white-1': [],
         'bishop-white-2': [],
         'queen-white': [],
-        'king-white': [],
+        'king-white': []
     })
 
     const [piecesShieldingKing, setPiecesShieldingKing] = useState({
@@ -112,69 +152,69 @@ const Board = () => {
                 let imageElement = <></>
                 let cellClass = ''
                 if (i === allPiecePositions['rook-black-1']) {
-                    imageElement = <img src="../Images/rook-black.png" alt="rook-black" id="rook-black-1" onClick={() => setSelectedPiece('rook-black-1')} />
+                    imageElement = <img src="../Images/rook-black.png" alt="rook-black" key="rook-black-1" id="rook-black-1" onClick={() => setSelectedPiece('rook-black-1')} />
                 } else if (i === allPiecePositions['rook-black-2']) {
-                    imageElement = <img src="../Images/rook-black.png" alt="rook-black" id="rook-black-2" onClick={() => setSelectedPiece('rook-black-2')} />
+                    imageElement = <img src="../Images/rook-black.png" alt="rook-black" key="rook-black-2" id="rook-black-2" onClick={() => setSelectedPiece('rook-black-2')} />
                 } else if (i === allPiecePositions['knight-black-1']) {
-                    imageElement = <img src="../Images/knight-black.png" alt="knight-black" id="knight-black-1" onClick={() => setSelectedPiece('knight-black-1')} />
+                    imageElement = <img src="../Images/knight-black.png" alt="knight-black" key="rook-black-2" id="knight-black-1" onClick={() => setSelectedPiece('knight-black-1')} />
                 } else if (i === allPiecePositions['knight-black-2']) {
-                    imageElement = <img src="../Images/knight-black.png" alt="knight-black" id="knight-black-2" onClick={() => setSelectedPiece('knight-black-2')} />
+                    imageElement = <img src="../Images/knight-black.png" alt="knight-black" key="knight-black-2" id="knight-black-2" onClick={() => setSelectedPiece('knight-black-2')} />
                 } else if (i === allPiecePositions['bishop-black-1']) {
-                    imageElement = <img src="../Images/bishop-black.png" alt="bishop-black" id="bishop-black-1" onClick={() => setSelectedPiece('bishop-black-1')} />
+                    imageElement = <img src="../Images/bishop-black.png" alt="bishop-black" key="bishop-black-1" id="bishop-black-1" onClick={() => setSelectedPiece('bishop-black-1')} />
                 } else if (i === allPiecePositions['bishop-black-2']) {
-                    imageElement = <img src="../Images/bishop-black.png" alt="bishop-black" id="bishop-black-2" onClick={() => setSelectedPiece('bishop-black-2')} />
+                    imageElement = <img src="../Images/bishop-black.png" alt="bishop-black" key="bishop-black-2" id="bishop-black-2" onClick={() => setSelectedPiece('bishop-black-2')} />
                 } else if (i === allPiecePositions['queen-black']) {
-                    imageElement = <img src="../Images/queen-black.png" alt="queen-black" id="queen-black" onClick={() => setSelectedPiece('queen-black')} />
+                    imageElement = <img src="../Images/queen-black.png" alt="queen-black" key="queen-black" id="queen-black" onClick={() => setSelectedPiece('queen-black')} />
                 } else if (i === allPiecePositions['king-black']) {
-                    imageElement = <img src="../Images/king-black.png" alt="king-black" id="king-black" onClick={() => setSelectedPiece('king-black')} />
+                    imageElement = <img src="../Images/king-black.png" alt="king-black" key="king-black" id="king-black" onClick={() => setSelectedPiece('king-black')} />
                 } else if (i === allPiecePositions['pawn-black-1']) {
-                    imageElement = <img src="../Images/pawn-black.png" alt="pawn-black" id="pawn-black-1" onClick={() => setSelectedPiece('pawn-black-1')} />
+                    imageElement = <img src="../Images/pawn-black.png" alt="pawn-black" key="pawn-black-1" id="pawn-black-1" onClick={() => setSelectedPiece('pawn-black-1')} />
                 } else if (i === allPiecePositions['pawn-black-2']) {
-                    imageElement = <img src="../Images/pawn-black.png" alt="pawn-black" id="pawn-black-2" onClick={() => setSelectedPiece('pawn-black-2')} />
+                    imageElement = <img src="../Images/pawn-black.png" alt="pawn-black" key="pawn-black-2" id="pawn-black-2" onClick={() => setSelectedPiece('pawn-black-2')} />
                 } else if (i === allPiecePositions['pawn-black-3']) {
-                    imageElement = <img src="../Images/pawn-black.png" alt="pawn-black" id="pawn-black-3" onClick={() => setSelectedPiece('pawn-black-3')} />
+                    imageElement = <img src="../Images/pawn-black.png" alt="pawn-black" key="pawn-black-3" id="pawn-black-3" onClick={() => setSelectedPiece('pawn-black-3')} />
                 } else if (i === allPiecePositions['pawn-black-4']) {
-                    imageElement = <img src="../Images/pawn-black.png" alt="pawn-black" id="pawn-black-4" onClick={() => setSelectedPiece('pawn-black-4')} />
+                    imageElement = <img src="../Images/pawn-black.png" alt="pawn-black" key="pawn-black-4" id="pawn-black-4" onClick={() => setSelectedPiece('pawn-black-4')} />
                 } else if (i === allPiecePositions['pawn-black-5']) {
-                    imageElement = <img src="../Images/pawn-black.png" alt="pawn-black" id="pawn-black-5" onClick={() => setSelectedPiece('pawn-black-5')} />
+                    imageElement = <img src="../Images/pawn-black.png" alt="pawn-black" key="pawn-black-5" id="pawn-black-5" onClick={() => setSelectedPiece('pawn-black-5')} />
                 } else if (i === allPiecePositions['pawn-black-6']) {
-                    imageElement = <img src="../Images/pawn-black.png" alt="pawn-black" id="pawn-black-6" onClick={() => setSelectedPiece('pawn-black-6')} />
+                    imageElement = <img src="../Images/pawn-black.png" alt="pawn-black" key="pawn-black-6" id="pawn-black-6" onClick={() => setSelectedPiece('pawn-black-6')} />
                 } else if (i === allPiecePositions['pawn-black-7']) {
-                    imageElement = <img src="../Images/pawn-black.png" alt="pawn-black" id="pawn-black-7" onClick={() => setSelectedPiece('pawn-black-7')} />
+                    imageElement = <img src="../Images/pawn-black.png" alt="pawn-black" key="pawn-black-7" id="pawn-black-7" onClick={() => setSelectedPiece('pawn-black-7')} />
                 } else if (i === allPiecePositions['pawn-black-8']) {
-                    imageElement = <img src="../Images/pawn-black.png" alt="pawn-black" id="pawn-black-8" onClick={() => setSelectedPiece('pawn-black-8')} />
+                    imageElement = <img src="../Images/pawn-black.png" alt="pawn-black" key="pawn-black-8" id="pawn-black-8" onClick={() => setSelectedPiece('pawn-black-8')} />
                 } else if (i === allPiecePositions['pawn-white-1']) {
-                    imageElement = <img src="../Images/pawn-white.png" alt="pawn-white" id="pawn-white-1" onClick={() => setSelectedPiece('pawn-white-1')} />
+                    imageElement = <img src="../Images/pawn-white.png" alt="pawn-white" key="pawn-white-1" id="pawn-white-1" onClick={() => setSelectedPiece('pawn-white-1')} />
                 } else if (i === allPiecePositions['pawn-white-2']) {
-                    imageElement = <img src="../Images/pawn-white.png" alt="pawn-white" id="pawn-white-2" onClick={() => setSelectedPiece('pawn-white-2')} />
+                    imageElement = <img src="../Images/pawn-white.png" alt="pawn-white" key="pawn-white-2" id="pawn-white-2" onClick={() => setSelectedPiece('pawn-white-2')} />
                 } else if (i === allPiecePositions['pawn-white-3']) {
-                    imageElement = <img src="../Images/pawn-white.png" alt="pawn-white" id="pawn-white-3" onClick={() => setSelectedPiece('pawn-white-3')} />
+                    imageElement = <img src="../Images/pawn-white.png" alt="pawn-white" key="pawn-white-3" id="pawn-white-3" onClick={() => setSelectedPiece('pawn-white-3')} />
                 } else if (i === allPiecePositions['pawn-white-4']) {
-                    imageElement = <img src="../Images/pawn-white.png" alt="pawn-white" id="pawn-white-4" onClick={() => setSelectedPiece('pawn-white-4')} />
+                    imageElement = <img src="../Images/pawn-white.png" alt="pawn-white" key="pawn-white-4" id="pawn-white-4" onClick={() => setSelectedPiece('pawn-white-4')} />
                 } else if (i === allPiecePositions['pawn-white-5']) {
-                    imageElement = <img src="../Images/pawn-white.png" alt="pawn-white" id="pawn-white-5" onClick={() => setSelectedPiece('pawn-white-5')} />
+                    imageElement = <img src="../Images/pawn-white.png" alt="pawn-white" key="pawn-white-5" id="pawn-white-5" onClick={() => setSelectedPiece('pawn-white-5')} />
                 } else if (i === allPiecePositions['pawn-white-6']) {
-                    imageElement = <img src="../Images/pawn-white.png" alt="pawn-white" id="pawn-white-6" onClick={() => setSelectedPiece('pawn-white-6')} />
+                    imageElement = <img src="../Images/pawn-white.png" alt="pawn-white" key="pawn-white-6" id="pawn-white-6" onClick={() => setSelectedPiece('pawn-white-6')} />
                 } else if (i === allPiecePositions['pawn-white-7']) {
-                    imageElement = <img src="../Images/pawn-white.png" alt="pawn-white" id="pawn-white-7" onClick={() => setSelectedPiece('pawn-white-7')} />
+                    imageElement = <img src="../Images/pawn-white.png" alt="pawn-white" key="pawn-white-7" id="pawn-white-7" onClick={() => setSelectedPiece('pawn-white-7')} />
                 } else if (i === allPiecePositions['pawn-white-8']) {
-                    imageElement = <img src="../Images/pawn-white.png" alt="pawn-white" id="pawn-white-8" onClick={() => setSelectedPiece('pawn-white-8')} />
+                    imageElement = <img src="../Images/pawn-white.png" alt="pawn-white" key="pawn-white-8" id="pawn-white-8" onClick={() => setSelectedPiece('pawn-white-8')} />
                 } else if (i === allPiecePositions['rook-white-1']) {
-                    imageElement = <img src="../Images/rook-white.png" alt="rook-white" id="rook-white-1" onClick={() => setSelectedPiece('rook-white-1')} />
+                    imageElement = <img src="../Images/rook-white.png" alt="rook-white" key="rook-white-1" id="rook-white-1" onClick={() => setSelectedPiece('rook-white-1')} />
                 } else if (i === allPiecePositions['rook-white-2']) {
-                    imageElement = <img src="../Images/rook-white.png" alt="rook-white" id="rook-white-2" onClick={() => setSelectedPiece('rook-white-2')} />
+                    imageElement = <img src="../Images/rook-white.png" alt="rook-white" key="rook-white-2" id="rook-white-2" onClick={() => setSelectedPiece('rook-white-2')} />
                 } else if (i === allPiecePositions['knight-white-1']) {
-                    imageElement = <img src="../Images/knight-white.png" alt="knight-white" id="knight-white-1" onClick={() => setSelectedPiece('knight-white-1')} />
+                    imageElement = <img src="../Images/knight-white.png" alt="knight-white" key="knight-white-1" id="knight-white-1" onClick={() => setSelectedPiece('knight-white-1')} />
                 } else if (i === allPiecePositions['knight-white-2']) {
-                    imageElement = <img src="../Images/knight-white.png" alt="knight-white" id="knight-white-2" onClick={() => setSelectedPiece('knight-white-2')} />
+                    imageElement = <img src="../Images/knight-white.png" alt="knight-white" key="knight-white-2" id="knight-white-2" onClick={() => setSelectedPiece('knight-white-2')} />
                 } else if (i === allPiecePositions['bishop-white-1']) {
-                    imageElement = <img src="../Images/bishop-white.png" alt="bishop-white" id="bishop-white-1" onClick={() => setSelectedPiece('bishop-white-1')} />
+                    imageElement = <img src="../Images/bishop-white.png" alt="bishop-white" key="bishop-white-1" id="bishop-white-1" onClick={() => setSelectedPiece('bishop-white-1')} />
                 } else if (i === allPiecePositions['bishop-white-2']) {
-                    imageElement = <img src="../Images/bishop-white.png" alt="bishop-white" id="bishop-white-2" onClick={() => setSelectedPiece('bishop-white-2')} />
+                    imageElement = <img src="../Images/bishop-white.png" alt="bishop-white" key="bishop-white-2" id="bishop-white-2" onClick={() => setSelectedPiece('bishop-white-2')} />
                 } else if (i === allPiecePositions['queen-white']) {
-                    imageElement = <img src="../Images/queen-white.png" alt="queen-white" id="queen-white" onClick={() => setSelectedPiece('queen-white')} />
+                    imageElement = <img src="../Images/queen-white.png" alt="queen-white" key="queen-white" id="queen-white" onClick={() => setSelectedPiece('queen-white')} />
                 } else if (i === allPiecePositions['king-white']) {
-                    imageElement = <img src="../Images/king-white.png" alt="king-white" id="king-white" onClick={() => setSelectedPiece('king-white')} />
+                    imageElement = <img src="../Images/king-white.png" alt="king-white"key="king-white" id="king-white" onClick={() => setSelectedPiece('king-white')} />
                 }
 
                 const rowNumber = (i - (i % 8)) / 8
@@ -184,22 +224,31 @@ const Board = () => {
                 allCellElements.push(<div id={i} key={i} className={cellClass}>{imageElement}</div>)
             }
 
+            setAllRows(() => {
+                const allRowElements = []
+                for (let j = 0; j < 8; j++) {
+                    const currentRow = allCellElements.slice((j * 8), (j * 8) + 8)
+                    allRowElements.push(<div key={j} className="row">{currentRow}</div>)
+                }
+                return allRowElements
+            })
+
             return allCellElements
         })
         // eslint-disable-next-line
     }, [])
 
     //create rows
-    useEffect(() => {
-        setAllRows(() => {
-            const allRowElements = []
-            for (let j = 0; j < 8; j++) {
-                const currentRow = allCells.slice((j * 8), (j * 8) + 8)
-                allRowElements.push(<div key={j} className="row">{currentRow}</div>)
-            }
-            return allRowElements
-        })
-    }, [allCells])
+    // useEffect(() => {
+    //     setAllRows(() => {
+    //         const allRowElements = []
+    //         for (let j = 0; j < 8; j++) {
+    //             const currentRow = allCells.slice((j * 8), (j * 8) + 8)
+    //             allRowElements.push(<div key={j} className="row">{currentRow}</div>)
+    //         }
+    //         return allRowElements
+    //     })
+    // }, [allCells])
 
     //piece movement
     useEffect(() => {
@@ -615,253 +664,30 @@ const Board = () => {
             return result
         }
 
-        const movePiece = (selectedPosition, currentPiecePosition) => {
-            // remove previous suitable cells
-            for (let i = 0; i < suitableCells.length ; i++) {
-                let newClass
-                const rowNumber = (suitableCells[i] - (suitableCells[i] % 8)) / 8
-                if (rowNumber % 2 === 0) {
-                    newClass = suitableCells[i] % 2 === 0 ? 'cell-even' : 'cell-uneven'
-                } else {
-                    newClass = suitableCells[i] % 2 === 1 ? 'cell-even' : 'cell-uneven'
-                }
-                let updatedCell
-                if (Object.values(allPiecePositions).includes(suitableCells[i])) {
-                    const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(suitableCells[i]))[0][0]
-                    updatedCell = (
-                        <div id={suitableCells[i]} key={suitableCells[i]} className={newClass}><img src={`../Images/${targetPiece.split('-')[0]}-${targetPiece.split('-')[1]}.png`} alt={`${targetPiece.split('-')[0]}-${targetPiece.split('-')[1]}`} id={targetPiece} onClick={() => setSelectedPiece(targetPiece)} /></div>
-                    )
-                } else {
-                    updatedCell = (
-                        <div id={suitableCells[i]} key={suitableCells[i]} className={newClass}></div>
-                    )
-                }
-                setAllCells(prevCells => {
-                    const updatedCells = prevCells
-                    updatedCells.splice(suitableCells[i], 1, updatedCell)
-                    return updatedCells
-                })
-                setAllRows(() => {
-                    const allRowElements = []
-                    for (let j = 0; j < 8; j++) {
-                        const currentRow = allCells.slice((j * 8), (j * 8) + 8)
-                        allRowElements.push(<div key={j} className="row">{currentRow}</div>)
-                    }
-                    return allRowElements
-                })
-            }
-            setSuitableCells(() => [])
-
-            let occupiedCellClass
-            const rowNumber = (selectedPosition - (selectedPosition % 8)) / 8
-            if (rowNumber % 2 === 0) {
-                occupiedCellClass = selectedPosition % 2 === 0 ? 'cell-even' : 'cell-uneven'
-            } else {
-                occupiedCellClass = selectedPosition % 2 === 1 ? 'cell-even' : 'cell-uneven'
-            }
-            let vacatedCellClass
-            const rowNumber2 = (currentPiecePosition - (currentPiecePosition % 8)) / 8
-            if (rowNumber2 % 2 === 0) {
-                vacatedCellClass = currentPiecePosition % 2 === 0 ? 'cell-even' : 'cell-uneven'
-            } else {
-                vacatedCellClass = currentPiecePosition % 2 === 1 ? 'cell-even' : 'cell-uneven'
-            }
-            let occupiedCell
-            // pawn queening
-            if (selectedPiece.indexOf('pawn-white') !== -1 && selectedPosition < 8 && selectedPosition >= 0) {
-                occupiedCell = (
-                    <div id={selectedPosition} key={selectedPosition} className={occupiedCellClass}><img src="../Images/queen-white.png" alt="queen-white" id="queen-white-2" onClick={() => setSelectedPiece('queen-white-2')}/></div>
-                )
-                setAllPiecePositions(prev => {
-                    let newState = {
-                        ...prev,
-                        'queen-white-2': selectedPosition,
-                        [selectedPiece]: -2,
-                    }
-                    if (Object.values(prev).includes(selectedPosition)) {
-                        const takenOutPiece = Object.entries(prev).filter(piece => piece.includes(selectedPosition))[0][0]
-                        newState = {
-                            ...newState,
-                            [takenOutPiece]: -1
-                        }
-                    }
-                    return newState
-                })
-                setAllThreatenedCells((prev) => {
-                    let newState = {
-                        ...prev,
-                        'queen-white-2': []
-                    }
-                    return newState
-                })
-            } else if (selectedPiece.indexOf('pawn-black') !== -1 && selectedPosition <= 63 && selectedPosition > 55) {
-                occupiedCell = (
-                    <div id={selectedPosition} key={selectedPosition} className={occupiedCellClass}><img src="../Images/queen-black.png" alt="queen-black" id="queen-black-2" onClick={() => setSelectedPiece('queen-black')}/></div>
-                )
-                setAllPiecePositions(prev => {
-                    let newState = {
-                        ...prev,
-                        'queen-black-2': selectedPosition,
-                        [selectedPiece]: -2,
-                    }
-                    if (Object.values(prev).includes(selectedPosition)) {
-                        const takenOutPiece = Object.entries(prev).filter(piece => piece.includes(selectedPosition))[0][0]
-                        newState = {
-                            ...newState,
-                            [takenOutPiece]: -1
-                        }
-                    }
-                    return newState
-                })
-                setAllThreatenedCells((prev) => {
-                    let newState = {
-                        ...prev,
-                        'queen-black-2': []
-                    }
-                    return newState
-                })
-            } else {
-                occupiedCell = (
-                    <div id={selectedPosition} key={selectedPosition} className={occupiedCellClass}><img src={`../Images/${selectedPiece.split('-')[0]}-${selectedPiece.split('-')[1]}.png`} alt={`${selectedPiece.split('-')[0]}-${selectedPiece.split('-')[1]}`} id={selectedPiece} onClick={() => setSelectedPiece(selectedPiece)}/></div>
-                )
-                setAllPiecePositions(prev => {
-                    let newState = {
-                        ...prev,
-                        [selectedPiece]: selectedPosition,
-                    }
-                    if (Object.values(prev).includes(selectedPosition)) {
-                        const takenOutPiece = Object.entries(prev).filter(piece => piece.includes(selectedPosition))[0][0]
-                        newState = {
-                            ...newState,
-                            [takenOutPiece]: -1
-                        }
-                    }
-                    return newState
-                })
-            }
-            const vacatedCell = (
-                <div id={currentPiecePosition} key={currentPiecePosition} className={vacatedCellClass}></div>
-            )
-            setAllCells(prevCells => {
-                const updatedCells = prevCells
-                updatedCells.splice(selectedPosition, 1, occupiedCell)
-                updatedCells.splice(currentPiecePosition, 1, vacatedCell)
-                return updatedCells
-            })
-            setAllRows(() => {
-                const allRowElements = []
-                for (let j = 0; j < 8; j++) {
-                    const currentRow = allCells.slice((j * 8), (j * 8) + 8)
-                    allRowElements.push(<div key={j} className="row">{currentRow}</div>)
-                }
-                return allRowElements
-            })
-            // Castling
-            if (selectedPiece.indexOf('king') !== -1 && ((selectedPosition - currentPiecePosition === 2) || (selectedPosition - currentPiecePosition === -2))) {
-                let occupiedCell
-                let vacatedCell
-                let pieceToMove
-                let positionToMove
-                let vacatedPosition
-                if (selectedPiece.indexOf('white') !== -1) {
-                    if (selectedPosition - currentPiecePosition === 2) {
-                        pieceToMove = 'rook-white-2'
-                        positionToMove = 61
-                        vacatedPosition = 63
-                        occupiedCell = (
-                            <div id={61} key={61} className='cell-even'><img src='../Images/rook-white.png' alt='rook-white' id='rook-white-2' onClick={() => setSelectedPiece('rook-white-2')} /></div>
-                        )
-                        vacatedCell = (
-                            <div id={63} key={63} className='cell-even'></div>
-                        )
-                    } else {
-                        pieceToMove = 'rook-white-1'
-                        positionToMove = 59
-                        vacatedPosition = 56
-                        occupiedCell = (
-                            <div id={59} key={59} className='cell-even'><img src='../Images/rook-white.png' alt='rook-white' id='rook-white-1' onClick={() => setSelectedPiece('rook-white-1')} /></div>
-                        )
-                        vacatedCell = (
-                            <div id={56} key={56} className='cell-uneven'></div>
-                        )
-                    }
-                } else {
-                    pieceToMove = 'rook-black-2'
-                    positionToMove = 5
-                    vacatedPosition = 7
-                    if (selectedPosition - currentPiecePosition === 2) {
-                        occupiedCell = (
-                            <div id={5} key={5} className='cell-uneven'><img src='../Images/rook-black.png' alt='rook-black' id='rook-black-2' onClick={() => setSelectedPiece('rook-black-2')} /></div>
-                        )
-                        vacatedCell = (
-                            <div id={7} key={7} className='cell-uneven'></div>
-                        )
-                    } else {
-                        pieceToMove = 'rook-black-1'
-                        positionToMove = 3
-                        vacatedPosition = 0
-                        occupiedCell = (
-                            <div id={3} key={3} className='cell-uneven'><img src='../Images/rook-black.png' alt='rook-black' id='rook-black-1' onClick={() => setSelectedPiece('rook-black-1')} /></div>
-                        )
-                        vacatedCell = (
-                            <div id={0} key={0} className='cell-even'></div>
-                        )
-                    }
-                }
-                setAllPiecePositions(prev => {
-                    let newState = {
-                        ...prev,
-                        [pieceToMove]: positionToMove,
-                    }
-                    return newState
-                })
-                setAllCells(prevCells => {
-                    const updatedCells = prevCells
-                    updatedCells.splice(positionToMove, 1, occupiedCell)
-                    updatedCells.splice(vacatedPosition, 1, vacatedCell)
-                    return updatedCells
-                })
-                setAllRows(() => {
-                    const allRowElements = []
-                    for (let j = 0; j < 8; j++) {
-                        const currentRow = allCells.slice((j * 8), (j * 8) + 8)
-                        allRowElements.push(<div key={j} className="row">{currentRow}</div>)
-                    }
-                    return allRowElements
-                })
-            }
-
-            setPiecesShieldingKing(() => {
-                return {
-                    black: [],
-                    white: []
-                }
-            })
-
-            setCellsInterceptingCheck([])
-            setCheckingPiece('')
-            setPreviousSelected(-1)
-            setSelectedPiece('')
-            setNextTurn(prev => prev === 'white' ? 'black' : 'white')
-        }
-
-        const setNewSuitableThreat = (currentPosition, targetPosition, targetPiece) => {
+        const setNewSuitableThreat = (targetPosition, targetPiece) => {
+        //const setNewSuitableThreat = (currentPosition, targetPosition, targetPiece) => {
+            // const updatedCell = (
+            //     <div id={targetPosition} key={targetPosition} className='suitable' onClick={() => movePiece(targetPosition, currentPosition)}><img src={`../Images/${targetPiece.split('-')[0]}-${targetPiece.split('-')[1]}.png`} alt={`${targetPiece.split('-')[0]}-${targetPiece.split('-')[1]}`} id={targetPiece} onClick={() => setSelectedPiece('')} /></div>
+            // )
             const updatedCell = (
-                <div id={targetPosition} key={targetPosition} className='suitable' onClick={() => movePiece(targetPosition, currentPosition)}><img src={`../Images/${targetPiece.split('-')[0]}-${targetPiece.split('-')[1]}.png`} alt={`${targetPiece.split('-')[0]}-${targetPiece.split('-')[1]}`} id={targetPiece} onClick={() => setSelectedPiece('')} /></div>
+                <div id={targetPosition} key={targetPosition} className='suitable' onClick={() => {
+                    setSelectedPosition(targetPosition)
+                    //setCurrentPiecePosition(currentPosition)
+                }}><img src={`../Images/${targetPiece.split('-')[0]}-${targetPiece.split('-')[1]}.png`} alt={`${targetPiece.split('-')[0]}-${targetPiece.split('-')[1]}`} key={targetPiece} id={targetPiece} /></div>
             )
             setAllCells(prevCells => {
                 const updatedCells = prevCells
                 updatedCells.splice(targetPosition, 1, updatedCell)
                 return updatedCells
             })
-            setAllRows(() => {
-                const allRowElements = []
-                for (let j = 0; j < 8; j++) {
-                    const currentRow = allCells.slice((j * 8), (j * 8) + 8)
-                    allRowElements.push(<div key={j} className="row">{currentRow}</div>)
-                }
-                return allRowElements
-            })
+            // setAllRows(() => {
+            //     const allRowElements = []
+            //     for (let j = 0; j < 8; j++) {
+            //         const currentRow = allCells.slice((j * 8), (j * 8) + 8)
+            //         allRowElements.push(<div key={j} className="row">{currentRow}</div>)
+            //     }
+            //     return allRowElements
+            // })
             setSuitableCells((prev) => {
                 const newSuitableCells = prev
                 if (!newSuitableCells.includes(targetPosition)) newSuitableCells.push(targetPosition)
@@ -869,23 +695,30 @@ const Board = () => {
             })
         }
 
-        const setNewSuitable = (currentPosition, targetPosition) => {
+        const setNewSuitable = (targetPosition) => {
+        //const setNewSuitable = (currentPosition, targetPosition) => {
+            // const updatedCell = (
+            //     <div id={targetPosition} key={targetPosition} className='suitable' onClick={() => movePiece(targetPosition, currentPosition)}></div>
+            // )
             const updatedCell = (
-                <div id={targetPosition} key={targetPosition} className='suitable' onClick={() => movePiece(targetPosition, currentPosition)}></div>
+                <div id={targetPosition} key={targetPosition} className='suitable' onClick={() => {
+                    setSelectedPosition(targetPosition)
+                    //setCurrentPiecePosition(currentPosition)
+                }}></div>
             )
             setAllCells(prevCells => {
                 const updatedCells = prevCells
                 updatedCells.splice(targetPosition, 1, updatedCell)
                 return updatedCells
             })
-            setAllRows(() => {
-                const allRowElements = []
-                for (let j = 0; j < 8; j++) {
-                    const currentRow = allCells.slice((j * 8), (j * 8) + 8)
-                    allRowElements.push(<div key={j} className="row">{currentRow}</div>)
-                }
-                return allRowElements
-            })
+            // setAllRows(() => {
+            //     const allRowElements = []
+            //     for (let j = 0; j < 8; j++) {
+            //         const currentRow = allCells.slice((j * 8), (j * 8) + 8)
+            //         allRowElements.push(<div key={j} className="row">{currentRow}</div>)
+            //     }
+            //     return allRowElements
+            // })
             setSuitableCells((prev) => {
                 const newSuitableCells = prev
                 if (!newSuitableCells.includes(targetPosition)) newSuitableCells.push(targetPosition)
@@ -963,13 +796,14 @@ const Board = () => {
                 // set new selected class
                 if (selectedPiece.indexOf(nextTurn) !== -1) {
                     const updatedCell = (
-                        <div id={allPiecePositions[selectedPiece]} key={allPiecePositions[selectedPiece]} className='selected'><img src={`../Images/${selectedPiece.split('-')[0]}-${selectedPiece.split('-')[1]}.png`} alt={`${selectedPiece.split('-')[0]}-${selectedPiece.split('-')[1]}`} id={selectedPiece} /></div>
+                        <div id={allPiecePositions[selectedPiece]} key={allPiecePositions[selectedPiece]} className='selected'><img src={`../Images/${selectedPiece.split('-')[0]}-${selectedPiece.split('-')[1]}.png`} alt={`${selectedPiece.split('-')[0]}-${selectedPiece.split('-')[1]}`} key={selectedPiece} id={selectedPiece} /></div>
                     )
                     setAllCells(prevCells => {
                         const updatedCells = prevCells
                         updatedCells.splice(allPiecePositions[selectedPiece], 1, updatedCell)
                         return updatedCells
                     })
+                    //setTimeout(() => {})
                     setAllRows(() => {
                         const allRowElements = []
                         for (let j = 0; j < 8; j++) {
@@ -981,194 +815,199 @@ const Board = () => {
                 }
 
                 // set new suitable cells
-                const currentPiecePosition = allPiecePositions[selectedPiece]
-                let column = (currentPiecePosition % width) + 1
-                let row = ((currentPiecePosition - (currentPiecePosition % width)) / width) + 1
-                const pieceMoveLogic = (pieceMoves) => {
-                    let notShielding = true
-                    let indexOfThreateningPiece = -1
-                    if (selectedPiece.split('-')[1] === 'black') {
-                        for (let i = 0; i < piecesShieldingKing.black.length; i++) {
-                            if (piecesShieldingKing.black[i]?.piece === selectedPiece) {
-                                indexOfThreateningPiece = i
-                                notShielding = false
-                                break
-                            }
-                        }
-                        for (let i = 0; i < pieceMoves.threatenedPieces.length; i++) {
-                            let clearedCell = false
-                            if (!notShielding && indexOfThreateningPiece !== -1) {
-                                const shieldingFromColumn = (allPiecePositions[piecesShieldingKing.black[indexOfThreateningPiece]?.shieldingFrom] % width) + 1
-                                const shieldingFromRow = ((allPiecePositions[piecesShieldingKing.black[indexOfThreateningPiece]?.shieldingFrom] - (allPiecePositions[piecesShieldingKing.black[indexOfThreateningPiece]?.shieldingFrom] % width)) / width) + 1
-                                const suitableCellColumn = (allPiecePositions[pieceMoves.threatenedPieces[i]] % width) + 1
-                                const suitableCellRow = ((allPiecePositions[pieceMoves.threatenedPieces[i]] - (allPiecePositions[pieceMoves.threatenedPieces[i]] % width)) / width) + 1
-                                if ((shieldingFromColumn === column && shieldingFromColumn === suitableCellColumn) || (shieldingFromRow === row && shieldingFromRow === suitableCellRow)) {
-                                    clearedCell = true
-                                } else {
-                                    if ((allPiecePositions[piecesShieldingKing.black[indexOfThreateningPiece]?.shieldingFrom] % 7 === allPiecePositions[pieceMoves.threatenedPieces[i]] % 7 && allPiecePositions[piecesShieldingKing.black[indexOfThreateningPiece]?.shieldingFrom] % 7 === currentPiecePosition % 7) || (allPiecePositions[piecesShieldingKing.black[indexOfThreateningPiece]?.shieldingFrom] % 9 === allPiecePositions[pieceMoves.threatenedPieces[i]] % 9 && allPiecePositions[piecesShieldingKing.black[indexOfThreateningPiece]?.shieldingFrom] % 9 === currentPiecePosition % 9)) {
-                                        clearedCell = true
-                                    }
+                //const currentPiecePosition = allPiecePositions[selectedPiece]
+                if (nextTurn === selectedPiece.split('-')[1]) {
+                    let column = (allPiecePositions[selectedPiece] % width) + 1
+                    let row = ((allPiecePositions[selectedPiece] - (allPiecePositions[selectedPiece] % width)) / width) + 1
+                    // setCurrentPiecePosition(() => {
+                    //     return allPiecePositions[selectedPiece]
+                    // })
+                    const pieceMoveLogic = (pieceMoves) => {
+                        let notShielding = true
+                        let indexOfThreateningPiece = -1
+                        if (selectedPiece.split('-')[1] === 'black') {
+                            for (let i = 0; i < piecesShieldingKing.black.length; i++) {
+                                if (piecesShieldingKing.black[i]?.piece === selectedPiece) {
+                                    indexOfThreateningPiece = i
+                                    notShielding = false
+                                    break
                                 }
                             }
-                            if (notShielding || clearedCell) setNewSuitableThreat(currentPiecePosition, allPiecePositions[pieceMoves.threatenedPieces[i]], pieceMoves.threatenedPieces[i])
-                        }
-                        for (let i = 0; i < pieceMoves.suitableCells.length; i++) {
-                            let clearedCell = false
-                            if (!notShielding && indexOfThreateningPiece !== -1) {
-                                const shieldingFromColumn = (allPiecePositions[piecesShieldingKing.black[indexOfThreateningPiece]?.shieldingFrom] % width) + 1
-                                const shieldingFromRow = ((allPiecePositions[piecesShieldingKing.black[indexOfThreateningPiece]?.shieldingFrom] - (allPiecePositions[piecesShieldingKing.black[indexOfThreateningPiece]?.shieldingFrom] % width)) / width) + 1
-                                const suitableCellColumn = (pieceMoves.suitableCells[i] % width) + 1
-                                const suitableCellRow = ((pieceMoves.suitableCells[i] - (pieceMoves.suitableCells[i] % width)) / width) + 1
-                                if ((shieldingFromColumn === column && shieldingFromColumn === suitableCellColumn) || (shieldingFromRow === row && shieldingFromRow === suitableCellRow)) {
-                                    clearedCell = true
-                                } else {
-                                    if ((allPiecePositions[piecesShieldingKing.black[indexOfThreateningPiece]?.shieldingFrom] % 7 === pieceMoves.suitableCells[i] % 7 && allPiecePositions[piecesShieldingKing.black[indexOfThreateningPiece]?.shieldingFrom] % 7 === currentPiecePosition % 7) || (allPiecePositions[piecesShieldingKing.black[indexOfThreateningPiece]?.shieldingFrom] % 9 === pieceMoves.suitableCells[i] % 9 && allPiecePositions[piecesShieldingKing.black[indexOfThreateningPiece]?.shieldingFrom] % 9 === currentPiecePosition % 9)) {
+                            for (let i = 0; i < pieceMoves.threatenedPieces.length; i++) {
+                                let clearedCell = false
+                                if (!notShielding && indexOfThreateningPiece !== -1) {
+                                    const shieldingFromColumn = (allPiecePositions[piecesShieldingKing.black[indexOfThreateningPiece]?.shieldingFrom] % width) + 1
+                                    const shieldingFromRow = ((allPiecePositions[piecesShieldingKing.black[indexOfThreateningPiece]?.shieldingFrom] - (allPiecePositions[piecesShieldingKing.black[indexOfThreateningPiece]?.shieldingFrom] % width)) / width) + 1
+                                    const suitableCellColumn = (allPiecePositions[pieceMoves.threatenedPieces[i]] % width) + 1
+                                    const suitableCellRow = ((allPiecePositions[pieceMoves.threatenedPieces[i]] - (allPiecePositions[pieceMoves.threatenedPieces[i]] % width)) / width) + 1
+                                    if ((shieldingFromColumn === column && shieldingFromColumn === suitableCellColumn) || (shieldingFromRow === row && shieldingFromRow === suitableCellRow)) {
                                         clearedCell = true
+                                    } else {
+                                        if ((allPiecePositions[piecesShieldingKing.black[indexOfThreateningPiece]?.shieldingFrom] % 7 === allPiecePositions[pieceMoves.threatenedPieces[i]] % 7 && allPiecePositions[piecesShieldingKing.black[indexOfThreateningPiece]?.shieldingFrom] % 7 === allPiecePositions[selectedPiece] % 7) || (allPiecePositions[piecesShieldingKing.black[indexOfThreateningPiece]?.shieldingFrom] % 9 === allPiecePositions[pieceMoves.threatenedPieces[i]] % 9 && allPiecePositions[piecesShieldingKing.black[indexOfThreateningPiece]?.shieldingFrom] % 9 === allPiecePositions[selectedPiece] % 9)) {
+                                            clearedCell = true
+                                        }
                                     }
                                 }
+                                if (notShielding || clearedCell) setNewSuitableThreat(allPiecePositions[pieceMoves.threatenedPieces[i]], pieceMoves.threatenedPieces[i])
                             }
-                            if (notShielding || clearedCell) setNewSuitable(currentPiecePosition, pieceMoves.suitableCells[i])
-                        }
-                    } else {
-                        for (let i = 0; i < piecesShieldingKing.white.length; i++) {
-                            if (piecesShieldingKing.white[i]?.piece === selectedPiece) {
-                                indexOfThreateningPiece = i
-                                notShielding = false
-                                break
-                            }
-                        }
-                        for (let i = 0; i < pieceMoves.threatenedPieces.length; i++) {
-                            let clearedCell = false
-                            if (!notShielding && indexOfThreateningPiece !== -1) {
-                                const shieldingFromColumn = (allPiecePositions[piecesShieldingKing.white[indexOfThreateningPiece]?.shieldingFrom] % width) + 1
-                                const shieldingFromRow = ((allPiecePositions[piecesShieldingKing.white[indexOfThreateningPiece]?.shieldingFrom] - (allPiecePositions[piecesShieldingKing.white[indexOfThreateningPiece]?.shieldingFrom] % width)) / width) + 1
-                                const suitableCellColumn = (allPiecePositions[pieceMoves.threatenedPieces[i]] % width) + 1
-                                const suitableCellRow = ((allPiecePositions[pieceMoves.threatenedPieces[i]] - (allPiecePositions[pieceMoves.threatenedPieces[i]] % width)) / width) + 1
-                                if ((shieldingFromColumn === column && shieldingFromColumn === suitableCellColumn) || (shieldingFromRow === row && shieldingFromRow === suitableCellRow)) {
-                                    clearedCell = true
-                                } else {
-                                    if ((allPiecePositions[piecesShieldingKing.white[indexOfThreateningPiece]?.shieldingFrom] % 7 === allPiecePositions[pieceMoves.threatenedPieces[i]] % 7 && allPiecePositions[piecesShieldingKing.white[indexOfThreateningPiece]?.shieldingFrom] % 7 === currentPiecePosition % 7) || (allPiecePositions[piecesShieldingKing.white[indexOfThreateningPiece]?.shieldingFrom] % 9 === allPiecePositions[pieceMoves.threatenedPieces[i]] % 9 && allPiecePositions[piecesShieldingKing.white[indexOfThreateningPiece]?.shieldingFrom] % 9 === currentPiecePosition % 9)) {
+                            for (let i = 0; i < pieceMoves.suitableCells.length; i++) {
+                                let clearedCell = false
+                                if (!notShielding && indexOfThreateningPiece !== -1) {
+                                    const shieldingFromColumn = (allPiecePositions[piecesShieldingKing.black[indexOfThreateningPiece]?.shieldingFrom] % width) + 1
+                                    const shieldingFromRow = ((allPiecePositions[piecesShieldingKing.black[indexOfThreateningPiece]?.shieldingFrom] - (allPiecePositions[piecesShieldingKing.black[indexOfThreateningPiece]?.shieldingFrom] % width)) / width) + 1
+                                    const suitableCellColumn = (pieceMoves.suitableCells[i] % width) + 1
+                                    const suitableCellRow = ((pieceMoves.suitableCells[i] - (pieceMoves.suitableCells[i] % width)) / width) + 1
+                                    if ((shieldingFromColumn === column && shieldingFromColumn === suitableCellColumn) || (shieldingFromRow === row && shieldingFromRow === suitableCellRow)) {
                                         clearedCell = true
+                                    } else {
+                                        if ((allPiecePositions[piecesShieldingKing.black[indexOfThreateningPiece]?.shieldingFrom] % 7 === pieceMoves.suitableCells[i] % 7 && allPiecePositions[piecesShieldingKing.black[indexOfThreateningPiece]?.shieldingFrom] % 7 === allPiecePositions[selectedPiece] % 7) || (allPiecePositions[piecesShieldingKing.black[indexOfThreateningPiece]?.shieldingFrom] % 9 === pieceMoves.suitableCells[i] % 9 && allPiecePositions[piecesShieldingKing.black[indexOfThreateningPiece]?.shieldingFrom] % 9 === allPiecePositions[selectedPiece] % 9)) {
+                                            clearedCell = true
+                                        }
                                     }
                                 }
+                                if (notShielding || clearedCell) setNewSuitable(pieceMoves.suitableCells[i])
                             }
-                            if (notShielding || clearedCell) setNewSuitableThreat(currentPiecePosition, allPiecePositions[pieceMoves.threatenedPieces[i]], pieceMoves.threatenedPieces[i])
-                        }
-                        for (let i = 0; i < pieceMoves.suitableCells.length; i++) {
-                            let clearedCell = false
-                            if (!notShielding && indexOfThreateningPiece !== -1) {
-                                const shieldingFromColumn = (allPiecePositions[piecesShieldingKing.white[indexOfThreateningPiece]?.shieldingFrom] % width) + 1
-                                const shieldingFromRow = ((allPiecePositions[piecesShieldingKing.white[indexOfThreateningPiece]?.shieldingFrom] - (allPiecePositions[piecesShieldingKing.white[indexOfThreateningPiece]?.shieldingFrom] % width)) / width) + 1
-                                const suitableCellColumn = (pieceMoves.suitableCells[i] % width) + 1
-                                const suitableCellRow = ((pieceMoves.suitableCells[i] - (pieceMoves.suitableCells[i] % width)) / width) + 1
-                                if ((shieldingFromColumn === column && shieldingFromColumn === suitableCellColumn) || (shieldingFromRow === row && shieldingFromRow === suitableCellRow)) {
-                                    clearedCell = true
-                                } else {
-                                    if ((allPiecePositions[piecesShieldingKing.white[indexOfThreateningPiece]?.shieldingFrom] % 7 === pieceMoves.suitableCells[i] % 7 && allPiecePositions[piecesShieldingKing.white[indexOfThreateningPiece]?.shieldingFrom] % 7 === currentPiecePosition % 7) || (allPiecePositions[piecesShieldingKing.white[indexOfThreateningPiece]?.shieldingFrom] % 9 === pieceMoves.suitableCells[i] % 9 && allPiecePositions[piecesShieldingKing.white[indexOfThreateningPiece]?.shieldingFrom] % 9 === currentPiecePosition % 9)) {
-                                        clearedCell = true
-                                    }
+                        } else {
+                            for (let i = 0; i < piecesShieldingKing.white.length; i++) {
+                                if (piecesShieldingKing.white[i]?.piece === selectedPiece) {
+                                    indexOfThreateningPiece = i
+                                    notShielding = false
+                                    break
                                 }
                             }
-                            if (notShielding || clearedCell) setNewSuitable(currentPiecePosition, pieceMoves.suitableCells[i])
+                            for (let i = 0; i < pieceMoves.threatenedPieces.length; i++) {
+                                let clearedCell = false
+                                if (!notShielding && indexOfThreateningPiece !== -1) {
+                                    const shieldingFromColumn = (allPiecePositions[piecesShieldingKing.white[indexOfThreateningPiece]?.shieldingFrom] % width) + 1
+                                    const shieldingFromRow = ((allPiecePositions[piecesShieldingKing.white[indexOfThreateningPiece]?.shieldingFrom] - (allPiecePositions[piecesShieldingKing.white[indexOfThreateningPiece]?.shieldingFrom] % width)) / width) + 1
+                                    const suitableCellColumn = (allPiecePositions[pieceMoves.threatenedPieces[i]] % width) + 1
+                                    const suitableCellRow = ((allPiecePositions[pieceMoves.threatenedPieces[i]] - (allPiecePositions[pieceMoves.threatenedPieces[i]] % width)) / width) + 1
+                                    if ((shieldingFromColumn === column && shieldingFromColumn === suitableCellColumn) || (shieldingFromRow === row && shieldingFromRow === suitableCellRow)) {
+                                        clearedCell = true
+                                    } else {
+                                        if ((allPiecePositions[piecesShieldingKing.white[indexOfThreateningPiece]?.shieldingFrom] % 7 === allPiecePositions[pieceMoves.threatenedPieces[i]] % 7 && allPiecePositions[piecesShieldingKing.white[indexOfThreateningPiece]?.shieldingFrom] % 7 === allPiecePositions[selectedPiece] % 7) || (allPiecePositions[piecesShieldingKing.white[indexOfThreateningPiece]?.shieldingFrom] % 9 === allPiecePositions[pieceMoves.threatenedPieces[i]] % 9 && allPiecePositions[piecesShieldingKing.white[indexOfThreateningPiece]?.shieldingFrom] % 9 === allPiecePositions[selectedPiece] % 9)) {
+                                            clearedCell = true
+                                        }
+                                    }
+                                }
+                                if (notShielding || clearedCell) setNewSuitableThreat(allPiecePositions[pieceMoves.threatenedPieces[i]], pieceMoves.threatenedPieces[i])
+                            }
+                            for (let i = 0; i < pieceMoves.suitableCells.length; i++) {
+                                let clearedCell = false
+                                if (!notShielding && indexOfThreateningPiece !== -1) {
+                                    const shieldingFromColumn = (allPiecePositions[piecesShieldingKing.white[indexOfThreateningPiece]?.shieldingFrom] % width) + 1
+                                    const shieldingFromRow = ((allPiecePositions[piecesShieldingKing.white[indexOfThreateningPiece]?.shieldingFrom] - (allPiecePositions[piecesShieldingKing.white[indexOfThreateningPiece]?.shieldingFrom] % width)) / width) + 1
+                                    const suitableCellColumn = (pieceMoves.suitableCells[i] % width) + 1
+                                    const suitableCellRow = ((pieceMoves.suitableCells[i] - (pieceMoves.suitableCells[i] % width)) / width) + 1
+                                    if ((shieldingFromColumn === column && shieldingFromColumn === suitableCellColumn) || (shieldingFromRow === row && shieldingFromRow === suitableCellRow)) {
+                                        clearedCell = true
+                                    } else {
+                                        if ((allPiecePositions[piecesShieldingKing.white[indexOfThreateningPiece]?.shieldingFrom] % 7 === pieceMoves.suitableCells[i] % 7 && allPiecePositions[piecesShieldingKing.white[indexOfThreateningPiece]?.shieldingFrom] % 7 === allPiecePositions[selectedPiece] % 7) || (allPiecePositions[piecesShieldingKing.white[indexOfThreateningPiece]?.shieldingFrom] % 9 === pieceMoves.suitableCells[i] % 9 && allPiecePositions[piecesShieldingKing.white[indexOfThreateningPiece]?.shieldingFrom] % 9 === allPiecePositions[selectedPiece] % 9)) {
+                                            clearedCell = true
+                                        }
+                                    }
+                                }
+                                if (notShielding || clearedCell) setNewSuitable(pieceMoves.suitableCells[i])
+                            }
                         }
                     }
-                }
-
-                const kingMoveLogic = (color) => {
-                    const kingMoves = kingMovement(color, currentPiecePosition, width, row, column)
-                    const allThreatenedByOpponent = []
-                    for (let i = 0; i < Object.entries(allThreatenedCells).length; i++) {
-                        if (Object.entries(allThreatenedCells)[i][0].indexOf(color) === -1) allThreatenedByOpponent.push(Object.entries(allThreatenedCells)[i][1])
-                    }
-                    for (let i = 0; i < kingMoves.threatenedPieces.length; i++) {
-                        if (!allThreatenedByOpponent.flat().includes(allPiecePositions[kingMoves.threatenedPieces[i]])) setNewSuitableThreat(currentPiecePosition, allPiecePositions[kingMoves.threatenedPieces[i]], kingMoves.threatenedPieces[i])
-                    }
-                    for (let i = 0; i < kingMoves.suitableCells.length; i++) {
-                        if (!allThreatenedByOpponent.flat().includes(kingMoves.suitableCells[i])) setNewSuitable(currentPiecePosition, kingMoves.suitableCells[i])
-                    }
-                }
-
-                if (!check) {
-                    // pawn
-                    if (selectedPiece.indexOf('pawn') !== -1 && nextTurn === selectedPiece.split('-')[1]) {
-                        const pawnMoves = pawnMovement(selectedPiece.split('-')[1], currentPiecePosition, row, column)
-                        pieceMoveLogic(pawnMoves)
-                    }
-                    // rook / queen
-                    if ((selectedPiece.indexOf('rook') !== -1 || selectedPiece.indexOf('queen') !== -1) && nextTurn === selectedPiece.split('-')[1]) {
-                        const rookMoves = rookMovement(selectedPiece.split('-')[1], currentPiecePosition, width, row, column)
-                        pieceMoveLogic(rookMoves)
-                    }
-                    // knight
-                    if (selectedPiece.indexOf('knight') !== -1 && nextTurn === selectedPiece.split('-')[1]) {
-                        const knightMoves = knightMovement(selectedPiece.split('-')[1], currentPiecePosition, row, column)
-                        pieceMoveLogic(knightMoves)
-                    }
-                    // bishop / queen
-                    if ((selectedPiece.indexOf('bishop') !== -1 || selectedPiece.indexOf('queen') !== -1) && nextTurn === selectedPiece.split('-')[1]) {
-                        const bishopMoves = bishopMovement(selectedPiece.split('-')[1], currentPiecePosition, width, row, column)
-                        pieceMoveLogic(bishopMoves)
-                    }
-                    // king
-                    if (selectedPiece.indexOf('king') !== -1 && nextTurn === selectedPiece.split('-')[1]) kingMoveLogic(selectedPiece.split('-')[1])
-                } else {
-                    let selectedPieceNotShielding = true
-                    for (const piece in piecesShieldingKing) {
-                        for (let i = 0; i < piecesShieldingKing[piece].length; i++) {
-                            if (piecesShieldingKing[piece][i].piece === selectedPiece) selectedPieceNotShielding = false
+    
+                    const kingMoveLogic = (color) => {
+                        const kingMoves = kingMovement(color, allPiecePositions[selectedPiece], width, row, column)
+                        const allThreatenedByOpponent = []
+                        for (let i = 0; i < Object.entries(allThreatenedCells).length; i++) {
+                            if (Object.entries(allThreatenedCells)[i][0].indexOf(color) === -1) allThreatenedByOpponent.push(Object.entries(allThreatenedCells)[i][1])
+                        }
+                        for (let i = 0; i < kingMoves.threatenedPieces.length; i++) {
+                            if (!allThreatenedByOpponent.flat().includes(allPiecePositions[kingMoves.threatenedPieces[i]])) setNewSuitableThreat(allPiecePositions[kingMoves.threatenedPieces[i]], kingMoves.threatenedPieces[i])
+                        }
+                        for (let i = 0; i < kingMoves.suitableCells.length; i++) {
+                            if (!allThreatenedByOpponent.flat().includes(kingMoves.suitableCells[i])) setNewSuitable(kingMoves.suitableCells[i])
                         }
                     }
-                    if (selectedPieceNotShielding) {
+    
+                    if (!check) {
                         // pawn
                         if (selectedPiece.indexOf('pawn') !== -1 && nextTurn === selectedPiece.split('-')[1]) {
-                            const pawnMoves = pawnMovement(selectedPiece.split('-')[1], currentPiecePosition, row, column)
-                            // take out checking piece
-                            for (let j = 0; j < pawnMoves.threatenedPieces.length; j++) {
-                                if (pawnMoves.threatenedPieces[j] === checkingPiece) setNewSuitableThreat(currentPiecePosition, allPiecePositions[checkingPiece], checkingPiece)
-                            }
-                            // intercept checking piece
-                            for (let i = 0; i < pawnMoves.suitableCells.length; i++) {
-                                if (cellsInterceptingCheck.includes(pawnMoves.suitableCells[i])) setNewSuitable(currentPiecePosition, pawnMoves.suitableCells[i])
-                            }
+                            const pawnMoves = pawnMovement(selectedPiece.split('-')[1], allPiecePositions[selectedPiece], row, column)
+                            pieceMoveLogic(pawnMoves)
                         }
                         // rook / queen
                         if ((selectedPiece.indexOf('rook') !== -1 || selectedPiece.indexOf('queen') !== -1) && nextTurn === selectedPiece.split('-')[1]) {
-                            const rookMoves = rookMovement(selectedPiece.split('-')[1], currentPiecePosition, width, row, column)
-                            // take out checking piece
-                            for (let j = 0; j < rookMoves.threatenedPieces.length; j++) {
-                                if (rookMoves.threatenedPieces[j] === checkingPiece) setNewSuitableThreat(currentPiecePosition, allPiecePositions[checkingPiece], checkingPiece)
-                            }
-                            // intercept checking piece
-                            for (let i = 0; i < rookMoves.suitableCells.length; i++) {
-                                if (cellsInterceptingCheck.includes(rookMoves.suitableCells[i])) setNewSuitable(currentPiecePosition, rookMoves.suitableCells[i])
-                            }
+                            const rookMoves = rookMovement(selectedPiece.split('-')[1], allPiecePositions[selectedPiece], width, row, column)
+                            pieceMoveLogic(rookMoves)
                         }
                         // knight
                         if (selectedPiece.indexOf('knight') !== -1 && nextTurn === selectedPiece.split('-')[1]) {
-                            const knightMoves = knightMovement(selectedPiece.split('-')[1], currentPiecePosition, row, column)
-                            // take out checking piece
-                            for (let j = 0; j < knightMoves.threatenedPieces.length; j++) {
-                                if (knightMoves.threatenedPieces[j] === checkingPiece) setNewSuitableThreat(currentPiecePosition, allPiecePositions[checkingPiece], checkingPiece)
-                            }
-                            // intercept checking piece
-                            for (let i = 0; i < knightMoves.suitableCells.length; i++) {
-                                if (cellsInterceptingCheck.includes(knightMoves.suitableCells[i])) setNewSuitable(currentPiecePosition, knightMoves.suitableCells[i])
-                            }
+                            const knightMoves = knightMovement(selectedPiece.split('-')[1], allPiecePositions[selectedPiece], row, column)
+                            pieceMoveLogic(knightMoves)
                         }
                         // bishop / queen
                         if ((selectedPiece.indexOf('bishop') !== -1 || selectedPiece.indexOf('queen') !== -1) && nextTurn === selectedPiece.split('-')[1]) {
-                            const bishopMoves = bishopMovement(selectedPiece.split('-')[1], currentPiecePosition, width, row, column)
-                            // take out checking piece
-                            for (let j = 0; j < bishopMoves.threatenedPieces.length; j++) {
-                                if (bishopMoves.threatenedPieces[j] === checkingPiece) setNewSuitableThreat(currentPiecePosition, allPiecePositions[checkingPiece], checkingPiece)
-                            }
-                            // intercept checking piece
-                            for (let i = 0; i < bishopMoves.suitableCells.length; i++) {
-                                if (cellsInterceptingCheck.includes(bishopMoves.suitableCells[i])) setNewSuitable(currentPiecePosition, bishopMoves.suitableCells[i])
-                            }
+                            const bishopMoves = bishopMovement(selectedPiece.split('-')[1], allPiecePositions[selectedPiece], width, row, column)
+                            pieceMoveLogic(bishopMoves)
                         }
                         // king
                         if (selectedPiece.indexOf('king') !== -1 && nextTurn === selectedPiece.split('-')[1]) kingMoveLogic(selectedPiece.split('-')[1])
+                    } else {
+                        let selectedPieceNotShielding = true
+                        for (const piece in piecesShieldingKing) {
+                            for (let i = 0; i < piecesShieldingKing[piece].length; i++) {
+                                if (piecesShieldingKing[piece][i].piece === selectedPiece) selectedPieceNotShielding = false
+                            }
+                        }
+                        if (selectedPieceNotShielding) {
+                            // pawn
+                            if (selectedPiece.indexOf('pawn') !== -1 && nextTurn === selectedPiece.split('-')[1]) {
+                                const pawnMoves = pawnMovement(selectedPiece.split('-')[1], allPiecePositions[selectedPiece], row, column)
+                                // take out checking piece
+                                for (let j = 0; j < pawnMoves.threatenedPieces.length; j++) {
+                                    if (pawnMoves.threatenedPieces[j] === checkingPiece) setNewSuitableThreat(allPiecePositions[checkingPiece], checkingPiece)
+                                }
+                                // intercept checking piece
+                                for (let i = 0; i < pawnMoves.suitableCells.length; i++) {
+                                    if (cellsInterceptingCheck.includes(pawnMoves.suitableCells[i])) setNewSuitable(pawnMoves.suitableCells[i])
+                                }
+                            }
+                            // rook / queen
+                            if ((selectedPiece.indexOf('rook') !== -1 || selectedPiece.indexOf('queen') !== -1) && nextTurn === selectedPiece.split('-')[1]) {
+                                const rookMoves = rookMovement(selectedPiece.split('-')[1], allPiecePositions[selectedPiece], width, row, column)
+                                // take out checking piece
+                                for (let j = 0; j < rookMoves.threatenedPieces.length; j++) {
+                                    if (rookMoves.threatenedPieces[j] === checkingPiece) setNewSuitableThreat(allPiecePositions[checkingPiece], checkingPiece)
+                                }
+                                // intercept checking piece
+                                for (let i = 0; i < rookMoves.suitableCells.length; i++) {
+                                    if (cellsInterceptingCheck.includes(rookMoves.suitableCells[i])) setNewSuitable(rookMoves.suitableCells[i])
+                                }
+                            }
+                            // knight
+                            if (selectedPiece.indexOf('knight') !== -1 && nextTurn === selectedPiece.split('-')[1]) {
+                                const knightMoves = knightMovement(selectedPiece.split('-')[1], allPiecePositions[selectedPiece], row, column)
+                                // take out checking piece
+                                for (let j = 0; j < knightMoves.threatenedPieces.length; j++) {
+                                    if (knightMoves.threatenedPieces[j] === checkingPiece) setNewSuitableThreat(allPiecePositions[checkingPiece], checkingPiece)
+                                }
+                                // intercept checking piece
+                                for (let i = 0; i < knightMoves.suitableCells.length; i++) {
+                                    if (cellsInterceptingCheck.includes(knightMoves.suitableCells[i])) setNewSuitable(knightMoves.suitableCells[i])
+                                }
+                            }
+                            // bishop / queen
+                            if ((selectedPiece.indexOf('bishop') !== -1 || selectedPiece.indexOf('queen') !== -1) && nextTurn === selectedPiece.split('-')[1]) {
+                                const bishopMoves = bishopMovement(selectedPiece.split('-')[1], allPiecePositions[selectedPiece], width, row, column)
+                                // take out checking piece
+                                for (let j = 0; j < bishopMoves.threatenedPieces.length; j++) {
+                                    if (bishopMoves.threatenedPieces[j] === checkingPiece) setNewSuitableThreat(allPiecePositions[checkingPiece], checkingPiece)
+                                }
+                                // intercept checking piece
+                                for (let i = 0; i < bishopMoves.suitableCells.length; i++) {
+                                    if (cellsInterceptingCheck.includes(bishopMoves.suitableCells[i])) setNewSuitable(bishopMoves.suitableCells[i])
+                                }
+                            }
+                            // king
+                            if (selectedPiece.indexOf('king') !== -1 && nextTurn === selectedPiece.split('-')[1]) kingMoveLogic(selectedPiece.split('-')[1])
+                        }
                     }
                 }
             }
@@ -1318,9 +1157,276 @@ const Board = () => {
             }
         }
         touchPiece()
+        return () => setSelectedPiece(prev => prev)
         // eslint-disable-next-line
-    }, [selectedPiece, checkingPiece])
+    }, [selectedPiece, checkingPiece, check])
 
+    useEffect(() => {
+        const movePiece = () => {
+            // remove previous suitable cells
+            for (let i = 0; i < suitableCells.length ; i++) {
+                let newClass
+                const rowNumber = (suitableCells[i] - (suitableCells[i] % 8)) / 8
+                if (rowNumber % 2 === 0) {
+                    newClass = suitableCells[i] % 2 === 0 ? 'cell-even' : 'cell-uneven'
+                } else {
+                    newClass = suitableCells[i] % 2 === 1 ? 'cell-even' : 'cell-uneven'
+                }
+                let updatedCell
+                if (Object.values(allPiecePositions).includes(suitableCells[i])) {
+                    const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(suitableCells[i]))[0][0]
+                    updatedCell = (
+                        <div id={suitableCells[i]} key={suitableCells[i]} className={newClass}><img src={`../Images/${targetPiece.split('-')[0]}-${targetPiece.split('-')[1]}.png`} alt={`${targetPiece.split('-')[0]}-${targetPiece.split('-')[1]}`} id={targetPiece} onClick={() => setSelectedPiece(targetPiece)} /></div>
+                    )
+                } else {
+                    updatedCell = (
+                        <div id={suitableCells[i]} key={suitableCells[i]} className={newClass}></div>
+                    )
+                }
+                setAllCells(prevCells => {
+                    const updatedCells = prevCells
+                    updatedCells.splice(suitableCells[i], 1, updatedCell)
+                    return updatedCells
+                })
+                setAllRows(() => {
+                    const allRowElements = []
+                    for (let j = 0; j < 8; j++) {
+                        const currentRow = allCells.slice((j * 8), (j * 8) + 8)
+                        allRowElements.push(<div key={j} className="row">{currentRow}</div>)
+                    }
+                    return allRowElements
+                })
+            }
+            setSuitableCells(() => [])
+
+            if (selectedPosition !== allPiecePositions[selectedPiece]) {
+                let occupiedCellClass
+                const rowNumber = (selectedPosition - (selectedPosition % 8)) / 8
+                if (rowNumber % 2 === 0) {
+                    occupiedCellClass = selectedPosition % 2 === 0 ? 'cell-even' : 'cell-uneven'
+                } else {
+                    occupiedCellClass = selectedPosition % 2 === 1 ? 'cell-even' : 'cell-uneven'
+                }
+                let vacatedCellClass
+                const rowNumber2 = (allPiecePositions[selectedPiece] - (allPiecePositions[selectedPiece] % 8)) / 8
+                if (rowNumber2 % 2 === 0) {
+                    vacatedCellClass = allPiecePositions[selectedPiece] % 2 === 0 ? 'cell-even' : 'cell-uneven'
+                } else {
+                    vacatedCellClass = allPiecePositions[selectedPiece] % 2 === 1 ? 'cell-even' : 'cell-uneven'
+                }
+                let occupiedCell
+                // pawn queening
+                if (selectedPiece.indexOf('pawn-white') !== -1 && selectedPosition < 8 && selectedPosition >= 0) {
+                    occupiedCell = (
+                        <div id={selectedPosition} key={selectedPosition} className={occupiedCellClass}><img src="../Images/queen-white.png" alt="queen-white" key="queen-white-2" id="queen-white-2" onClick={() => setSelectedPiece('queen-white-2')}/></div>
+                    )
+                    setAllPiecePositions(prev => {
+                        let newState = {
+                            ...prev,
+                            'queen-white-2': selectedPosition,
+                            [selectedPiece]: -2,
+                        }
+                        if (Object.values(prev).includes(selectedPosition)) {
+                            const takenOutPiece = Object.entries(prev).filter(piece => piece.includes(selectedPosition))[0][0]
+                            newState = {
+                                ...newState,
+                                [takenOutPiece]: -1
+                            }
+                        }
+                        return newState
+                    })
+                    setAllThreatenedCells((prev) => {
+                        let newState = {
+                            ...prev,
+                            'queen-white-2': []
+                        }
+                        return newState
+                    })
+                } else if (selectedPiece.indexOf('pawn-black') !== -1 && selectedPosition <= 63 && selectedPosition > 55) {
+                    occupiedCell = (
+                        <div id={selectedPosition} key={selectedPosition} className={occupiedCellClass}><img src="../Images/queen-black.png" alt="queen-black" key="queen-black-2"  id="queen-black-2" onClick={() => setSelectedPiece('queen-black')}/></div>
+                    )
+                    setAllPiecePositions(prev => {
+                        let newState = {
+                            ...prev,
+                            'queen-black-2': selectedPosition,
+                            [selectedPiece]: -2,
+                        }
+                        if (Object.values(prev).includes(selectedPosition)) {
+                            const takenOutPiece = Object.entries(prev).filter(piece => piece.includes(selectedPosition))[0][0]
+                            newState = {
+                                ...newState,
+                                [takenOutPiece]: -1
+                            }
+                        }
+                        return newState
+                    })
+                    setAllThreatenedCells((prev) => {
+                        let newState = {
+                            ...prev,
+                            'queen-black-2': []
+                        }
+                        return newState
+                    })
+                } else {
+                    occupiedCell = (
+                        <div id={selectedPosition} key={selectedPosition} className={occupiedCellClass}><img src={`../Images/${selectedPiece.split('-')[0]}-${selectedPiece.split('-')[1]}.png`} alt={`${selectedPiece.split('-')[0]}-${selectedPiece.split('-')[1]}`} key={selectedPiece} id={selectedPiece} onClick={() => setSelectedPiece(selectedPiece)}/></div>
+                    )
+                    //console.log(occupiedCell)
+                    setAllPiecePositions(prev => {
+                        let newState
+                        if (Object.values(prev).includes(selectedPosition)) {
+                            const takenOutPiece = Object.entries(prev).filter(piece => piece.includes(selectedPosition))[0][0]
+                            newState = {
+                                ...prev,
+                                [selectedPiece]: selectedPosition,
+                                [takenOutPiece]: -1
+                            }
+                        } else {
+                            newState = {
+                                ...prev,
+                                [selectedPiece]: selectedPosition,
+                            }
+                        }
+                        return newState
+                    })
+                }
+                const vacatedCell = (
+                    <div id={allPiecePositions[selectedPiece]} key={allPiecePositions[selectedPiece]} className={vacatedCellClass}></div>
+                )
+                setAllCells(prevCells => {
+                    const updatedCells = prevCells
+                    updatedCells.splice(selectedPosition, 1, occupiedCell)
+                    updatedCells.splice(allPiecePositions[selectedPiece], 1, vacatedCell)
+                    return updatedCells
+                })
+                setAllRows(() => {
+                    const allRowElements = []
+                    for (let j = 0; j < 8; j++) {
+                        const currentRow = allCells.slice((j * 8), (j * 8) + 8)
+                        allRowElements.push(<div key={j} className="row">{currentRow}</div>)
+                    }
+                    return allRowElements
+                })
+                // Castling
+                if (selectedPiece.indexOf('king') !== -1 && ((selectedPosition - allPiecePositions[selectedPiece] === 2) || (selectedPosition - allPiecePositions[selectedPiece] === -2))) {
+                    let occupiedCell
+                    let vacatedCell
+                    let pieceToMove
+                    let positionToMove
+                    let vacatedPosition
+                    if (selectedPiece.indexOf('white') !== -1) {
+                        if (selectedPosition - allPiecePositions[selectedPiece] === 2) {
+                            pieceToMove = 'rook-white-2'
+                            positionToMove = 61
+                            vacatedPosition = 63
+                            occupiedCell = (
+                                <div id={61} key={61} className='cell-even'><img src='../Images/rook-white.png' alt='rook-white' key='rook-white-2' id='rook-white-2' onClick={() => setSelectedPiece('rook-white-2')} /></div>
+                            )
+                            vacatedCell = (
+                                <div id={63} key={63} className='cell-even'></div>
+                            )
+                        } else {
+                            pieceToMove = 'rook-white-1'
+                            positionToMove = 59
+                            vacatedPosition = 56
+                            occupiedCell = (
+                                <div id={59} key={59} className='cell-even'><img src='../Images/rook-white.png' alt='rook-white' key='rook-white-1' id='rook-white-1' onClick={() => setSelectedPiece('rook-white-1')} /></div>
+                            )
+                            vacatedCell = (
+                                <div id={56} key={56} className='cell-uneven'></div>
+                            )
+                        }
+                    } else {
+                        pieceToMove = 'rook-black-2'
+                        positionToMove = 5
+                        vacatedPosition = 7
+                        if (selectedPosition - allPiecePositions[selectedPiece] === 2) {
+                            occupiedCell = (
+                                <div id={5} key={5} className='cell-uneven'><img src='../Images/rook-black.png' alt='rook-black' key='rook-black-2' id='rook-black-2' onClick={() => setSelectedPiece('rook-black-2')} /></div>
+                            )
+                            vacatedCell = (
+                                <div id={7} key={7} className='cell-uneven'></div>
+                            )
+                        } else {
+                            pieceToMove = 'rook-black-1'
+                            positionToMove = 3
+                            vacatedPosition = 0
+                            occupiedCell = (
+                                <div id={3} key={3} className='cell-uneven'><img src='../Images/rook-black.png' alt='rook-black' key='rook-black-1' id='rook-black-1' onClick={() => setSelectedPiece('rook-black-1')} /></div>
+                            )
+                            vacatedCell = (
+                                <div id={0} key={0} className='cell-even'></div>
+                            )
+                        }
+                    }
+                    setAllPiecePositions(prev => {
+                        let newState = {
+                            ...prev,
+                            [pieceToMove]: positionToMove,
+                        }
+                        return newState
+                    })
+                    setAllCells(prevCells => {
+                        const updatedCells = prevCells
+                        updatedCells.splice(positionToMove, 1, occupiedCell)
+                        updatedCells.splice(vacatedPosition, 1, vacatedCell)
+                        return updatedCells
+                    })
+                    setAllRows(() => {
+                        const allRowElements = []
+                        for (let j = 0; j < 8; j++) {
+                            const currentRow = allCells.slice((j * 8), (j * 8) + 8)
+                            allRowElements.push(<div key={j} className="row">{currentRow}</div>)
+                        }
+                        return allRowElements
+                    })
+                }
+                setPiecesShieldingKing(() => {
+                    return {
+                        black: [],
+                        white: []
+                    }
+                })
+                setCellsInterceptingCheck([])
+                setCheckingPiece('')
+                setPreviousSelected(-1)
+                setSelectedPiece('')
+                setSelectedPosition(-1)
+                //setTimeout(() => {
+                    setNextTurn(prev => prev === 'white' ? 'black' : 'white')
+                //})
+            }
+        }
+        if (!checkMate && selectedPosition !== -1 && allPiecePositions[selectedPiece] !== -1) movePiece()
+        return () => setSelectedPiece(prev => prev)
+        // eslint-disable-next-line
+    }, [selectedPosition, nextTurn])
+
+    // auto move
+    useEffect(() => {
+        setTimeout(() => {
+            if (nextTurn === 'black') {
+                setAllPiecePositions((prev) => {
+                    const move = nextMove(prev, check, cellsInterceptingCheck, checkingPiece)
+                    setTimeout(() => {
+                        setSelectedPiece(move.selectedPiece)
+                        setTimeout(() => {
+                            setSelectedPosition(prev => {
+                                return prev !== move.selectedPosition ? move.selectedPosition : prev
+                            })
+                        }, 500)
+                    }, 500)
+                    return prev
+                })
+            }
+        }, 1)
+        setSelectedPiece('')
+        setSelectedPosition(-1)
+        return () => setNextTurn(prev => prev)
+    }, [nextTurn])
+
+    // set taken out pieces
     useEffect(() => {
         for (let i = 0; i < 32; i++) {
             if (Object.entries(allPiecePositions)[i][1] === -1) {
