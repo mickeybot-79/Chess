@@ -51,38 +51,38 @@ const Board = () => {
     */
 
     const [allPiecePositions, setAllPiecePositions] = useState({
-        'rook-black-1': 2,
-        'rook-black-2': 5,
-        'knight-black-1': 8,
-        'knight-black-2': -1,
-        'bishop-black-1': 12,
-        'bishop-black-2': -1,
-        'queen-black': 24,
-        'king-black': 6,
-        'pawn-black-1': 16,
-        'pawn-black-2': 25,
-        'pawn-black-3': -1,
-        'pawn-black-4': -1,
-        'pawn-black-5': 28,
+        'rook-black-1': 0,
+        'rook-black-2': 7,
+        'knight-black-1': 1,
+        'knight-black-2': 6,
+        'bishop-black-1': 2,
+        'bishop-black-2': 5,
+        'queen-black': 3,
+        'king-black': 4,
+        'pawn-black-1': 8,
+        'pawn-black-2': 9,
+        'pawn-black-3': 10,
+        'pawn-black-4': 11,
+        'pawn-black-5': 12,
         'pawn-black-6': 13,
         'pawn-black-7': 14,
         'pawn-black-8': 15,
-        'pawn-white-1': 40,
+        'pawn-white-1': 48,
         'pawn-white-2': 49,
-        'pawn-white-3': -1,
-        'pawn-white-4': -1,
-        'pawn-white-5': 44,
+        'pawn-white-3': 50,
+        'pawn-white-4': 51,
+        'pawn-white-5': 52,
         'pawn-white-6': 53,
-        'pawn-white-7': 45,
+        'pawn-white-7': 54,
         'pawn-white-8': 55,
-        'rook-white-1': 58,
-        'rook-white-2': 61,
-        'knight-white-1': -1,
-        'knight-white-2': -1,
-        'bishop-white-1': 27,
-        'bishop-white-2': 46,
-        'queen-white': 36,
-        'king-white': 62,
+        'rook-white-1': 56,
+        'rook-white-2': 63,
+        'knight-white-1': 57,
+        'knight-white-2': 62,
+        'bishop-white-1': 58,
+        'bishop-white-2': 61,
+        'queen-white': 59,
+        'king-white': 60,
     })
 
     const [nextTurn, setNextTurn] = useState('white')
@@ -1407,23 +1407,33 @@ const Board = () => {
     useEffect(() => {
         setTimeout(() => {
             if (nextTurn === 'black') {
+                window.sessionStorage.setItem('codeRan', false)
                 setAllPiecePositions((prev) => {
                     const move = nextMove(prev, check, cellsInterceptingCheck, checkingPiece)
                     setTimeout(() => {
-                        setSelectedPiece(move.selectedPiece)
+                        setSelectedPiece((prev)=> {
+                            if (move?.selectedPiece){
+                                return move?.selectedPiece
+                            } else {
+                                return prev
+                            }
+                        })
                         setTimeout(() => {
                             setSelectedPosition(prev => {
-                                return prev !== move.selectedPosition ? move.selectedPosition : prev
+                                if (move?.selectedPosition){
+                                    return move?.selectedPosition
+                                } else {
+                                    return prev
+                                }
                             })
                         }, 500)
                     }, 500)
                     return prev
                 })
             }
-        }, 1)
+        }, 10)
         setSelectedPiece('')
         setSelectedPosition(-1)
-        return () => setNextTurn(prev => prev)
     }, [nextTurn])
 
     // set taken out pieces
