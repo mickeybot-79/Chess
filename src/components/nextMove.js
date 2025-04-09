@@ -1,4 +1,5 @@
-const nextMove = (allPiecePositions, check, cellsInterceptingCheck, checkingPiece) => {
+
+const nextMove = (allPiecePositions, check, piecesShieldingKing, cellsInterceptingCheck, checkingPiece) => {
 
     let codeRan = window.sessionStorage.getItem('codeRan')
 
@@ -6,10 +7,9 @@ const nextMove = (allPiecePositions, check, cellsInterceptingCheck, checkingPiec
 
     if (codeRan === 'false') {
 
-        let piecesShieldingKing = {
-            'black': [],
-            'white': []
-        }
+        let shieldedCells = []
+
+        let shieldedPieces = []
 
         const checkShieldingPiece = (loopValue, direction, mainPiece, currentCellPosition) => {
             const interceptingPieces = []
@@ -34,16 +34,30 @@ const nextMove = (allPiecePositions, check, cellsInterceptingCheck, checkingPiec
                 }
                 if (Object.values(allPiecePositions).includes(nextValue)) {
                     const currentPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(nextValue))[0][0]
-                    if (currentPiece.indexOf('king') === -1 && currentPiece.split('-')[1] !== mainPiece.split('-')[1]) interceptingPieces.push(Object.entries(allPiecePositions).filter(piece => piece.includes(nextValue))[0][0])
+                    interceptingPieces.push(currentPiece)
                 }
             }
 
             if (interceptingPieces.length === 1) {
-                if (!piecesShieldingKing[interceptingPieces[0].split('-')[1]].filter(piece => piece?.piece === interceptingPieces[0]).length) {
-                    piecesShieldingKing[interceptingPieces[0].split('-')[1]].push({
-                        piece: interceptingPieces[0],
-                        shieldingFrom: mainPiece
-                    })
+                if (mainPiece.split('-')[1] !== 'black') {
+                    if (!Object.values(allPiecePositions).includes(currentCellPosition) && !shieldedCells.includes(currentCellPosition)) {
+                        shieldedCells.push(currentCellPosition)
+                    }
+                    if (Object.values(allPiecePositions).includes(currentCellPosition)) {
+                        const shieldedPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentCellPosition))[0][0]
+                        if (shieldedPiece.split('-')[0] !== 'king') {
+                            let notIncluded = true
+                            for (let i = 0; i < shieldedPieces.length; i++) {
+                                if (Object.values(shieldedPieces[i]).includes(shieldedPiece)) notIncluded = false
+                            }
+                            if (notIncluded) {
+                                shieldedPieces.push({
+                                    piece: shieldedPiece,
+                                    shieldedBy: interceptingPieces[0]
+                                })
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -132,8 +146,8 @@ const nextMove = (allPiecePositions, check, cellsInterceptingCheck, checkingPiec
                     default: moveBackward = moveForward - (j * 8);
                 }
                 if (Object.values(allPiecePositions).includes(moveBackward) && moveBackward !== currentPiecePosition) {
-                    if (Object.entries(allPiecePositions).filter(piece => piece.includes(moveBackward))[0][0].indexOf(color) === -1 && Object.entries(allPiecePositions).filter(piece => piece.includes(moveBackward))[0][0].indexOf('king') !== -1) {
-                        checkShieldingPiece(loopValue - 1, direction, currentPiece, moveBackward)
+                    if (Object.entries(allPiecePositions).filter(piece => piece.includes(moveBackward))[0][0].indexOf(color) === -1) {
+                        checkShieldingPiece(loopValue - 1, direction, currentPiece, moveForward)
                     }
                     if (moveBackward !== moveForward) {
                         clear = false
@@ -378,6 +392,7 @@ const nextMove = (allPiecePositions, check, cellsInterceptingCheck, checkingPiec
         }
         for (let i = 0; i < Object.values(allPiecePositions).length; i++) {
             const currentPiece = Object.entries(allPiecePositions)[i][0]
+            //console.log(currentPiece)
             const currentPosition = Object.entries(allPiecePositions)[i][1]
             if (currentPosition !== -1) {
                 let column = (currentPosition % width) + 1
@@ -534,31 +549,42 @@ const nextMove = (allPiecePositions, check, cellsInterceptingCheck, checkingPiec
         console.log('allPossibleMoves', allPossibleMoves)
         //console.log('piecesShieldingKing', piecesShieldingKing)
 
+        console.log('shieldedCells', shieldedCells)
+        console.log('shieldedPieces', shieldedPieces)
+        console.log('piecesShieldingKing', piecesShieldingKing)
+
         let currentBestMove = {
             piece: '',
             cell: -1,
             cellValue: -50
         }
 
+        const pawnValue = 1
+        const bishopValue = 4
+        const knightValue = 6
+        const rookValue = 8
+        const queenValue = 10
+        const kingValue = 20
+
         for (const blackPiece in allPossibleMoves) {
             let pieceValue = 0
-            if (blackPiece.split('-')[0] === 'pawn') pieceValue = -1
-            if (blackPiece.split('-')[0] === 'bishop') pieceValue = -2
-            if (blackPiece.split('-')[0] === 'knight') pieceValue = -3
-            if (blackPiece.split('-')[0] === 'rook') pieceValue = -4
-            if (blackPiece.split('-')[0] === 'queen') pieceValue = -5
-            if (blackPiece.split('-')[0] === 'king') pieceValue = -10
+            if (blackPiece.split('-')[0] === 'pawn') pieceValue -= pawnValue * 1
+            if (blackPiece.split('-')[0] === 'bishop') pieceValue -= bishopValue * 1
+            if (blackPiece.split('-')[0] === 'knight') pieceValue -= knightValue * 1
+            if (blackPiece.split('-')[0] === 'rook') pieceValue -= rookValue * 1
+            if (blackPiece.split('-')[0] === 'queen') pieceValue -= queenValue * 1
+            if (blackPiece.split('-')[0] === 'king') pieceValue -= kingValue * 1
             const currentBlackPiecePosition = allPiecePositions[blackPiece]
-            // if the current piece is threatened (pieceValue - piece value * 3)
+            // if the current piece is threatened (pieceValue + piece value * 3)
             if (Object.values(allThreatenedCells).flat().includes(currentBlackPiecePosition)) {
                 const currentThreateningPiece = Object.entries(allThreatenedCells).filter(piece => piece.flat().includes(currentBlackPiecePosition)).filter(piece => piece[0].split('-')[1] !== 'black')
                 if (currentThreateningPiece.length) {
-                    if (blackPiece.split('-')[0] === 'pawn') pieceValue += 3
-                    if (blackPiece.split('-')[0] === 'bishop') pieceValue += 6
-                    if (blackPiece.split('-')[0] === 'knight') pieceValue += 9
-                    if (blackPiece.split('-')[0] === 'rook') pieceValue += 12
-                    if (blackPiece.split('-')[0] === 'queen') pieceValue += 15
-                    if (blackPiece.split('-')[0] === 'king') pieceValue += 30
+                    if (blackPiece.split('-')[0] === 'pawn') pieceValue += pawnValue * 3
+                    if (blackPiece.split('-')[0] === 'bishop') pieceValue += bishopValue * 3
+                    if (blackPiece.split('-')[0] === 'knight') pieceValue += knightValue * 3
+                    if (blackPiece.split('-')[0] === 'rook') pieceValue += rookValue * 3
+                    if (blackPiece.split('-')[0] === 'queen') pieceValue += queenValue * 3
+                    if (blackPiece.split('-')[0] === 'king') pieceValue += kingValue * 3
                 }
                 // CHECK IF THE PIECE IS CLOSE TO THE KING AND THREATENED BY MORE THAN ONE ENEMY PIECE (POSSIBLE CHECKMATE)
                 if (true) { }
@@ -566,17 +592,17 @@ const nextMove = (allPiecePositions, check, cellsInterceptingCheck, checkingPiec
             for (let i = 0; i < allPossibleMoves[blackPiece].length; i++) {
                 let currentCellValue = pieceValue
                 const currentCell = allPossibleMoves[blackPiece][i]
-                let trueConditions = [`pieceValue: ${pieceValue}`, `currentCell: ${currentCell}`]
-                // if the target cell contains an enemy piece (currentValue + enemy piece value)
+                let trueConditions = [ `currentCell: ${currentCell}`, `pieceValue: ${pieceValue}`]
+                // if the target cell contains an enemy piece (currentValue + enemy piece value * 2)
                 if (Object.values(allPiecePositions).includes(currentCell)) {
                     const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentCell))[0][0]
                     if (targetPiece.split('-')[1] !== 'black') {
-                        if (targetPiece.split('-')[0] === 'pawn') currentCellValue += 2
-                        if (targetPiece.split('-')[0] === 'bishop') currentCellValue += 4
-                        if (targetPiece.split('-')[0] === 'knight') currentCellValue += 6
-                        if (targetPiece.split('-')[0] === 'rook') currentCellValue += 8
-                        if (targetPiece.split('-')[0] === 'queen') currentCellValue += 10
-                        if (targetPiece.split('-')[0] === 'king') currentCellValue += 20
+                        if (targetPiece.split('-')[0] === 'pawn') currentCellValue += pawnValue * 3
+                        if (targetPiece.split('-')[0] === 'bishop') currentCellValue += bishopValue * 3
+                        if (targetPiece.split('-')[0] === 'knight') currentCellValue += knightValue * 3
+                        if (targetPiece.split('-')[0] === 'rook') currentCellValue += rookValue * 3
+                        if (targetPiece.split('-')[0] === 'queen') currentCellValue += queenValue * 3
+                        if (targetPiece.split('-')[0] === 'king') currentCellValue += kingValue * 3
                         trueConditions.push('target cell contains an enemy piece (currentCellValue + enemy piece value * 2)', `currentCellValue: ${currentCellValue}`)
                     }
                     // if the enemy piece in the target cell is threatening a friendly piece (currentValue + friendly piece value * 2)
@@ -585,12 +611,12 @@ const nextMove = (allPiecePositions, check, cellsInterceptingCheck, checkingPiec
                             if (Object.values(allPiecePositions).includes(allThreatenedCells[targetPiece][j])) {
                                 const threatenedPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(allThreatenedCells[targetPiece][j]))[0][0]
                                 if (threatenedPiece !== blackPiece && threatenedPiece.split('-')[1] === 'black') {
-                                    if (targetPiece.split('-')[0] === 'pawn') currentCellValue += 2
-                                    if (targetPiece.split('-')[0] === 'bishop') currentCellValue += 4
-                                    if (targetPiece.split('-')[0] === 'knight') currentCellValue += 6
-                                    if (targetPiece.split('-')[0] === 'rook') currentCellValue += 8
-                                    if (targetPiece.split('-')[0] === 'queen') currentCellValue += 10
-                                    if (targetPiece.split('-')[0] === 'king') currentCellValue += 20
+                                    if (targetPiece.split('-')[0] === 'pawn') currentCellValue += pawnValue * 2
+                                    if (targetPiece.split('-')[0] === 'bishop') currentCellValue += bishopValue * 2
+                                    if (targetPiece.split('-')[0] === 'knight') currentCellValue += knightValue * 2
+                                    if (targetPiece.split('-')[0] === 'rook') currentCellValue += rookValue * 2
+                                    if (targetPiece.split('-')[0] === 'queen') currentCellValue += queenValue * 2
+                                    if (targetPiece.split('-')[0] === 'king') currentCellValue += kingValue * 2
                                     trueConditions.push('target piece is threatening friendly piece (currentCellValue + friendly piece value * 2)', `currentCellValue: ${currentCellValue}`)
                                 }
                             }
@@ -601,13 +627,13 @@ const nextMove = (allPiecePositions, check, cellsInterceptingCheck, checkingPiec
                 if (Object.values(allThreatenedCells).flat().includes(currentCell)) {
                     const threateningPiece = Object.entries(allThreatenedCells).filter(piece => piece.flat().includes(currentCell)).filter(piece => piece[0].split('-')[1] !== 'black')
                     if (threateningPiece.length) {
-                        if (blackPiece.split('-')[0] === 'pawn') currentCellValue -= 3
-                        if (blackPiece.split('-')[0] === 'bishop') currentCellValue -= 6
-                        if (blackPiece.split('-')[0] === 'knight') currentCellValue -= 9
-                        if (blackPiece.split('-')[0] === 'rook') currentCellValue -= 12
-                        if (blackPiece.split('-')[0] === 'queen') currentCellValue -= 15
-                        if (blackPiece.split('-')[0] === 'king') currentCellValue -= 30
-                        trueConditions.push('target cell is threatened (currentCellValue - piece value * 2)', 'by', threateningPiece, `currentCellValue: ${currentCellValue}`)
+                        if (blackPiece.split('-')[0] === 'pawn') currentCellValue -= pawnValue * 3
+                        if (blackPiece.split('-')[0] === 'bishop') currentCellValue -= bishopValue * 3
+                        if (blackPiece.split('-')[0] === 'knight') currentCellValue -= knightValue * 3
+                        if (blackPiece.split('-')[0] === 'rook') currentCellValue -= rookValue * 3
+                        if (blackPiece.split('-')[0] === 'queen') currentCellValue -= queenValue * 3
+                        if (blackPiece.split('-')[0] === 'king') currentCellValue -= kingValue * 3
+                        trueConditions.push('target cell is threatened (currentCellValue - piece value * 4)', 'by', threateningPiece, `currentCellValue: ${currentCellValue}`)
                     } else { // if the cells behind the current piece are also threatened
                         const threateningPiece2 = Object.entries(allThreatenedCells).filter(piece => piece.flat().includes(allPiecePositions[blackPiece])).filter(piece => piece[0].split('-')[1] !== 'black')
                         let notThreatened = true
@@ -636,29 +662,29 @@ const nextMove = (allPiecePositions, check, cellsInterceptingCheck, checkingPiec
                             }
                         }
                         if (notThreatened) {
-                            // if the target cell contains an enemy piece (currentValue + enemy piece value * 5)
+                            // if the target cell contains an enemy piece (currentValue + enemy piece value * 3)
                             if (Object.values(allPiecePositions).includes(currentCell)) {
                                 const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(currentCell))[0][0]
                                 if (targetPiece.split('-')[1] !== 'black') {
-                                    if (targetPiece.split('-')[0] === 'pawn') currentCellValue += 5
-                                    if (targetPiece.split('-')[0] === 'bishop') currentCellValue += 10
-                                    if (targetPiece.split('-')[0] === 'knight') currentCellValue += 15
-                                    if (targetPiece.split('-')[0] === 'rook') currentCellValue += 40
-                                    if (targetPiece.split('-')[0] === 'queen') currentCellValue += 25
-                                    if (targetPiece.split('-')[0] === 'king') currentCellValue += 50
-                                    trueConditions.push('target cell is not threatened (currentCellValue + enemy piece value * 5)', `currentCellValue: ${currentCellValue}`)
+                                    if (targetPiece.split('-')[0] === 'pawn') currentCellValue += pawnValue * 3
+                                    if (targetPiece.split('-')[0] === 'bishop') currentCellValue += bishopValue * 3
+                                    if (targetPiece.split('-')[0] === 'knight') currentCellValue += knightValue * 3
+                                    if (targetPiece.split('-')[0] === 'rook') currentCellValue += rookValue * 3
+                                    if (targetPiece.split('-')[0] === 'queen') currentCellValue += queenValue * 3
+                                    if (targetPiece.split('-')[0] === 'king') currentCellValue += kingValue * 3
+                                    trueConditions.push('target cell is not threatened (currentCellValue + enemy piece value * 3)', `currentCellValue: ${currentCellValue}`)
                                 }
                             } else {
                                 currentCellValue += 1
                                 trueConditions.push('target cell is not threatened (currentCellValue + 1)', 'by', threateningPiece2, `currentCellValue: ${currentCellValue}`)
                             }
                         } else {
-                            if (blackPiece.split('-')[0] === 'pawn') currentCellValue -= 2
-                            if (blackPiece.split('-')[0] === 'bishop') currentCellValue -= 4
-                            if (blackPiece.split('-')[0] === 'knight') currentCellValue -= 6
-                            if (blackPiece.split('-')[0] === 'rook') currentCellValue -= 8
-                            if (blackPiece.split('-')[0] === 'queen') currentCellValue -= 10
-                            if (blackPiece.split('-')[0] === 'king') currentCellValue -= 20
+                            if (blackPiece.split('-')[0] === 'pawn') currentCellValue -= pawnValue * 2
+                            if (blackPiece.split('-')[0] === 'bishop') currentCellValue -= bishopValue * 2
+                            if (blackPiece.split('-')[0] === 'knight') currentCellValue -= knightValue * 2
+                            if (blackPiece.split('-')[0] === 'rook') currentCellValue -= rookValue * 2
+                            if (blackPiece.split('-')[0] === 'queen') currentCellValue -= queenValue * 2
+                            if (blackPiece.split('-')[0] === 'king') currentCellValue -= kingValue * 2
                             trueConditions.push('target cell is threatened (currentCellValue - piece value * 2)', 'by', threateningPiece2, `currentCellValue: ${currentCellValue}`)
                         }
                     }
@@ -694,7 +720,7 @@ const nextMove = (allPiecePositions, check, cellsInterceptingCheck, checkingPiec
                     }
                 }
                 if (blackPiece.indexOf('rook') !== -1 || blackPiece.indexOf('queen') !== -1) {
-                    blackPieceMoves = rookMovement('black', currentCell, width, row, column)
+                    blackPieceMoves = rookMovement('black', blackPiece, currentCell, width, row, column)
                     for (let j = 0; j < blackPieceMoves.threatenedPieces.length; j++) {
                         if (!allCellsThreatenedFromCurrentCell.includes(allPiecePositions[blackPieceMoves.threatenedPieces[j]])) {
                             allCellsThreatenedFromCurrentCell.push(allPiecePositions[blackPieceMoves.threatenedPieces[j]])
@@ -730,7 +756,7 @@ const nextMove = (allPiecePositions, check, cellsInterceptingCheck, checkingPiec
                     }
                 }
                 if (blackPiece.indexOf('bishop') !== -1 || blackPiece.indexOf('queen') !== -1) {
-                    blackPieceMoves = bishopMovement('black', currentCell, width, row, column)
+                    blackPieceMoves = bishopMovement('black', blackPiece, currentCell, width, row, column)
                     for (let j = 0; j < blackPieceMoves.threatenedPieces.length; j++) {
                         if (!allCellsThreatenedFromCurrentCell.includes(allPiecePositions[blackPieceMoves.threatenedPieces[j]])) {
                             allCellsThreatenedFromCurrentCell.push(allPiecePositions[blackPieceMoves.threatenedPieces[j]])
@@ -771,12 +797,12 @@ const nextMove = (allPiecePositions, check, cellsInterceptingCheck, checkingPiec
                         //if the friendly piece to be defended is already being defended by another friendly piece
                         const defendingPieces = Object.entries(allThreatenedCells).filter(piece => piece.flat().includes(allPiecePositions[blackPieceMoves.protectedPieces[j]])).filter(piece => piece[0].split('-')[1] === 'black').filter(piece => piece[0] !== blackPiece)
                         if (!defendingPieces.length) { //(currentCellValue + value of piece to be defended)
-                            if (blackPieceMoves.protectedPieces[j].split('-')[0] === 'pawn') currentCellValue += 1
-                            if (blackPieceMoves.protectedPieces[j].split('-')[0] === 'bishop') currentCellValue += 2
-                            if (blackPieceMoves.protectedPieces[j].split('-')[0] === 'knight') currentCellValue += 3
-                            if (blackPieceMoves.protectedPieces[j].split('-')[0] === 'rook') currentCellValue += 4
-                            if (blackPieceMoves.protectedPieces[j].split('-')[0] === 'queen') currentCellValue += 5
-                            if (blackPieceMoves.protectedPieces[j].split('-')[0] === 'king') currentCellValue += 10
+                            if (blackPieceMoves.protectedPieces[j].split('-')[0] === 'pawn') currentCellValue += pawnValue
+                            if (blackPieceMoves.protectedPieces[j].split('-')[0] === 'bishop') currentCellValue += bishopValue
+                            if (blackPieceMoves.protectedPieces[j].split('-')[0] === 'knight') currentCellValue += knightValue
+                            if (blackPieceMoves.protectedPieces[j].split('-')[0] === 'rook') currentCellValue += rookValue
+                            if (blackPieceMoves.protectedPieces[j].split('-')[0] === 'queen') currentCellValue += queenValue
+                            if (blackPieceMoves.protectedPieces[j].split('-')[0] === 'king') currentCellValue += kingValue
                             trueConditions.push('friendly piece is not defended (currentCellValue + value of piece to be defended)', `currentCellValue: ${currentCellValue}`)
                         } else {
                             currentCellValue += 1
@@ -784,12 +810,12 @@ const nextMove = (allPiecePositions, check, cellsInterceptingCheck, checkingPiec
                         }
                         const threateningPieces = Object.entries(allThreatenedCells).filter(piece => piece.flat().includes(allPiecePositions[blackPieceMoves.protectedPieces[j]])).filter(piece => piece[0].split('-')[1] !== 'black')
                         if (threateningPieces.length) { //(currentCellValue + value of piece to be defended)
-                            if (blackPieceMoves.protectedPieces[j].split('-')[0] === 'pawn') currentCellValue += 1
-                            if (blackPieceMoves.protectedPieces[j].split('-')[0] === 'bishop') currentCellValue += 2
-                            if (blackPieceMoves.protectedPieces[j].split('-')[0] === 'knight') currentCellValue += 3
-                            if (blackPieceMoves.protectedPieces[j].split('-')[0] === 'rook') currentCellValue += 4
-                            if (blackPieceMoves.protectedPieces[j].split('-')[0] === 'queen') currentCellValue += 5
-                            if (blackPieceMoves.protectedPieces[j].split('-')[0] === 'king') currentCellValue += 10
+                            if (blackPieceMoves.protectedPieces[j].split('-')[0] === 'pawn') currentCellValue += pawnValue
+                            if (blackPieceMoves.protectedPieces[j].split('-')[0] === 'bishop') currentCellValue += bishopValue
+                            if (blackPieceMoves.protectedPieces[j].split('-')[0] === 'knight') currentCellValue += knightValue
+                            if (blackPieceMoves.protectedPieces[j].split('-')[0] === 'rook') currentCellValue += rookValue
+                            if (blackPieceMoves.protectedPieces[j].split('-')[0] === 'queen') currentCellValue += queenValue
+                            if (blackPieceMoves.protectedPieces[j].split('-')[0] === 'king') currentCellValue += kingValue
                             trueConditions.push('friendly piece is threatened (currentCellValue + value of piece to be defended)', `currentCellValue: ${currentCellValue}`)
                         } else { // if the friendly piece to be defended is being threatened by one or more enemy pieces
                             currentCellValue += 1
@@ -799,40 +825,44 @@ const nextMove = (allPiecePositions, check, cellsInterceptingCheck, checkingPiec
                 }
                 //if the piece to be moved can threaten an enemy piece from the target cell
                 for (let j = 0; j < blackPieceMoves.threatenedPieces.length; j++) {
-                    //if the enemy piece to be threatened is also being threatened by another friendly piece
+                    //if the enemy piece to be threatened is also being threatened by another friendly piece  (currentCellValue + 1)
                     const threateningPieces = Object.entries(allThreatenedCells).filter(piece => piece.flat().includes(blackPieceMoves.threatenedPieces[j]))
-                    for (let k = 0; k < threateningPieces.length; k++) {
-                        if (threateningPieces[k][0] !== blackPiece) {
-                            currentCellValue += 1
-                            trueConditions.push('enemy piece is already threatened (currentCellValue + 1)', `currentCellValue: ${currentCellValue}`)
-                        }
-                    }
-                    if (threateningPieces.length < 2) {
-                        if (blackPieceMoves.threatenedPieces[j].split('-')[0] === 'pawn') currentCellValue += 1
-                        if (blackPieceMoves.threatenedPieces[j].split('-')[0] === 'bishop') currentCellValue += 2
-                        if (blackPieceMoves.threatenedPieces[j].split('-')[0] === 'knight') currentCellValue += 3
-                        if (blackPieceMoves.threatenedPieces[j].split('-')[0] === 'rook') currentCellValue += 4
-                        if (blackPieceMoves.threatenedPieces[j].split('-')[0] === 'queen') currentCellValue += 5
-                        if (blackPieceMoves.threatenedPieces[j].split('-')[0] === 'king') currentCellValue += 10
+                    if (threateningPieces.length >= 2) {
+                        currentCellValue += 1
+                        trueConditions.push('enemy piece is already threatened (currentCellValue + 1)', `currentCellValue: ${currentCellValue}`)
+                    } else { // (currentCellValue + enemy piece value)
+                        if (blackPieceMoves.threatenedPieces[j].split('-')[0] === 'pawn') currentCellValue += pawnValue
+                        if (blackPieceMoves.threatenedPieces[j].split('-')[0] === 'bishop') currentCellValue += bishopValue
+                        if (blackPieceMoves.threatenedPieces[j].split('-')[0] === 'knight') currentCellValue += knightValue
+                        if (blackPieceMoves.threatenedPieces[j].split('-')[0] === 'rook') currentCellValue += rookValue
+                        if (blackPieceMoves.threatenedPieces[j].split('-')[0] === 'queen') currentCellValue += queenValue
+                        if (blackPieceMoves.threatenedPieces[j].split('-')[0] === 'king') currentCellValue += kingValue
                         trueConditions.push('enemy piece can be threatened (currentCellValue + enemy piece value)', `currentCellValue: ${currentCellValue}`)
                     }
-                    if (true) {
+                }
 
+                // if the target cell is being shielded by a friendly piece (currentCellValue - 3)
+                if (shieldedCells.includes(currentCell)) {
+                    currentCellValue -= 3
+                    trueConditions.push('target cell is shielded (currentCellValue - 3)', `currentCellValue: ${currentCellValue}`)
+                }
+
+                // if the movement will leave a friendly piece exposed (currentCellValue - friendly piece value * 2)
+                for (let j = 0; j < shieldedPieces.length; j++ ) {
+                    if (shieldedPieces[j].shieldedBy === blackPiece) {
+                        if (shieldedPieces[j].piece.split('-')[0] === 'pawn') currentCellValue -= pawnValue * 2
+                        if (shieldedPieces[j].piece.split('-')[0] === 'bishop') currentCellValue -= bishopValue * 2
+                        if (shieldedPieces[j].piece.split('-')[0] === 'knight') currentCellValue -= knightValue * 2
+                        if (shieldedPieces[j].piece.split('-')[0] === 'rook') currentCellValue -= rookValue * 2
+                        if (shieldedPieces[j].piece.split('-')[0] === 'queen') currentCellValue -= queenValue * 2
+                        trueConditions.push('piece is shielding a friendly piece (currentCellValue - friendly piece value * 2)', `currentCellValue: ${currentCellValue}`)
                     }
-
-                    //if the enemy piece to be threatened is being defended by one or more enemy pieces
-                    if (true) {
-
-                    }
                 }
-                if (true) {
-                }
+                //if the friendly piece is defended (currentCellValue - 1)
+                if (true) { }
 
-                // if the movement will leave a friendly piece exposed
-                if (true) {
-                    //if the friendly piece is defended
-                    if (true) { }
-                }
+                // if a friendly piece can be shielded from the target cell
+                if (true) { }
 
                 if (currentCellValue > currentBestMove.cellValue) {
                     currentBestMove = {
@@ -841,7 +871,7 @@ const nextMove = (allPiecePositions, check, cellsInterceptingCheck, checkingPiec
                         cellValue: currentCellValue
                     }
                 }
-                if (blackPiece === 'queen-black') console.log('trueConditions', trueConditions)
+                if (blackPiece === 'pawn-black-7') console.log('trueConditions', trueConditions)
             }
         }
 

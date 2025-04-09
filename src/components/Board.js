@@ -59,11 +59,11 @@ const Board = () => {
         'bishop-black-2': 5,
         'queen-black': 3,
         'king-black': 4,
-        'pawn-black-1': 8,
-        'pawn-black-2': 9,
+        'pawn-black-1':12,
+        'pawn-black-2': 11,
         'pawn-black-3': 10,
-        'pawn-black-4': 11,
-        'pawn-black-5': 12,
+        'pawn-black-4': 9,
+        'pawn-black-5': 8,
         'pawn-black-6': 13,
         'pawn-black-7': 14,
         'pawn-black-8': 15,
@@ -237,18 +237,6 @@ const Board = () => {
         })
         // eslint-disable-next-line
     }, [])
-
-    //create rows
-    // useEffect(() => {
-    //     setAllRows(() => {
-    //         const allRowElements = []
-    //         for (let j = 0; j < 8; j++) {
-    //             const currentRow = allCells.slice((j * 8), (j * 8) + 8)
-    //             allRowElements.push(<div key={j} className="row">{currentRow}</div>)
-    //         }
-    //         return allRowElements
-    //     })
-    // }, [allCells])
 
     //piece movement
     useEffect(() => {
@@ -1409,7 +1397,7 @@ const Board = () => {
             if (nextTurn === 'black') {
                 window.sessionStorage.setItem('codeRan', false)
                 setAllPiecePositions((prev) => {
-                    const move = nextMove(prev, check, cellsInterceptingCheck, checkingPiece)
+                    const move = nextMove(prev, check, piecesShieldingKing, cellsInterceptingCheck, checkingPiece)
                     setTimeout(() => {
                         setSelectedPiece((prev)=> {
                             if (move?.selectedPiece){
@@ -1420,7 +1408,7 @@ const Board = () => {
                         })
                         setTimeout(() => {
                             setSelectedPosition(prev => {
-                                if (move?.selectedPosition){
+                                if (move?.selectedPosition > -1){
                                     return move?.selectedPosition
                                 } else {
                                     return prev
