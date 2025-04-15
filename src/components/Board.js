@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import nextMove from "../components/nextMove"
+//import nextMove from "../components/nextMove2"
 
 const Board = () => {
 
@@ -15,40 +16,40 @@ const Board = () => {
 
     //const [currentPiecePosition, setCurrentPiecePosition] = useState(-1)
 
-    /*
-        'rook-black-1': 0,
-        'rook-black-2': 7,
-        'knight-black-1': 1,
-        'knight-black-2': 6,
-        'bishop-black-1': 2,
-        'bishop-black-2': 5,
-        'queen-black': 3,
-        'king-black': 4,
-        'pawn-black-1': 8,
-        'pawn-black-2': 9,
-        'pawn-black-3': 10,
-        'pawn-black-4': 11,
-        'pawn-black-5': 12,
-        'pawn-black-6': 13,
-        'pawn-black-7': 14,
-        'pawn-black-8': 15,
-        'pawn-white-1': 48,
-        'pawn-white-2': 49,
-        'pawn-white-3': 50,
-        'pawn-white-4': 51,
-        'pawn-white-5': 52,
-        'pawn-white-6': 53,
-        'pawn-white-7': 54,
-        'pawn-white-8': 55,
-        'rook-white-1': 56,
-        'rook-white-2': 63,
-        'knight-white-1': 57,
-        'knight-white-2': 62,
-        'bishop-white-1': 58,
-        'bishop-white-2': 61,
-        'queen-white': 59,
-        'king-white': 60,
-    */
+    // const [allPiecePositions, setAllPiecePositions] = useState({
+    //     'rook-black-1': 2,
+    //     'rook-black-2': 5,
+    //     'knight-black-1': 8,
+    //     'knight-black-2': -1,
+    //     'bishop-black-1': 12,
+    //     'bishop-black-2': -1,
+    //     'queen-black': 24,
+    //     'king-black': 6,
+    //     'pawn-black-1': 16,
+    //     'pawn-black-2': 25,
+    //     'pawn-black-3': -1,
+    //     'pawn-black-4': -1,
+    //     'pawn-black-5': 28,
+    //     'pawn-black-6': 13,
+    //     'pawn-black-7': 14,
+    //     'pawn-black-8': 15,
+    //     'pawn-white-1': 40,
+    //     'pawn-white-2': 49,
+    //     'pawn-white-3': -1,
+    //     'pawn-white-4': -1,
+    //     'pawn-white-5': 44,
+    //     'pawn-white-6': 53,
+    //     'pawn-white-7': 45,
+    //     'pawn-white-8': 55,
+    //     'rook-white-1': 58,
+    //     'rook-white-2': 61,
+    //     'knight-white-1': -1,
+    //     'knight-white-2': -1,
+    //     'bishop-white-1': 27,
+    //     'bishop-white-2': 46,
+    //     'queen-white': 36,
+    //     'king-white': 62,
+    // })
 
     const [allPiecePositions, setAllPiecePositions] = useState({
         'rook-black-1': 0,
@@ -84,6 +85,7 @@ const Board = () => {
         'queen-white': 59,
         'king-white': 60,
     })
+
 
     const [nextTurn, setNextTurn] = useState('white')
 
@@ -214,7 +216,7 @@ const Board = () => {
                 } else if (i === allPiecePositions['queen-white']) {
                     imageElement = <img src="../Images/queen-white.png" alt="queen-white" key="queen-white" id="queen-white" onClick={() => setSelectedPiece('queen-white')} />
                 } else if (i === allPiecePositions['king-white']) {
-                    imageElement = <img src="../Images/king-white.png" alt="king-white"key="king-white" id="king-white" onClick={() => setSelectedPiece('king-white')} />
+                    imageElement = <img src="../Images/king-white.png" alt="king-white" key="king-white" id="king-white" onClick={() => setSelectedPiece('king-white')} />
                 }
 
                 const rowNumber = (i - (i % 8)) / 8
@@ -235,6 +237,7 @@ const Board = () => {
 
             return allCellElements
         })
+
         // eslint-disable-next-line
     }, [])
 
@@ -263,11 +266,11 @@ const Board = () => {
                 }
                 if (Object.values(allPiecePositions).includes(nextValue)) {
                     const currentPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(nextValue))[0][0]
-                    if (currentPiece.indexOf('king') === -1 && currentPiece.split('-')[1] !== mainPiece.split('-')[1]) interceptingPieces.push(Object.entries(allPiecePositions).filter(piece => piece.includes(nextValue))[0][0])
+                    if (currentPiece.split('-')[0] !== 'king' && currentPiece !== mainPiece) interceptingPieces.push(Object.entries(allPiecePositions).filter(piece => piece.includes(nextValue))[0][0])
                 }
             }
 
-            if (interceptingPieces.length === 1) {
+            if (interceptingPieces.length === 1 && interceptingPieces[0].split('-')[1] !== mainPiece.split('-')[1]) {
                 setPiecesShieldingKing((prev) => {
                     let newState
                     if (interceptingPieces[0].indexOf('black') !== -1) {
@@ -372,19 +375,19 @@ const Board = () => {
                 let moveBackward
                 switch (direction) {
                     case 'right': moveBackward = moveForward - j;
-                    break;
+                        break;
                     case 'left': moveBackward = moveForward + j;
-                    break;
+                        break;
                     case 'up': moveBackward = moveForward + (j * 8);
-                    break;
+                        break;
                     case 'down right': moveBackward = moveForward - (width * j + j);
-                    break;
+                        break;
                     case 'down left': moveBackward = moveForward - (width * j - j);
-                    break;
+                        break;
                     case 'up right': moveBackward = moveForward + (width * j - j);
-                    break;
+                        break;
                     case 'up left': moveBackward = moveForward + (width * j + j);
-                    break;
+                        break;
                     default: moveBackward = moveForward - (j * 8);
                 }
                 if (Object.values(allPiecePositions).includes(moveBackward) && moveBackward !== currentPiecePosition) {
@@ -397,7 +400,7 @@ const Board = () => {
                     }
                 }
             }
-        
+
             if (Object.values(allPiecePositions).includes(moveForward)) {
                 const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(moveForward))[0][0]
                 if (clear && targetPiece.indexOf(color) === -1) {
@@ -412,19 +415,19 @@ const Board = () => {
                                 let interceptingCell
                                 switch (direction) {
                                     case 'right': interceptingCell = currentPiecePosition + j;
-                                    break;
+                                        break;
                                     case 'left': interceptingCell = currentPiecePosition - j;
-                                    break;
+                                        break;
                                     case 'up': interceptingCell = currentPiecePosition - (j * width);
-                                    break;
+                                        break;
                                     case 'down right': interceptingCell = currentPiecePosition + width * j + j;
-                                    break;
+                                        break;
                                     case 'down left': interceptingCell = currentPiecePosition + width * j - j;
-                                    break;
+                                        break;
                                     case 'up right': interceptingCell = currentPiecePosition - width * j + j;
-                                    break;
+                                        break;
                                     case 'up left': interceptingCell = currentPiecePosition - width * j - j;
-                                    break;
+                                        break;
                                     default: interceptingCell = currentPiecePosition + (j * width);
                                 }
                                 if (!newState.includes(interceptingCell)) newState.push(interceptingCell)
@@ -434,19 +437,19 @@ const Board = () => {
                         let threateningCellValue
                         switch (direction) {
                             case 'right': threateningCellValue = moveForward + 1;
-                            break;
+                                break;
                             case 'left': threateningCellValue = moveForward - 1;
-                            break;
+                                break;
                             case 'up': threateningCellValue = moveForward - width;
-                            break;
+                                break;
                             case 'down right': threateningCellValue = moveForward + width + 1;
-                            break;
+                                break;
                             case 'down left': threateningCellValue = moveForward + width - 1;
-                            break;
+                                break;
                             case 'up right': threateningCellValue = moveForward - width + 1;
-                            break;
+                                break;
                             case 'up left': threateningCellValue = moveForward - width - 1;
-                            break;
+                                break;
                             default: threateningCellValue = moveForward + width;
                         }
                         if (((!Object.values(allPiecePositions).includes(threateningCellValue)) || (Object.entries(allPiecePositions).filter(piece => piece.includes(threateningCellValue))[0][0]).split('-')[1] === currentPiece.split('-')[1])) {
@@ -454,19 +457,19 @@ const Board = () => {
                                 let threateningCellValue2
                                 switch (direction) {
                                     case 'right': threateningCellValue2 = allPiecePositions[targetPiece] + 1;
-                                    break;
+                                        break;
                                     case 'left': threateningCellValue2 = allPiecePositions[targetPiece] - 1;
-                                    break;
+                                        break;
                                     case 'up': threateningCellValue2 = allPiecePositions[targetPiece] - width;
-                                    break;
+                                        break;
                                     case 'down right': threateningCellValue2 = allPiecePositions[targetPiece] + width + 1;
-                                    break;
+                                        break;
                                     case 'down left': threateningCellValue2 = allPiecePositions[targetPiece] + width - 1;
-                                    break;
+                                        break;
                                     case 'up right': threateningCellValue2 = allPiecePositions[targetPiece] - width + 1;
-                                    break;
+                                        break;
                                     case 'up left': threateningCellValue2 = allPiecePositions[targetPiece] - width - 1;
-                                    break;
+                                        break;
                                     default: threateningCellValue2 = allPiecePositions[targetPiece] + width;
                                 }
                                 const newThreatenedCells = Object.entries(prev).filter(piece => piece.includes(currentPiece))[0][1]
@@ -653,7 +656,7 @@ const Board = () => {
         }
 
         const setNewSuitableThreat = (targetPosition, targetPiece) => {
-        //const setNewSuitableThreat = (currentPosition, targetPosition, targetPiece) => {
+            //const setNewSuitableThreat = (currentPosition, targetPosition, targetPiece) => {
             // const updatedCell = (
             //     <div id={targetPosition} key={targetPosition} className='suitable' onClick={() => movePiece(targetPosition, currentPosition)}><img src={`../Images/${targetPiece.split('-')[0]}-${targetPiece.split('-')[1]}.png`} alt={`${targetPiece.split('-')[0]}-${targetPiece.split('-')[1]}`} id={targetPiece} onClick={() => setSelectedPiece('')} /></div>
             // )
@@ -684,7 +687,7 @@ const Board = () => {
         }
 
         const setNewSuitable = (targetPosition) => {
-        //const setNewSuitable = (currentPosition, targetPosition) => {
+            //const setNewSuitable = (currentPosition, targetPosition) => {
             // const updatedCell = (
             //     <div id={targetPosition} key={targetPosition} className='suitable' onClick={() => movePiece(targetPosition, currentPosition)}></div>
             // )
@@ -715,9 +718,10 @@ const Board = () => {
         }
 
         const touchPiece = () => {
+            console.log('allPiecePositions', allPiecePositions)
             if (selectedPiece && allPiecePositions[selectedPiece] >= 0 && !checkMate) {
                 // remove previous suitable cells
-                for (let i = 0; i < suitableCells.length ; i++) {
+                for (let i = 0; i < suitableCells.length; i++) {
                     let newClass
                     const rowNumber = (suitableCells[i] - (suitableCells[i] % 8)) / 8
                     if (rowNumber % 2 === 0) {
@@ -762,7 +766,7 @@ const Board = () => {
                     }
                     const previousSelectedPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(previousSelected))[0][0]
                     const previousSelectedCell = (
-                        <div id={previousSelected} key={previousSelected} className={newSelectedClass}><img src={`../Images/${previousSelectedPiece.split('-')[0]}-${previousSelectedPiece.split('-')[1]}.png`} alt={`${previousSelectedPiece.split('-')[0]}-${previousSelectedPiece.split('-')[1]}`} id={previousSelectedPiece} onClick={() => setSelectedPiece(previousSelectedPiece)}/></div>
+                        <div id={previousSelected} key={previousSelected} className={newSelectedClass}><img src={`../Images/${previousSelectedPiece.split('-')[0]}-${previousSelectedPiece.split('-')[1]}.png`} alt={`${previousSelectedPiece.split('-')[0]}-${previousSelectedPiece.split('-')[1]}`} id={previousSelectedPiece} onClick={() => setSelectedPiece(previousSelectedPiece)} /></div>
                     )
                     setAllCells(prevCells => {
                         const updatedCells = prevCells
@@ -899,7 +903,7 @@ const Board = () => {
                             }
                         }
                     }
-    
+
                     const kingMoveLogic = (color) => {
                         const kingMoves = kingMovement(color, allPiecePositions[selectedPiece], width, row, column)
                         const allThreatenedByOpponent = []
@@ -913,7 +917,7 @@ const Board = () => {
                             if (!allThreatenedByOpponent.flat().includes(kingMoves.suitableCells[i])) setNewSuitable(kingMoves.suitableCells[i])
                         }
                     }
-    
+
                     if (!check) {
                         // pawn
                         if (selectedPiece.indexOf('pawn') !== -1 && nextTurn === selectedPiece.split('-')[1]) {
@@ -1145,14 +1149,13 @@ const Board = () => {
             }
         }
         touchPiece()
-        return () => setSelectedPiece(prev => prev)
         // eslint-disable-next-line
     }, [selectedPiece, checkingPiece, check])
 
     useEffect(() => {
         const movePiece = () => {
             // remove previous suitable cells
-            for (let i = 0; i < suitableCells.length ; i++) {
+            for (let i = 0; i < suitableCells.length; i++) {
                 let newClass
                 const rowNumber = (suitableCells[i] - (suitableCells[i] % 8)) / 8
                 if (rowNumber % 2 === 0) {
@@ -1206,7 +1209,7 @@ const Board = () => {
                 // pawn queening
                 if (selectedPiece.indexOf('pawn-white') !== -1 && selectedPosition < 8 && selectedPosition >= 0) {
                     occupiedCell = (
-                        <div id={selectedPosition} key={selectedPosition} className={occupiedCellClass}><img src="../Images/queen-white.png" alt="queen-white" key="queen-white-2" id="queen-white-2" onClick={() => setSelectedPiece('queen-white-2')}/></div>
+                        <div id={selectedPosition} key={selectedPosition} className={occupiedCellClass}><img src="../Images/queen-white.png" alt="queen-white" key="queen-white-2" id="queen-white-2" onClick={() => setSelectedPiece('queen-white-2')} /></div>
                     )
                     setAllPiecePositions(prev => {
                         let newState = {
@@ -1232,7 +1235,7 @@ const Board = () => {
                     })
                 } else if (selectedPiece.indexOf('pawn-black') !== -1 && selectedPosition <= 63 && selectedPosition > 55) {
                     occupiedCell = (
-                        <div id={selectedPosition} key={selectedPosition} className={occupiedCellClass}><img src="../Images/queen-black.png" alt="queen-black" key="queen-black-2"  id="queen-black-2" onClick={() => setSelectedPiece('queen-black')}/></div>
+                        <div id={selectedPosition} key={selectedPosition} className={occupiedCellClass}><img src="../Images/queen-black.png" alt="queen-black" key="queen-black-2" id="queen-black-2" onClick={() => setSelectedPiece('queen-black')} /></div>
                     )
                     setAllPiecePositions(prev => {
                         let newState = {
@@ -1257,10 +1260,11 @@ const Board = () => {
                         return newState
                     })
                 } else {
+                    const pieceName = selectedPiece.split('-')[0]
+                    const pieceColor = selectedPiece.split('-')[1]
                     occupiedCell = (
-                        <div id={selectedPosition} key={selectedPosition} className={occupiedCellClass}><img src={`../Images/${selectedPiece.split('-')[0]}-${selectedPiece.split('-')[1]}.png`} alt={`${selectedPiece.split('-')[0]}-${selectedPiece.split('-')[1]}`} key={selectedPiece} id={selectedPiece} onClick={() => setSelectedPiece(selectedPiece)}/></div>
+                        <div id={selectedPosition} key={selectedPosition} className={occupiedCellClass}><img src={`../Images/${pieceName}-${pieceColor}.png`} alt={`${pieceName}-${pieceColor}`} key={selectedPiece} id={selectedPiece} onClick={() => setSelectedPiece(selectedPiece)} /></div>
                     )
-                    //console.log(occupiedCell)
                     setAllPiecePositions(prev => {
                         let newState
                         if (Object.values(prev).includes(selectedPosition)) {
@@ -1382,12 +1386,11 @@ const Board = () => {
                 setSelectedPiece('')
                 setSelectedPosition(-1)
                 //setTimeout(() => {
-                    setNextTurn(prev => prev === 'white' ? 'black' : 'white')
+                setNextTurn(prev => prev === 'white' ? 'black' : 'white')
                 //})
             }
         }
         if (!checkMate && selectedPosition !== -1 && allPiecePositions[selectedPiece] !== -1) movePiece()
-        return () => setSelectedPiece(prev => prev)
         // eslint-disable-next-line
     }, [selectedPosition, nextTurn])
 
@@ -1397,25 +1400,37 @@ const Board = () => {
             if (nextTurn === 'black') {
                 window.sessionStorage.setItem('codeRan', false)
                 setAllPiecePositions((prev) => {
-                    const move = nextMove(prev, check, piecesShieldingKing, cellsInterceptingCheck, checkingPiece)
-                    setTimeout(() => {
-                        setSelectedPiece((prev)=> {
-                            if (move?.selectedPiece){
-                                return move?.selectedPiece
-                            } else {
-                                return prev
-                            }
-                        })
-                        setTimeout(() => {
-                            setSelectedPosition(prev => {
-                                if (move?.selectedPosition > -1){
-                                    return move?.selectedPosition
-                                } else {
-                                    return prev
-                                }
+                    setCheck(prevCheck => {
+                        setPiecesShieldingKing(prevPieces => {
+                            setCellsInterceptingCheck(prevCells => {
+                                setCheckingPiece(prevCheckingPiece => {
+                                    const move = nextMove(prev, prevCheck, prevPieces, prevCells, prevCheckingPiece)
+                                    setTimeout(() => {
+                                        setSelectedPiece((prev) => {
+                                            if (move?.selectedPiece) {
+                                                return move?.selectedPiece
+                                            } else {
+                                                return prev
+                                            }
+                                        })
+                                        setTimeout(() => {
+                                            setSelectedPosition(prev => {
+                                                if (move?.selectedPosition > -1) {
+                                                    return move?.selectedPosition
+                                                } else {
+                                                    return prev
+                                                }
+                                            })
+                                        }, 500)
+                                    }, 500)
+                                    return prevCheckingPiece
+                                })
+                                return prevCells
                             })
-                        }, 500)
-                    }, 500)
+                            return prevPieces
+                        })
+                        return prevCheck
+                    })
                     return prev
                 })
             }
@@ -1447,19 +1462,19 @@ const Board = () => {
 
     const blackTakenOut = takenOutBlack.map(piece => {
         return (
-            <img src={`../Images/${piece.split('-')[0]}-${piece.split('-')[1]}.png`} alt={`${piece.split('-')[0]}-${piece.split('-')[1]}`} id={piece} key={piece}/>
+            <img src={`../Images/${piece.split('-')[0]}-${piece.split('-')[1]}.png`} alt={`${piece.split('-')[0]}-${piece.split('-')[1]}`} id={piece} key={piece} />
         )
     })
     const whiteTakenOut = takenOutWhite.map(piece => {
         return (
-            <img src={`../Images/${piece.split('-')[0]}-${piece.split('-')[1]}.png`} alt={`${piece.split('-')[0]}-${piece.split('-')[1]}`} id={piece} key={piece}/>
+            <img src={`../Images/${piece.split('-')[0]}-${piece.split('-')[1]}.png`} alt={`${piece.split('-')[0]}-${piece.split('-')[1]}`} id={piece} key={piece} />
         )
     })
 
     return (
         <div id="page">
             <div id="board-check">
-            <p id="check-display" style={{color: check && nextTurn === 'white' ? 'black' : 'white', textShadow: check && nextTurn === 'white' ? '4px 4px gray' : '4px 4px gray'}}>{checkMate ? nextTurn === 'black' ? 'Checkmate, white wins' : 'Checkmate, black wins' : check ? 'Check!' : ''}</p>
+                <p id="check-display" style={{ color: check && nextTurn === 'white' ? 'black' : 'white', textShadow: check && nextTurn === 'white' ? '4px 4px gray' : '4px 4px gray' }}>{checkMate ? nextTurn === 'black' ? 'Checkmate, white wins' : 'Checkmate, black wins' : check ? 'Check!' : ''}</p>
                 <div id="taken-out-white-pieces">{whiteTakenOut}</div>
                 <div id="board">
                     {allRows}
