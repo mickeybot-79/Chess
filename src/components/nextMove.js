@@ -570,12 +570,12 @@ const nextMove = (allPiecePositions, check, piecesShieldingKing, cellsIntercepti
             }
         }
 
-        console.log('allPossibleMoves', allPossibleMoves)
+        //console.log('allPossibleMoves', allPossibleMoves)
         //console.log('piecesShieldingKing', piecesShieldingKing)
 
-        console.log('shieldedCells', shieldedCells)
-        console.log('shieldedPieces', shieldedPieces)
-        console.log('piecesShieldingKing', piecesShieldingKing)
+        // console.log('shieldedCells', shieldedCells)
+        // console.log('shieldedPieces', shieldedPieces)
+        // console.log('piecesShieldingKing', piecesShieldingKing)
 
         let currentBestMove = {
             piece: '',
@@ -1077,7 +1077,7 @@ const nextMove = (allPiecePositions, check, piecesShieldingKing, cellsIntercepti
                             }
                         }
                         //if (blackPiece === 'rook-black-1') {
-                        console.log('trueConditions', trueConditions)
+                        //console.log('trueConditions', trueConditions)
                         //console.log('blackPieceMoves', blackPieceMoves)
                         //}
 
@@ -1208,8 +1208,6 @@ const nextMove = (allPiecePositions, check, piecesShieldingKing, cellsIntercepti
                                         shieldingPieces.push(piecesShieldingKing.black[i].piece)
                                     }
                                     if (!shieldingPieces.includes(blackPiece)) {
-                                        console.log(blackPiece)
-                                        console.log('friendlyPiecesThreateningCurrentInterceptingCell', friendlyPiecesThreateningCurrentInterceptingCell)
                                         currentCellValue += kingValue * 10 - currentPieceValue
                                         trueConditions.push(`${blackPiece} is threatening an intercepting cell (currentCellValue + kingValue * 10)`, `currentCell: ${cellsInterceptingCheck[i]}`, `currentCellValue: ${currentCellValue}`)
                                     }
@@ -1251,7 +1249,6 @@ const nextMove = (allPiecePositions, check, piecesShieldingKing, cellsIntercepti
                             }
     
                             if (currentCellValue > currentBestMove.cellValue && allPossibleMoves[blackPiece].includes(currentCell)) {
-                                console.log(blackPiece)
                                 currentBestMove = {
                                     piece: blackPiece,
                                     cell: currentCell,
@@ -1273,7 +1270,7 @@ const nextMove = (allPiecePositions, check, piecesShieldingKing, cellsIntercepti
                                 if (currentThreatenedPiece.split('-')[0] === 'rook') currentCellValue += rookValue * 2
                                 if (currentThreatenedPiece.split('-')[0] === 'queen') currentCellValue += queenValue * 2
                                 // trueConditions.push(`king is threatening ${currentThreatenedPiece} (currentCellValue + enemy piece value * 2)`, `currentCell: ${allPossibleMoves['king-black'][i]}`, `currentCellValue: ${currentCellValue}`)
-                                console.log(`king is threatening ${currentThreatenedPiece} (currentCellValue + enemy piece value * 2)`, `currentCell: ${allPossibleMoves['king-black'][i]}`, `currentCellValue: ${currentCellValue}`)
+                                // console.log(`king is threatening ${currentThreatenedPiece} (currentCellValue + enemy piece value * 2)`, `currentCell: ${allPossibleMoves['king-black'][i]}`, `currentCellValue: ${currentCellValue}`)
 
                                 for (const piece in allPiecePositions) {
                                     if (piece[0].split('-')[1] === 'black' && piece[0] !== blackPiece) {
@@ -1284,7 +1281,7 @@ const nextMove = (allPiecePositions, check, piecesShieldingKing, cellsIntercepti
                                             if (piece.split('-')[0] === 'rook') currentCellValue += rookValue
                                             if (piece.split('-')[0] === 'queen') currentCellValue += queenValue
                                             // trueConditions.push(`${currentThreatenedPiece} is threateining friendly piece ${piece} (currentCellValue + friendly piece value)`, `currentCell: ${allPossibleMoves['king-black'][i]}`, `currentCellValue: ${currentCellValue}`)
-                                            console.log(`${currentThreatenedPiece} is threateining friendly piece ${piece} (currentCellValue + friendly piece value)`, `currentCell: ${allPossibleMoves['king-black'][i]}`, `currentCellValue: ${currentCellValue}`)
+                                            // console.log(`${currentThreatenedPiece} is threateining friendly piece ${piece} (currentCellValue + friendly piece value)`, `currentCell: ${allPossibleMoves['king-black'][i]}`, `currentCellValue: ${currentCellValue}`)
                                         }
                                     }
                                 }
@@ -1312,7 +1309,7 @@ const nextMove = (allPiecePositions, check, piecesShieldingKing, cellsIntercepti
                                 if (kingMoves.threatenedPieces[j].split('-')[0] === 'rook') currentCellValue += rookValue
                                 if (kingMoves.threatenedPieces[j].split('-')[0] === 'queen') currentCellValue += queenValue
                                 // trueConditions.push(`king can threaten ${kingMoves.threatenedPieces[j]} from the target cell (currentCellValue + friendly piece value)`, `currentCell: ${allPossibleMoves['king-black'][i]}`, `currentCellValue: ${currentCellValue}`)
-                                console.log(`king can threaten ${kingMoves.threatenedPieces[j]} from the target cell (currentCellValue + friendly piece value)`, `currentCell: ${allPossibleMoves['king-black'][i]}`, `currentCellValue: ${currentCellValue}`)
+                                // console.log(`king can threaten ${kingMoves.threatenedPieces[j]} from the target cell (currentCellValue + friendly piece value)`, `currentCell: ${allPossibleMoves['king-black'][i]}`, `currentCellValue: ${currentCellValue}`)
                                 if (currentCellValue > currentBestMove.cellValue) {
                                     currentBestMove = {
                                         piece: blackPiece,
@@ -1332,7 +1329,7 @@ const nextMove = (allPiecePositions, check, piecesShieldingKing, cellsIntercepti
                                     if (kingMoves.protectedPieces[j].split('-')[0] === 'rook') currentCellValue += rookValue
                                     if (kingMoves.protectedPieces[j].split('-')[0] === 'queen') currentCellValue += queenValue
                                     // trueConditions.push(`king can protect ${kingMoves.protectedPieces[j]} from the target cell (currentCellValue + friendly piece value)`, `currentCell: ${allPossibleMoves['king-black'][i]}`, `currentCellValue: ${currentCellValue}`)
-                                    console.log(`king can protect ${kingMoves.protectedPieces[j]} from the target cell (currentCellValue + friendly piece value)`, `currentCell: ${allPossibleMoves['king-black'][i]}`, `currentCellValue: ${currentCellValue}`)
+                                    // console.log(`king can protect ${kingMoves.protectedPieces[j]} from the target cell (currentCellValue + friendly piece value)`, `currentCell: ${allPossibleMoves['king-black'][i]}`, `currentCellValue: ${currentCellValue}`)
                                     if (currentCellValue > currentBestMove.cellValue) {
                                         currentBestMove = {
                                             piece: blackPiece,
@@ -1348,7 +1345,7 @@ const nextMove = (allPiecePositions, check, piecesShieldingKing, cellsIntercepti
                                 if (allPossibleMoves['king-black'].includes(kingMoves.suitableCells[j])) {
                                     currentCellValue += kingValue
                                     // trueConditions.push(`cell ${kingMoves.suitableCells[j]} is not threatened (currentCellValue + friendly piece value)`, `currentCell: ${allPossibleMoves['king-black'][i]}`, `currentCellValue: ${currentCellValue}`)
-                                    console.log(`cell ${kingMoves.suitableCells[j]} is not threatened (currentCellValue + friendly piece value)`, `currentCell: ${allPossibleMoves['king-black'][i]}`, `currentCellValue: ${currentCellValue}`)
+                                    // console.log(`cell ${kingMoves.suitableCells[j]} is not threatened (currentCellValue + friendly piece value)`, `currentCell: ${allPossibleMoves['king-black'][i]}`, `currentCellValue: ${currentCellValue}`)
                                     if (currentCellValue > currentBestMove.cellValue) {
                                         currentBestMove = {
                                             piece: blackPiece,

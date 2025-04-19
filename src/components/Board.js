@@ -14,8 +14,6 @@ const Board = () => {
 
     const [selectedPosition, setSelectedPosition] = useState(-1)
 
-    //const [currentPiecePosition, setCurrentPiecePosition] = useState(-1)
-
     // const [allPiecePositions, setAllPiecePositions] = useState({
     //     'rook-black-1': 2,
     //     'rook-black-2': 5,
@@ -145,6 +143,16 @@ const Board = () => {
 
     const [checkMate, setCheckMate] = useState(false)
 
+    const [targetCellCoordinates, setTargetCellCoordinates] = useState({
+        top: 0,
+        left: 0
+    })
+
+    const [startingCellCoordinates, setStartingCellCoordinates] = useState({
+        top: 0,
+        left: 0
+    })
+
     //create cells
     useEffect(() => {
         setAllCells(() => {
@@ -154,69 +162,485 @@ const Board = () => {
                 let imageElement = <></>
                 let cellClass = ''
                 if (i === allPiecePositions['rook-black-1']) {
-                    imageElement = <img src="../Images/rook-black.png" alt="rook-black" key="rook-black-1" id="rook-black-1" onClick={() => setSelectedPiece('rook-black-1')} />
+                    imageElement = <img src="../Images/rook-black.png" alt="rook-black" key="rook-black-1" id="rook-black-1" onClick={(e) => {
+                        setSelectedPiece('rook-black-1')
+                        setStartingCellCoordinates((prev) => {
+                            if (nextTurn === 'black') {
+                                const rect = e.target.parentNode.getBoundingClientRect()
+                                return {
+                                    top: rect.top,
+                                    left: rect.left
+                                }
+                            } else {
+                                return prev
+                            }
+                        })
+                    }} />
                 } else if (i === allPiecePositions['rook-black-2']) {
-                    imageElement = <img src="../Images/rook-black.png" alt="rook-black" key="rook-black-2" id="rook-black-2" onClick={() => setSelectedPiece('rook-black-2')} />
+                    imageElement = <img src="../Images/rook-black.png" alt="rook-black" key="rook-black-2" id="rook-black-2" onClick={(e) => {
+                        setSelectedPiece('rook-black-2')
+                        setStartingCellCoordinates((prev) => {
+                            if (nextTurn === 'black') {
+                                const rect = e.target.parentNode.getBoundingClientRect()
+                                return {
+                                    top: rect.top,
+                                    left: rect.left
+                                }
+                            } else {
+                                return prev
+                            }
+                        })
+                    }} />
                 } else if (i === allPiecePositions['knight-black-1']) {
-                    imageElement = <img src="../Images/knight-black.png" alt="knight-black" key="rook-black-2" id="knight-black-1" onClick={() => setSelectedPiece('knight-black-1')} />
+                    imageElement = <img src="../Images/knight-black.png" alt="knight-black" key="rook-black-2" id="knight-black-1" onClick={(e) => {
+                        setSelectedPiece('knight-black-1')
+                        setStartingCellCoordinates((prev) => {
+                            if (nextTurn === 'black') {
+                                const rect = e.target.parentNode.getBoundingClientRect()
+                                return {
+                                    top: rect.top,
+                                    left: rect.left
+                                }
+                            } else {
+                                return prev
+                            }
+                        })
+                    }} />
                 } else if (i === allPiecePositions['knight-black-2']) {
-                    imageElement = <img src="../Images/knight-black.png" alt="knight-black" key="knight-black-2" id="knight-black-2" onClick={() => setSelectedPiece('knight-black-2')} />
+                    imageElement = <img src="../Images/knight-black.png" alt="knight-black" key="knight-black-2" id="knight-black-2" onClick={(e) => {
+                        setSelectedPiece('knight-black-2')
+                        setStartingCellCoordinates((prev) => {
+                            if (nextTurn === 'black') {
+                                const rect = e.target.parentNode.getBoundingClientRect()
+                                return {
+                                    top: rect.top,
+                                    left: rect.left
+                                }
+                            } else {
+                                return prev
+                            }
+                        })
+                    }} />
                 } else if (i === allPiecePositions['bishop-black-1']) {
-                    imageElement = <img src="../Images/bishop-black.png" alt="bishop-black" key="bishop-black-1" id="bishop-black-1" onClick={() => setSelectedPiece('bishop-black-1')} />
+                    imageElement = <img src="../Images/bishop-black.png" alt="bishop-black" key="bishop-black-1" id="bishop-black-1" onClick={(e) => {
+                        setSelectedPiece('bishop-black-1')
+                        setStartingCellCoordinates((prev) => {
+                            if (nextTurn === 'black') {
+                                const rect = e.target.parentNode.getBoundingClientRect()
+                                return {
+                                    top: rect.top,
+                                    left: rect.left
+                                }
+                            } else {
+                                return prev
+                            }
+                        })
+                    }} />
                 } else if (i === allPiecePositions['bishop-black-2']) {
-                    imageElement = <img src="../Images/bishop-black.png" alt="bishop-black" key="bishop-black-2" id="bishop-black-2" onClick={() => setSelectedPiece('bishop-black-2')} />
+                    imageElement = <img src="../Images/bishop-black.png" alt="bishop-black" key="bishop-black-2" id="bishop-black-2" onClick={(e) => {
+                        setSelectedPiece('bishop-black-2')
+                        setStartingCellCoordinates((prev) => {
+                            if (nextTurn === 'black') {
+                                const rect = e.target.parentNode.getBoundingClientRect()
+                                return {
+                                    top: rect.top,
+                                    left: rect.left
+                                }
+                            } else {
+                                return prev
+                            }
+                        })
+                    }} />
                 } else if (i === allPiecePositions['queen-black']) {
-                    imageElement = <img src="../Images/queen-black.png" alt="queen-black" key="queen-black" id="queen-black" onClick={() => setSelectedPiece('queen-black')} />
+                    imageElement = <img src="../Images/queen-black.png" alt="queen-black" key="queen-black" id="queen-black" onClick={(e) => {
+                        setSelectedPiece('queen-black')
+                        setStartingCellCoordinates((prev) => {
+                            if (nextTurn === 'black') {
+                                const rect = e.target.parentNode.getBoundingClientRect()
+                                return {
+                                    top: rect.top,
+                                    left: rect.left
+                                }
+                            } else {
+                                return prev
+                            }
+                        })
+                    }} />
                 } else if (i === allPiecePositions['king-black']) {
-                    imageElement = <img src="../Images/king-black.png" alt="king-black" key="king-black" id="king-black" onClick={() => setSelectedPiece('king-black')} />
+                    imageElement = <img src="../Images/king-black.png" alt="king-black" key="king-black" id="king-black" onClick={(e) => {
+                        setSelectedPiece('king-black')
+                        setStartingCellCoordinates((prev) => {
+                            if (nextTurn === 'black') {
+                                const rect = e.target.parentNode.getBoundingClientRect()
+                                return {
+                                    top: rect.top,
+                                    left: rect.left
+                                }
+                            } else {
+                                return prev
+                            }
+                        })
+                    }} />
                 } else if (i === allPiecePositions['pawn-black-1']) {
-                    imageElement = <img src="../Images/pawn-black.png" alt="pawn-black" key="pawn-black-1" id="pawn-black-1" onClick={() => setSelectedPiece('pawn-black-1')} />
+                    imageElement = <img src="../Images/pawn-black.png" alt="pawn-black" key="pawn-black-1" id="pawn-black-1" onClick={(e) => {
+                        setSelectedPiece('pawn-black-1')
+                        setStartingCellCoordinates((prev) => {
+                            if (nextTurn === 'black') {
+                                const rect = e.target.parentNode.getBoundingClientRect()
+                                return {
+                                    top: rect.top,
+                                    left: rect.left
+                                }
+                            } else {
+                                return prev
+                            }
+                        })
+                    }} />
                 } else if (i === allPiecePositions['pawn-black-2']) {
-                    imageElement = <img src="../Images/pawn-black.png" alt="pawn-black" key="pawn-black-2" id="pawn-black-2" onClick={() => setSelectedPiece('pawn-black-2')} />
+                    imageElement = <img src="../Images/pawn-black.png" alt="pawn-black" key="pawn-black-2" id="pawn-black-2" onClick={(e) => {
+                        setSelectedPiece('pawn-black-2')
+                        setStartingCellCoordinates((prev) => {
+                            if (nextTurn === 'black') {
+                                const rect = e.target.parentNode.getBoundingClientRect()
+                                return {
+                                    top: rect.top,
+                                    left: rect.left
+                                }
+                            } else {
+                                return prev
+                            }
+                        })
+                    }} />
                 } else if (i === allPiecePositions['pawn-black-3']) {
-                    imageElement = <img src="../Images/pawn-black.png" alt="pawn-black" key="pawn-black-3" id="pawn-black-3" onClick={() => setSelectedPiece('pawn-black-3')} />
+                    imageElement = <img src="../Images/pawn-black.png" alt="pawn-black" key="pawn-black-3" id="pawn-black-3" onClick={(e) => {
+                        setSelectedPiece('pawn-black-3')
+                        setStartingCellCoordinates((prev) => {
+                            if (nextTurn === 'black') {
+                                const rect = e.target.parentNode.getBoundingClientRect()
+                                return {
+                                    top: rect.top,
+                                    left: rect.left
+                                }
+                            } else {
+                                return prev
+                            }
+                        })
+                    }} />
                 } else if (i === allPiecePositions['pawn-black-4']) {
-                    imageElement = <img src="../Images/pawn-black.png" alt="pawn-black" key="pawn-black-4" id="pawn-black-4" onClick={() => setSelectedPiece('pawn-black-4')} />
+                    imageElement = <img src="../Images/pawn-black.png" alt="pawn-black" key="pawn-black-4" id="pawn-black-4" onClick={(e) => {
+                        setSelectedPiece('pawn-black-4')
+                        setStartingCellCoordinates((prev) => {
+                            if (nextTurn === 'black') {
+                                const rect = e.target.parentNode.getBoundingClientRect()
+                                return {
+                                    top: rect.top,
+                                    left: rect.left
+                                }
+                            } else {
+                                return prev
+                            }
+                        })
+                    }} />
                 } else if (i === allPiecePositions['pawn-black-5']) {
-                    imageElement = <img src="../Images/pawn-black.png" alt="pawn-black" key="pawn-black-5" id="pawn-black-5" onClick={() => setSelectedPiece('pawn-black-5')} />
+                    imageElement = <img src="../Images/pawn-black.png" alt="pawn-black" key="pawn-black-5" id="pawn-black-5" onClick={(e) => {
+                        setSelectedPiece('pawn-black-5')
+                        setStartingCellCoordinates((prev) => {
+                            if (nextTurn === 'black') {
+                                const rect = e.target.parentNode.getBoundingClientRect()
+                                return {
+                                    top: rect.top,
+                                    left: rect.left
+                                }
+                            } else {
+                                return prev
+                            }
+                        })
+                    }} />
                 } else if (i === allPiecePositions['pawn-black-6']) {
-                    imageElement = <img src="../Images/pawn-black.png" alt="pawn-black" key="pawn-black-6" id="pawn-black-6" onClick={() => setSelectedPiece('pawn-black-6')} />
+                    imageElement = <img src="../Images/pawn-black.png" alt="pawn-black" key="pawn-black-6" id="pawn-black-6" onClick={(e) => {
+                        setSelectedPiece('pawn-black-6')
+                        setStartingCellCoordinates((prev) => {
+                            if (nextTurn === 'black') {
+                                const rect = e.target.parentNode.getBoundingClientRect()
+                                return {
+                                    top: rect.top,
+                                    left: rect.left
+                                }
+                            } else {
+                                return prev
+                            }
+                        })
+                    }} />
                 } else if (i === allPiecePositions['pawn-black-7']) {
-                    imageElement = <img src="../Images/pawn-black.png" alt="pawn-black" key="pawn-black-7" id="pawn-black-7" onClick={() => setSelectedPiece('pawn-black-7')} />
+                    imageElement = <img src="../Images/pawn-black.png" alt="pawn-black" key="pawn-black-7" id="pawn-black-7" onClick={(e) => {
+                        setSelectedPiece('pawn-black-7')
+                        setStartingCellCoordinates((prev) => {
+                            if (nextTurn === 'black') {
+                                const rect = e.target.parentNode.getBoundingClientRect()
+                                return {
+                                    top: rect.top,
+                                    left: rect.left
+                                }
+                            } else {
+                                return prev
+                            }
+                        })
+                    }} />
                 } else if (i === allPiecePositions['pawn-black-8']) {
-                    imageElement = <img src="../Images/pawn-black.png" alt="pawn-black" key="pawn-black-8" id="pawn-black-8" onClick={() => setSelectedPiece('pawn-black-8')} />
+                    imageElement = <img src="../Images/pawn-black.png" alt="pawn-black" key="pawn-black-8" id="pawn-black-8" onClick={(e) => {
+                        setSelectedPiece('pawn-black-8')
+                        setStartingCellCoordinates((prev) => {
+                            if (nextTurn === 'black') {
+                                const rect = e.target.parentNode.getBoundingClientRect()
+                                return {
+                                    top: rect.top,
+                                    left: rect.left
+                                }
+                            } else {
+                                return prev
+                            }
+                        })
+                    }} />
                 } else if (i === allPiecePositions['pawn-white-1']) {
-                    imageElement = <img src="../Images/pawn-white.png" alt="pawn-white" key="pawn-white-1" id="pawn-white-1" onClick={() => setSelectedPiece('pawn-white-1')} />
+                    imageElement = <img src="../Images/pawn-white.png" alt="pawn-white" key="pawn-white-1" id="pawn-white-1" onClick={(e) => {
+                        setSelectedPiece('pawn-white-1')
+                        setStartingCellCoordinates((prev) => {
+                            if (nextTurn !== 'black') {
+                                const rect = e.target.parentNode.getBoundingClientRect()
+                                return {
+                                    top: rect.top,
+                                    left: rect.left
+                                }
+                            } else {
+                                return prev
+                            }
+                        })
+                    }} />
                 } else if (i === allPiecePositions['pawn-white-2']) {
-                    imageElement = <img src="../Images/pawn-white.png" alt="pawn-white" key="pawn-white-2" id="pawn-white-2" onClick={() => setSelectedPiece('pawn-white-2')} />
+                    imageElement = <img src="../Images/pawn-white.png" alt="pawn-white" key="pawn-white-2" id="pawn-white-2" onClick={(e) => {
+                        setSelectedPiece('pawn-white-2')
+                        setStartingCellCoordinates((prev) => {
+                            if (nextTurn !== 'black') {
+                                const rect = e.target.parentNode.getBoundingClientRect()
+                                return {
+                                    top: rect.top,
+                                    left: rect.left
+                                }
+                            } else {
+                                return prev
+                            }
+                        })
+                    }} />
                 } else if (i === allPiecePositions['pawn-white-3']) {
-                    imageElement = <img src="../Images/pawn-white.png" alt="pawn-white" key="pawn-white-3" id="pawn-white-3" onClick={() => setSelectedPiece('pawn-white-3')} />
+                    imageElement = <img src="../Images/pawn-white.png" alt="pawn-white" key="pawn-white-3" id="pawn-white-3" onClick={(e) => {
+                        setSelectedPiece('pawn-white-3')
+                        setStartingCellCoordinates((prev) => {
+                            if (nextTurn !== 'black') {
+                                const rect = e.target.parentNode.getBoundingClientRect()
+                                return {
+                                    top: rect.top,
+                                    left: rect.left
+                                }
+                            } else {
+                                return prev
+                            }
+                        })
+                    }} />
                 } else if (i === allPiecePositions['pawn-white-4']) {
-                    imageElement = <img src="../Images/pawn-white.png" alt="pawn-white" key="pawn-white-4" id="pawn-white-4" onClick={() => setSelectedPiece('pawn-white-4')} />
+                    imageElement = <img src="../Images/pawn-white.png" alt="pawn-white" key="pawn-white-4" id="pawn-white-4" onClick={(e) => {
+                        setSelectedPiece('pawn-white-4')
+                        setStartingCellCoordinates((prev) => {
+                            if (nextTurn !== 'black') {
+                                const rect = e.target.parentNode.getBoundingClientRect()
+                                return {
+                                    top: rect.top,
+                                    left: rect.left
+                                }
+                            } else {
+                                return prev
+                            }
+                        })
+                    }} />
                 } else if (i === allPiecePositions['pawn-white-5']) {
-                    imageElement = <img src="../Images/pawn-white.png" alt="pawn-white" key="pawn-white-5" id="pawn-white-5" onClick={() => setSelectedPiece('pawn-white-5')} />
+                    imageElement = <img src="../Images/pawn-white.png" alt="pawn-white" key="pawn-white-5" id="pawn-white-5" onClick={(e) => {
+                        setSelectedPiece('pawn-white-5')
+                        setStartingCellCoordinates((prev) => {
+                            if (nextTurn !== 'black') {
+                                const rect = e.target.parentNode.getBoundingClientRect()
+                                return {
+                                    top: rect.top,
+                                    left: rect.left
+                                }
+                            } else {
+                                return prev
+                            }
+                        })
+                    }} />
                 } else if (i === allPiecePositions['pawn-white-6']) {
-                    imageElement = <img src="../Images/pawn-white.png" alt="pawn-white" key="pawn-white-6" id="pawn-white-6" onClick={() => setSelectedPiece('pawn-white-6')} />
+                    imageElement = <img src="../Images/pawn-white.png" alt="pawn-white" key="pawn-white-6" id="pawn-white-6" onClick={(e) => {
+                        setSelectedPiece('pawn-white-6')
+                        setStartingCellCoordinates((prev) => {
+                            if (nextTurn !== 'black') {
+                                const rect = e.target.parentNode.getBoundingClientRect()
+                                return {
+                                    top: rect.top,
+                                    left: rect.left
+                                }
+                            } else {
+                                return prev
+                            }
+                        })
+                    }} />
                 } else if (i === allPiecePositions['pawn-white-7']) {
-                    imageElement = <img src="../Images/pawn-white.png" alt="pawn-white" key="pawn-white-7" id="pawn-white-7" onClick={() => setSelectedPiece('pawn-white-7')} />
+                    imageElement = <img src="../Images/pawn-white.png" alt="pawn-white" key="pawn-white-7" id="pawn-white-7" onClick={(e) => {
+                        setSelectedPiece('pawn-white-7')
+                        setStartingCellCoordinates((prev) => {
+                            if (nextTurn !== 'black') {
+                                const rect = e.target.parentNode.getBoundingClientRect()
+                                return {
+                                    top: rect.top,
+                                    left: rect.left
+                                }
+                            } else {
+                                return prev
+                            }
+                        })
+                    }} />
                 } else if (i === allPiecePositions['pawn-white-8']) {
-                    imageElement = <img src="../Images/pawn-white.png" alt="pawn-white" key="pawn-white-8" id="pawn-white-8" onClick={() => setSelectedPiece('pawn-white-8')} />
+                    imageElement = <img src="../Images/pawn-white.png" alt="pawn-white" key="pawn-white-8" id="pawn-white-8" onClick={(e) => {
+                        setSelectedPiece('pawn-white-8')
+                        setStartingCellCoordinates((prev) => {
+                            if (nextTurn !== 'black') {
+                                const rect = e.target.parentNode.getBoundingClientRect()
+                                return {
+                                    top: rect.top,
+                                    left: rect.left
+                                }
+                            } else {
+                                return prev
+                            }
+                        })
+                    }} />
                 } else if (i === allPiecePositions['rook-white-1']) {
-                    imageElement = <img src="../Images/rook-white.png" alt="rook-white" key="rook-white-1" id="rook-white-1" onClick={() => setSelectedPiece('rook-white-1')} />
+                    imageElement = <img src="../Images/rook-white.png" alt="rook-white" key="rook-white-1" id="rook-white-1" onClick={(e) => {
+                        setSelectedPiece('rook-white-1')
+                        setStartingCellCoordinates((prev) => {
+                            if (nextTurn !== 'black') {
+                                const rect = e.target.parentNode.getBoundingClientRect()
+                                return {
+                                    top: rect.top,
+                                    left: rect.left
+                                }
+                            } else {
+                                return prev
+                            }
+                        })
+                    }} />
                 } else if (i === allPiecePositions['rook-white-2']) {
-                    imageElement = <img src="../Images/rook-white.png" alt="rook-white" key="rook-white-2" id="rook-white-2" onClick={() => setSelectedPiece('rook-white-2')} />
+                    imageElement = <img src="../Images/rook-white.png" alt="rook-white" key="rook-white-2" id="rook-white-2" onClick={(e) => {
+                        setSelectedPiece('rook-white-2')
+                        setStartingCellCoordinates((prev) => {
+                            if (nextTurn !== 'black') {
+                                const rect = e.target.parentNode.getBoundingClientRect()
+                                return {
+                                    top: rect.top,
+                                    left: rect.left
+                                }
+                            } else {
+                                return prev
+                            }
+                        })
+                    }} />
                 } else if (i === allPiecePositions['knight-white-1']) {
-                    imageElement = <img src="../Images/knight-white.png" alt="knight-white" key="knight-white-1" id="knight-white-1" onClick={() => setSelectedPiece('knight-white-1')} />
+                    imageElement = <img src="../Images/knight-white.png" alt="knight-white" key="knight-white-1" id="knight-white-1" onClick={(e) => {
+                        setSelectedPiece('knight-white-1')
+                        setStartingCellCoordinates((prev) => {
+                            if (nextTurn !== 'black') {
+                                const rect = e.target.parentNode.getBoundingClientRect()
+                                return {
+                                    top: rect.top,
+                                    left: rect.left
+                                }
+                            } else {
+                                return prev
+                            }
+                        })
+                    }} />
                 } else if (i === allPiecePositions['knight-white-2']) {
-                    imageElement = <img src="../Images/knight-white.png" alt="knight-white" key="knight-white-2" id="knight-white-2" onClick={() => setSelectedPiece('knight-white-2')} />
+                    imageElement = <img src="../Images/knight-white.png" alt="knight-white" key="knight-white-2" id="knight-white-2" onClick={(e) => {
+                        setSelectedPiece('knight-white-2')
+                        setStartingCellCoordinates((prev) => {
+                            if (nextTurn !== 'black') {
+                                const rect = e.target.parentNode.getBoundingClientRect()
+                                return {
+                                    top: rect.top,
+                                    left: rect.left
+                                }
+                            } else {
+                                return prev
+                            }
+                        })
+                    }} />
                 } else if (i === allPiecePositions['bishop-white-1']) {
-                    imageElement = <img src="../Images/bishop-white.png" alt="bishop-white" key="bishop-white-1" id="bishop-white-1" onClick={() => setSelectedPiece('bishop-white-1')} />
+                    imageElement = <img src="../Images/bishop-white.png" alt="bishop-white" key="bishop-white-1" id="bishop-white-1" onClick={(e) => {
+                        setSelectedPiece('bishop-white-1')
+                        setStartingCellCoordinates((prev) => {
+                            if (nextTurn !== 'black') {
+                                const rect = e.target.parentNode.getBoundingClientRect()
+                                return {
+                                    top: rect.top,
+                                    left: rect.left
+                                }
+                            } else {
+                                return prev
+                            }
+                        })
+                    }} />
                 } else if (i === allPiecePositions['bishop-white-2']) {
-                    imageElement = <img src="../Images/bishop-white.png" alt="bishop-white" key="bishop-white-2" id="bishop-white-2" onClick={() => setSelectedPiece('bishop-white-2')} />
+                    imageElement = <img src="../Images/bishop-white.png" alt="bishop-white" key="bishop-white-2" id="bishop-white-2" onClick={(e) => {
+                        setSelectedPiece('bishop-white-2')
+                        setStartingCellCoordinates((prev) => {
+                            if (nextTurn !== 'black') {
+                                const rect = e.target.parentNode.getBoundingClientRect()
+                                return {
+                                    top: rect.top,
+                                    left: rect.left
+                                }
+                            } else {
+                                return prev
+                            }
+                        })
+                    }} />
                 } else if (i === allPiecePositions['queen-white']) {
-                    imageElement = <img src="../Images/queen-white.png" alt="queen-white" key="queen-white" id="queen-white" onClick={() => setSelectedPiece('queen-white')} />
+                    imageElement = <img src="../Images/queen-white.png" alt="queen-white" key="queen-white" id="queen-white" onClick={(e) => {
+                        setSelectedPiece('queen-white')
+                        setStartingCellCoordinates((prev) => {
+                            if (nextTurn !== 'black') {
+                                const rect = e.target.parentNode.getBoundingClientRect()
+                                return {
+                                    top: rect.top,
+                                    left: rect.left
+                                }
+                            } else {
+                                return prev
+                            }
+                        })
+                    }} />
                 } else if (i === allPiecePositions['king-white']) {
-                    imageElement = <img src="../Images/king-white.png" alt="king-white" key="king-white" id="king-white" onClick={() => setSelectedPiece('king-white')} />
+                    imageElement = <img src="../Images/king-white.png" alt="king-white" key="king-white" id="king-white" onClick={(e) => {
+                        setSelectedPiece('king-white')
+                        setStartingCellCoordinates((prev) => {
+                            if (nextTurn !== 'black') {
+                                const rect = e.target.parentNode.getBoundingClientRect()
+                                return {
+                                    top: rect.top,
+                                    left: rect.left
+                                }
+                            } else {
+                                return prev
+                            }
+                        })
+                    }} />
                 }
 
                 const rowNumber = (i - (i % 8)) / 8
@@ -656,14 +1080,17 @@ const Board = () => {
         }
 
         const setNewSuitableThreat = (targetPosition, targetPiece) => {
-            //const setNewSuitableThreat = (currentPosition, targetPosition, targetPiece) => {
-            // const updatedCell = (
-            //     <div id={targetPosition} key={targetPosition} className='suitable' onClick={() => movePiece(targetPosition, currentPosition)}><img src={`../Images/${targetPiece.split('-')[0]}-${targetPiece.split('-')[1]}.png`} alt={`${targetPiece.split('-')[0]}-${targetPiece.split('-')[1]}`} id={targetPiece} onClick={() => setSelectedPiece('')} /></div>
-            // )
             const updatedCell = (
-                <div id={targetPosition} key={targetPosition} className='suitable' onClick={() => {
+                <div id={targetPosition} key={targetPosition} className='suitable' onClick={(e) => {
                     setSelectedPosition(targetPosition)
-                    //setCurrentPiecePosition(currentPosition)
+                    setTargetCellCoordinates(() => {
+                        console.log(e.target)
+                        const rect = e.target.getBoundingClientRect()
+                        return {
+                            top: rect.top,
+                            left: rect.left
+                        }
+                    })
                 }}><img src={`../Images/${targetPiece.split('-')[0]}-${targetPiece.split('-')[1]}.png`} alt={`${targetPiece.split('-')[0]}-${targetPiece.split('-')[1]}`} key={targetPiece} id={targetPiece} /></div>
             )
             setAllCells(prevCells => {
@@ -671,14 +1098,6 @@ const Board = () => {
                 updatedCells.splice(targetPosition, 1, updatedCell)
                 return updatedCells
             })
-            // setAllRows(() => {
-            //     const allRowElements = []
-            //     for (let j = 0; j < 8; j++) {
-            //         const currentRow = allCells.slice((j * 8), (j * 8) + 8)
-            //         allRowElements.push(<div key={j} className="row">{currentRow}</div>)
-            //     }
-            //     return allRowElements
-            // })
             setSuitableCells((prev) => {
                 const newSuitableCells = prev
                 if (!newSuitableCells.includes(targetPosition)) newSuitableCells.push(targetPosition)
@@ -687,14 +1106,16 @@ const Board = () => {
         }
 
         const setNewSuitable = (targetPosition) => {
-            //const setNewSuitable = (currentPosition, targetPosition) => {
-            // const updatedCell = (
-            //     <div id={targetPosition} key={targetPosition} className='suitable' onClick={() => movePiece(targetPosition, currentPosition)}></div>
-            // )
             const updatedCell = (
-                <div id={targetPosition} key={targetPosition} className='suitable' onClick={() => {
+                <div id={targetPosition} key={targetPosition} className='suitable' onClick={(e) => {
                     setSelectedPosition(targetPosition)
-                    //setCurrentPiecePosition(currentPosition)
+                    setTargetCellCoordinates(() => {
+                        const rect = e.target.getBoundingClientRect()
+                        return {
+                            top: rect.top,
+                            left: rect.left
+                        }
+                    })
                 }}></div>
             )
             setAllCells(prevCells => {
@@ -702,14 +1123,6 @@ const Board = () => {
                 updatedCells.splice(targetPosition, 1, updatedCell)
                 return updatedCells
             })
-            // setAllRows(() => {
-            //     const allRowElements = []
-            //     for (let j = 0; j < 8; j++) {
-            //         const currentRow = allCells.slice((j * 8), (j * 8) + 8)
-            //         allRowElements.push(<div key={j} className="row">{currentRow}</div>)
-            //     }
-            //     return allRowElements
-            // })
             setSuitableCells((prev) => {
                 const newSuitableCells = prev
                 if (!newSuitableCells.includes(targetPosition)) newSuitableCells.push(targetPosition)
@@ -718,8 +1131,20 @@ const Board = () => {
         }
 
         const touchPiece = () => {
-            console.log('allPiecePositions', allPiecePositions)
+            //console.log('allPiecePositions', allPiecePositions)
+            console.log('startingCellCoordinates', startingCellCoordinates)
+            if (selectedPiece) console.log('selectedPiece', selectedPiece)
             if (selectedPiece && allPiecePositions[selectedPiece] >= 0 && !checkMate) {
+                if (nextTurn === selectedPiece.split('-')[1]) {
+                    setStartingCellCoordinates(() => {
+                        const startingCell = document.getElementById(allPiecePositions[selectedPiece])
+                        const rect = startingCell.getBoundingClientRect()
+                        return {
+                            top: rect.top,
+                            left: rect.left
+                        }
+                    })
+                }
                 // remove previous suitable cells
                 for (let i = 0; i < suitableCells.length; i++) {
                     let newClass
@@ -795,7 +1220,6 @@ const Board = () => {
                         updatedCells.splice(allPiecePositions[selectedPiece], 1, updatedCell)
                         return updatedCells
                     })
-                    //setTimeout(() => {})
                     setAllRows(() => {
                         const allRowElements = []
                         for (let j = 0; j < 8; j++) {
@@ -807,13 +1231,9 @@ const Board = () => {
                 }
 
                 // set new suitable cells
-                //const currentPiecePosition = allPiecePositions[selectedPiece]
                 if (nextTurn === selectedPiece.split('-')[1]) {
                     let column = (allPiecePositions[selectedPiece] % width) + 1
                     let row = ((allPiecePositions[selectedPiece] - (allPiecePositions[selectedPiece] % width)) / width) + 1
-                    // setCurrentPiecePosition(() => {
-                    //     return allPiecePositions[selectedPiece]
-                    // })
                     const pieceMoveLogic = (pieceMoves) => {
                         let notShielding = true
                         let indexOfThreateningPiece = -1
@@ -1154,6 +1574,7 @@ const Board = () => {
 
     useEffect(() => {
         const movePiece = () => {
+            console.log('targetCellCoordinates', targetCellCoordinates)
             // remove previous suitable cells
             for (let i = 0; i < suitableCells.length; i++) {
                 let newClass
@@ -1167,7 +1588,7 @@ const Board = () => {
                 if (Object.values(allPiecePositions).includes(suitableCells[i])) {
                     const targetPiece = Object.entries(allPiecePositions).filter(piece => piece.includes(suitableCells[i]))[0][0]
                     updatedCell = (
-                        <div id={suitableCells[i]} key={suitableCells[i]} className={newClass}><img src={`../Images/${targetPiece.split('-')[0]}-${targetPiece.split('-')[1]}.png`} alt={`${targetPiece.split('-')[0]}-${targetPiece.split('-')[1]}`} id={targetPiece} onClick={() => setSelectedPiece(targetPiece)} /></div>
+                        <div id={suitableCells[i]} key={suitableCells[i]} className={newClass}><img src={`../Images/${targetPiece.split('-')[0]}-${targetPiece.split('-')[1]}.png`} alt={`${targetPiece.split('-')[0]}-${targetPiece.split('-')[1]}`} id={targetPiece} onClick={() => setSelectedPiece(targetPiece)}/></div>
                     )
                 } else {
                     updatedCell = (
@@ -1190,7 +1611,7 @@ const Board = () => {
             }
             setSuitableCells(() => [])
 
-            if (selectedPosition !== allPiecePositions[selectedPiece]) {
+            if (selectedPosition > -1 && selectedPosition !== allPiecePositions[selectedPiece]) {
                 let occupiedCellClass
                 const rowNumber = (selectedPosition - (selectedPosition % 8)) / 8
                 if (rowNumber % 2 === 0) {
@@ -1262,8 +1683,24 @@ const Board = () => {
                 } else {
                     const pieceName = selectedPiece.split('-')[0]
                     const pieceColor = selectedPiece.split('-')[1]
+                    // occupiedCell = (
+                    //     <div id={selectedPosition} key={selectedPosition} className={occupiedCellClass}><img src={`../Images/${pieceName}-${pieceColor}.png`} alt={`${pieceName}-${pieceColor}`} key={selectedPiece} id={selectedPiece} onClick={() => setSelectedPiece(selectedPiece)}/></div>
+                    // )
+
+                    // occupiedCell = (
+                    //     <div id={selectedPosition} key={selectedPosition} className={occupiedCellClass}><img src={`../Images/${pieceName}-${pieceColor}.png`} alt={`${pieceName}-${pieceColor}`} key={selectedPiece} id={selectedPiece} onClick={() => setSelectedPiece(selectedPiece)} style={{'--position-y': `${targetCellCoordinates.top - startingCellCoordinates.top}px`, '--position-x': `${targetCellCoordinates.left - startingCellCoordinates.left}px`, animation: 'movement-animation 0.5s linear 1'}}/></div>
+                    // )
+
+                    // const startingRect = startingCellRef.current.getBoundingClientRect()
+                    // const targetRect = targetCellRef.current.getBoundingClientRect()
+                    // occupiedCell = (
+                    //     <div id={selectedPosition} key={selectedPosition} className={occupiedCellClass}><img src={`../Images/${pieceName}-${pieceColor}.png`} alt={`${pieceName}-${pieceColor}`} key={selectedPiece} id={selectedPiece} onClick={() => setSelectedPiece(selectedPiece)} style={{'--position-y': `${targetRect.top}px`, '--position-x': `${targetRect.left}px`, animation: 'movement-animation 0.75s linear 1'}}/></div>
+                    // )
+                    
+                    const positionX = targetCellCoordinates.top - startingCellCoordinates.top
+                    const positionY = targetCellCoordinates.left - startingCellCoordinates.left
                     occupiedCell = (
-                        <div id={selectedPosition} key={selectedPosition} className={occupiedCellClass}><img src={`../Images/${pieceName}-${pieceColor}.png`} alt={`${pieceName}-${pieceColor}`} key={selectedPiece} id={selectedPiece} onClick={() => setSelectedPiece(selectedPiece)} /></div>
+                        <div id={selectedPosition} key={100} className={vacatedCellClass}><img src={`../Images/${pieceName}-${pieceColor}.png`} alt={`${pieceName}-${pieceColor}`} key={selectedPiece} id={selectedPiece} onClick={() => setSelectedPiece(selectedPiece)} style={{'--position-y': `${positionX}px`, '--position-x': `${positionY}px`, animation: 'movement-animation 0.7s cubic-bezier(.53,.12,.36,1.06) 1'}}/></div>
                     )
                     setAllPiecePositions(prev => {
                         let newState
@@ -1282,24 +1719,43 @@ const Board = () => {
                         }
                         return newState
                     })
+                    setAllCells(prevCells => {
+                        const updatedCells = prevCells
+                        updatedCells.splice(allPiecePositions[selectedPiece], 1, occupiedCell)
+                        setAllRows(() => {
+                            const allRowElements = []
+                            for (let j = 0; j < 8; j++) {
+                                const currentRow = updatedCells.slice((j * 8), (j * 8) + 8)
+                                allRowElements.push(<div key={j} className="row">{currentRow}</div>)
+                            }
+                            return allRowElements
+                        })
+                        return updatedCells
+                    })
+
+                    setTimeout(() => {
+                        let occupiedCell2 = (
+                            <div id={selectedPosition} key={selectedPosition} className={occupiedCellClass}><img src={`../Images/${pieceName}-${pieceColor}.png`} alt={`${pieceName}-${pieceColor}`} key={selectedPiece} id={selectedPiece} onClick={() => setSelectedPiece(selectedPiece)} /></div>
+                        )
+                        const vacatedCell = (
+                            <div id={allPiecePositions[selectedPiece]} key={allPiecePositions[selectedPiece]} className={vacatedCellClass}></div>
+                        )
+                        setAllCells(prevCells => {
+                            const updatedCells = prevCells
+                            updatedCells.splice(selectedPosition, 1, occupiedCell2)
+                            updatedCells.splice(allPiecePositions[selectedPiece], 1, vacatedCell)
+                            setAllRows(() => {
+                                const allRowElements = []
+                                for (let j = 0; j < 8; j++) {
+                                    const currentRow = updatedCells.slice((j * 8), (j * 8) + 8)
+                                    allRowElements.push(<div key={j} className="row">{currentRow}</div>)
+                                }
+                                return allRowElements
+                            })
+                            return updatedCells
+                        })
+                    },650)
                 }
-                const vacatedCell = (
-                    <div id={allPiecePositions[selectedPiece]} key={allPiecePositions[selectedPiece]} className={vacatedCellClass}></div>
-                )
-                setAllCells(prevCells => {
-                    const updatedCells = prevCells
-                    updatedCells.splice(selectedPosition, 1, occupiedCell)
-                    updatedCells.splice(allPiecePositions[selectedPiece], 1, vacatedCell)
-                    return updatedCells
-                })
-                setAllRows(() => {
-                    const allRowElements = []
-                    for (let j = 0; j < 8; j++) {
-                        const currentRow = allCells.slice((j * 8), (j * 8) + 8)
-                        allRowElements.push(<div key={j} className="row">{currentRow}</div>)
-                    }
-                    return allRowElements
-                })
                 // Castling
                 if (selectedPiece.indexOf('king') !== -1 && ((selectedPosition - allPiecePositions[selectedPiece] === 2) || (selectedPosition - allPiecePositions[selectedPiece] === -2))) {
                     let occupiedCell
@@ -1385,12 +1841,22 @@ const Board = () => {
                 setPreviousSelected(-1)
                 setSelectedPiece('')
                 setSelectedPosition(-1)
-                //setTimeout(() => {
                 setNextTurn(prev => prev === 'white' ? 'black' : 'white')
-                //})
+                setStartingCellCoordinates(() => {
+                    return {
+                        top: 0,
+                        left: 0
+                    }
+                })
+                setTargetCellCoordinates(() => {
+                    return {
+                        top: 0,
+                        left: 0
+                    }
+                })
             }
         }
-        if (!checkMate && selectedPosition !== -1 && allPiecePositions[selectedPiece] !== -1) movePiece()
+        if (!checkMate && selectedPosition >= -1 && allPiecePositions[selectedPiece] !== -1) movePiece()
         // eslint-disable-next-line
     }, [selectedPosition, nextTurn])
 
@@ -1405,24 +1871,32 @@ const Board = () => {
                             setCellsInterceptingCheck(prevCells => {
                                 setCheckingPiece(prevCheckingPiece => {
                                     const move = nextMove(prev, prevCheck, prevPieces, prevCells, prevCheckingPiece)
-                                    setTimeout(() => {
-                                        setSelectedPiece((prev) => {
-                                            if (move?.selectedPiece) {
-                                                return move?.selectedPiece
-                                            } else {
-                                                return prev
+                                    if (move?.selectedPiece && move?.selectedPosition > -1) {
+                                        setStartingCellCoordinates(() => {
+                                            const startingCell = document.getElementById(allPiecePositions[move?.selectedPiece])
+                                            const rect = startingCell.getBoundingClientRect()
+                                            return {
+                                                top: rect.top,
+                                                left: rect.left
                                             }
                                         })
-                                        setTimeout(() => {
-                                            setSelectedPosition(prev => {
-                                                if (move?.selectedPosition > -1) {
-                                                    return move?.selectedPosition
-                                                } else {
-                                                    return prev
-                                                }
-                                            })
-                                        }, 500)
-                                    }, 500)
+                                        setTargetCellCoordinates(() => {
+                                            const targetCell = document.getElementById(move?.selectedPosition)
+                                            const rect = targetCell.getBoundingClientRect()
+                                            return {
+                                                top: rect.top,
+                                                left: rect.left
+                                            }
+                                        })
+                                    }
+                                    setTimeout(() => {
+                                        if (move?.selectedPiece && move?.selectedPosition > -1) {
+                                            setSelectedPiece(move?.selectedPiece)
+                                            setTimeout(() => {
+                                                setSelectedPosition(move?.selectedPosition)
+                                            }, 200)
+                                        }
+                                    }, 700)
                                     return prevCheckingPiece
                                 })
                                 return prevCells
