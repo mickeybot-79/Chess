@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import nextMove from "../components/nextMove"
+import nextMove from "../components/AIMove"
 //import nextMove from "../components/nextMove2"
 
 const Board = () => {

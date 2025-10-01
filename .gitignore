@@ -25,3 +25,5 @@ yarn-error.log*
 /src/Tests
 /src/components/nextMove2.js
 /src/components/firstNextMove.js
+/src/originalChessSample.html
+ChessSampleTest.html
